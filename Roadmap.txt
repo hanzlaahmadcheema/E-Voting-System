@@ -1,0 +1,102 @@
+Detailed Roadmap for a Voting System Project
+
+____________________________________________________________________________________________________
+
+📌 Phase 1: Project Setup (Week 1 - 2)
+✅ Common Tasks for All Members:  
+   • Set up GitHub Repository for version control.  
+   • Define the project architecture and file structure.  
+   • Establish coding standards (naming conventions, documentation rules, etc.).  
+   • Install necessary tools (C++ Compiler, MySQL, etc.).  
+   • Plan the database schema and data structures together.  
+
+____________________________________________________________________________________________________
+
+📌 Hanzla Ahmad – Core Voting Logic & DSA Optimization  
+
+Week 1 - 2: Planning & Initial Setup  
+   • Understand election requirements (local & national elections).  
+   • Decide on data structures for efficient vote storage and retrieval.  
+   • Set up a basic C++ structure for the voting system.  
+   • Research and select suitable sorting & searching algorithms.  
+
+Week 3 - 2: Vote Processing & Sorting Algorithms  
+   • Implement data structures (linked lists, BST, etc.).  
+   • Code the vote processing logic (storing, retrieving, and validating votes).  
+   • Develop the sorting algorithms for ranking candidates based on vote count.  
+
+Week 5 - 2: Real   •Time Counting & Winner Declaration  
+   • Implement real   •time vote tracking.  
+   • Optimize vote counting algorithms for speed and efficiency.  
+   • Develop the winner declaration system based on vote tallying.  
+   • Ensure that edge cases (e.g., ties) are handled.  
+
+Week 7 - 2: DSA Optimization & Final Testing  
+   • Optimize data structures and algorithms for performance.  
+   • Work on code efficiency and memory management.  
+   • Test the entire voting logic under different scenarios.  
+
+____________________________________________________________________________________________________
+
+📌 Bilawal Hussain – Database Management & Security  
+
+Week 1 - 2: Database Schema Design & Setup  
+   • Design the SQL database schema.  
+   • Define relationships between Voter, Candidate, Election, and Vote tables.  
+   • Set up the MySQL database locally or on a server.  
+
+Week 3 - 2: CRUD Operations & Data Integrity  
+   • Implement Create, Read, Update, Delete (CRUD) operations.  
+   • Validate data integrity (prevent duplicate voters, secure candidate data).  
+   • Ensure referential integrity (foreign key constraints, unique indexes).  
+
+Week 5 - 2: Database Security & Optimization  
+   • Apply input validation & SQL injection protection.  
+   • Optimize database queries for faster data retrieval.  
+   • Implement backup and recovery strategies for database safety.  
+
+Week 7 - 2: Performance Testing & Final Adjustments  
+   • Test database under load (simulating high voter turnout).  
+   • Fine   •tune query performance & indexing.  
+   • Integrate the database with the C++ backend.  
+
+____________________________________________________________________________________________________
+
+📌 Meeral Nafees – CLI Interface & User Interaction  
+
+Week 1 - 2: UI Design & Registration System  
+   • Plan the command   •line interface (CLI) layout.  
+   • Implement the voter and candidate registration system.  
+   • Ensure proper input validation & error handling.  
+
+Week 3 - 2: Voting Process & User Interaction  
+   • Develop the vote   •casting process through CLI.  
+   • Ensure smooth navigation & user feedback messages.  
+   • Implement confirmation prompts & error handling.  
+
+Week 5 - 2: Admin Features & Testing  
+   • Create an admin dashboard for managing voters & candidates.  
+   • Implement log reports to track election progress.  
+   • Conduct unit testing on all UI interactions.  
+
+Week 7 - 2: Final Debugging & UI Refinements  
+   • Ensure smooth user experience & bug fixes.  
+   • Improve CLI design & usability (color coding, better prompts).  
+   • Conduct final user testing & documentation.  
+
+____________________________________________________________________________________________________
+
+📌 Final Phase (Week 9   •10) – Integration & Deployment  
+
+✅ Merge all components (backend, database, CLI).  
+✅ Run full system tests for performance, security, and usability.  
+✅ Prepare final project report & documentation.  
+✅ Create a presentation for submission.  
+
+____________________________________________________________________________________________________
+
+🔹 Key Guidelines for Success:  
+🔸 Regular Meetings: Weekly team check   •ins to discuss progress & blockers.  
+🔸 Version Control: Always push code updates to GitHub.  
+🔸 Testing & Debugging: Test each module before integration.  
+🔸 Documentation: Keep clear documentation for future reference.  
