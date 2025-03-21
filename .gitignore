@@ -1,0 +1,16 @@
+# Build files
+bin/
+build/
+logs/
+*.o
+*.exe
+*.out
+
+# Editor and OS-specific files
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.swp
+*.swo
