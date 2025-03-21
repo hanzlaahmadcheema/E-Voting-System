@@ -1,103 +1,90 @@
-Detailed Roadmap for a Voting System Project
+🗺️ Finalized Roadmap for E-Voting System Project  
+✅ Duration: 10 Weeks  
+✅ Technology Stack: C++ (Backend), MySQL (Database), CLI (User Interface)  
+✅ Team Members & Responsibilities:  
+   • Hanzla Ahmad: Core voting logic & algorithm optimization  
+   • Bilawal Hussain: Database management & security  
+   • Meeral Nafees: CLI interface & user interaction  
 
-____________________________________________________________________________________________________
+______________________________________________________________________________________________
 
-📌 Phase 1: Project Setup (Week 1 - 2)
-✅ Common Tasks for All Members:  
-   • Set up GitHub Repository for version control.  
-   • Define the project architecture and file structure.  
-   • Establish coding standards (naming conventions, documentation rules, etc.).  
-   • Install necessary tools (C++ Compiler, MySQL, etc.).  
-   • Plan the database schema and data structures together.  
+📌 Phase 1: Project Setup (Week 1 - 2) – All Members  
+🔹 Common Tasks:  
+   • Set up GitHub Repository with proper branching strategy (`main`, `dev`, `feature` branches).  
+   • Define the project architecture and directory structure.  
+   • Establish coding standards (naming conventions, documentation rules).  
+   • Install required tools (C++ compiler, MySQL, debugging tools).  
+   • Plan and finalize the database schema & data structures.  
+   • Write basic setup scripts for database initialization.  
 
-____________________________________________________________________________________________________
+______________________________________________________________________________________________
 
 📌 Hanzla Ahmad – Core Voting Logic & DSA Optimization  
 
-Week 1 - 2: Planning & Initial Setup  
-   • Understand election requirements (local & national elections).  
-   • Decide on data structures for efficient vote storage and retrieval.  
-   • Set up a basic C++ structure for the voting system.  
-   • Research and select suitable sorting & searching algorithms.  
+🔹 Week 3 - 4: Core Data Structures & Vote Processing  
+   • Select efficient data structures (linked lists, BST, hash maps, etc.).  
+   • Implement vote storage, retrieval, and validation mechanisms.  
+   • Develop the sorting algorithm to rank candidates based on votes.  
 
-Week 3 - 2: Vote Processing & Sorting Algorithms  
-   • Implement data structures (linked lists, BST, etc.).  
-   • Code the vote processing logic (storing, retrieving, and validating votes).  
-   • Develop the sorting algorithms for ranking candidates based on vote count.  
+🔹 Week 5 - 6: Real-Time Counting & Winner Declaration  
+   • Implement real-time vote tracking and automatic counting.  
+   • Optimize vote tallying for speed and efficiency.  
+   • Handle edge cases (e.g., tied votes, invalid votes).  
 
-Week 5 - 2: Real   •Time Counting & Winner Declaration  
-   • Implement real   •time vote tracking.  
-   • Optimize vote counting algorithms for speed and efficiency.  
-   • Develop the winner declaration system based on vote tallying.  
-   • Ensure that edge cases (e.g., ties) are handled.  
+🔹 Week 7 - 8: DSA Optimization & Final Testing  
+   • Optimize memory usage and algorithm efficiency.  
+   • Implement performance benchmarks for the vote-counting process.  
+   • Conduct unit tests and debugging for voting logic.  
 
-Week 7 - 2: DSA Optimization & Final Testing  
-   • Optimize data structures and algorithms for performance.  
-   • Work on code efficiency and memory management.  
-   • Test the entire voting logic under different scenarios.  
-
-____________________________________________________________________________________________________
+______________________________________________________________________________________________
 
 📌 Bilawal Hussain – Database Management & Security  
 
-Week 1 - 2: Database Schema Design & Setup  
-   • Design the SQL database schema.  
-   • Define relationships between Voter, Candidate, Election, and Vote tables.  
-   • Set up the MySQL database locally or on a server.  
+🔹 Week 3 - 4: Database Schema & Initial Setup  
+   • Finalize MySQL database schema.  
+   • Define relationships between tables (Voter, Candidate, Election, Vote).  
+   • Set up database connection with C++.  
 
-Week 3 - 2: CRUD Operations & Data Integrity  
-   • Implement Create, Read, Update, Delete (CRUD) operations.  
-   • Validate data integrity (prevent duplicate voters, secure candidate data).  
-   • Ensure referential integrity (foreign key constraints, unique indexes).  
+🔹 Week 5 - 6: CRUD Operations & Data Integrity  
+   • Implement CRUD (Create, Read, Update, Delete) operations for voters, candidates, and votes.  
+   • Apply foreign key constraints, indexing, and referential integrity checks.  
 
-Week 5 - 2: Database Security & Optimization  
-   • Apply input validation & SQL injection protection.  
-   • Optimize database queries for faster data retrieval.  
-   • Implement backup and recovery strategies for database safety.  
+🔹 Week 7 - 8: Security & Performance Optimization  
+   • Implement SQL injection protection & user input validation.  
+   • Optimize query performance and indexing for large-scale elections.  
+   • Implement backup & recovery strategies.  
 
-Week 7 - 2: Performance Testing & Final Adjustments  
-   • Test database under load (simulating high voter turnout).  
-   • Fine   •tune query performance & indexing.  
-   • Integrate the database with the C++ backend.  
-
-____________________________________________________________________________________________________
+______________________________________________________________________________________________
 
 📌 Meeral Nafees – CLI Interface & User Interaction  
 
-Week 1 - 2: UI Design & Registration System  
-   • Plan the command   •line interface (CLI) layout.  
-   • Implement the voter and candidate registration system.  
+🔹 Week 3 - 4: UI Design & Registration System  
+   • Design the command-line interface (CLI) layout.  
+   • Implement user authentication (voter registration, login, role-based access).  
    • Ensure proper input validation & error handling.  
 
-Week 3 - 2: Voting Process & User Interaction  
-   • Develop the vote   •casting process through CLI.  
-   • Ensure smooth navigation & user feedback messages.  
-   • Implement confirmation prompts & error handling.  
+🔹 Week 5 - 6: Voting Process & Admin Features  
+   • Develop the vote-casting process via CLI.  
+   • Implement admin dashboard for managing voters & candidates.  
+   • Display real-time election progress & results.  
 
-Week 5 - 2: Admin Features & Testing  
-   • Create an admin dashboard for managing voters & candidates.  
-   • Implement log reports to track election progress.  
-   • Conduct unit testing on all UI interactions.  
+🔹 Week 7 - 8: UI Enhancements & Final Testing  
+   • Improve CLI design (better prompts, color coding, progress indicators).  
+   • Conduct user testing & debug reported issues.  
+   • Ensure a smooth and intuitive user experience.  
 
-Week 7 - 2: Final Debugging & UI Refinements  
-   • Ensure smooth user experience & bug fixes.  
-   • Improve CLI design & usability (color coding, better prompts).  
-   • Conduct final user testing & documentation.  
+______________________________________________________________________________________________
 
-____________________________________________________________________________________________________
+📌 Final Phase (Week 9 - 10) – Integration & Deployment  
+✅ Merge all components (backend, database, CLI) into a single system.  
+✅ Perform full system testing (performance, security, and usability).  
+✅ Document final project setup & instructions.  
+✅ Prepare final project report & presentation.  
 
-📌 Final Phase (Week 9   •10) – Integration & Deployment  
+______________________________________________________________________________________________
 
-✅ Merge all components (backend, database, CLI).  
-✅ Run full system tests for performance, security, and usability.  
-✅ Prepare final project report & documentation.  
-✅ Create a presentation for submission.  
-
-____________________________________________________________________________________________________
-
-🔹 Key Guidelines for Success:  
-🔸 Regular Meetings: Weekly team check   •ins to discuss progress & blockers.  
-🔸 Version Control: Always push code updates to GitHub.  
-🔸 Testing & Debugging: Test each module before integration.  
-🔸 Documentation: Keep clear documentation for future reference.  
-
+🚀 Key Guidelines for Success  
+🔸 Weekly Meetings: Regular team sync-ups to discuss progress, blockers, and next steps.  
+🔸 Version Control: Always push updates to GitHub and use proper commit messages.  
+🔸 Modular Development: Test each module individually before integration.  
+🔸 Documentation: Keep everything well-documented for future reference.  
