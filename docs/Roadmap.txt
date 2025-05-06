@@ -1,90 +1,84 @@
-🗺️ Finalized Roadmap for E-Voting System Project  
-✅ Duration: 10 Weeks  
-✅ Technology Stack: C++ (Backend), MySQL (Database), CLI (User Interface)  
-✅ Team Members & Responsibilities:  
-   • Hanzla Ahmad: Core voting logic & algorithm optimization  
-   • Bilawal Hussain: Database management & security  
-   • Meeral Nafees: CLI interface & user interaction  
+🔥 1. Hanzla Ahmad – Core Concepts & System Logic (Lead)
+Focus: Architecture, logic flow, feature integration, code quality.
 
-______________________________________________________________________________________________
+Week 1–2:
+Finalize ERD & class diagrams (high-level only).
 
-📌 Phase 1: Project Setup (Week 1 - 2) – All Members  
-🔹 Common Tasks:  
-   • Set up GitHub Repository with proper branching strategy (`main`, `dev`, `feature` branches).  
-   • Define the project architecture and directory structure.  
-   • Establish coding standards (naming conventions, documentation rules).  
-   • Install required tools (C++ compiler, MySQL, debugging tools).  
-   • Plan and finalize the database schema & data structures.  
-   • Write basic setup scripts for database initialization.  
+Set up GitHub repo + project board.
 
-______________________________________________________________________________________________
+Define main business logic (voting rules, eligibility, result logic).
 
-📌 Hanzla Ahmad – Core Voting Logic & DSA Optimization  
+Write pseudocode / flowcharts for all system processes.
 
-🔹 Week 3 - 4: Core Data Structures & Vote Processing  
-   • Select efficient data structures (linked lists, BST, hash maps, etc.).  
-   • Implement vote storage, retrieval, and validation mechanisms.  
-   • Develop the sorting algorithm to rank candidates based on votes.  
+Week 3–4:
+Implement core controller classes:
 
-🔹 Week 5 - 6: Real-Time Counting & Winner Declaration  
-   • Implement real-time vote tracking and automatic counting.  
-   • Optimize vote tallying for speed and efficiency.  
-   • Handle edge cases (e.g., tied votes, invalid votes).  
+ElectionManage
 
-🔹 Week 7 - 8: DSA Optimization & Final Testing  
-   • Optimize memory usage and algorithm efficiency.  
-   • Implement performance benchmarks for the vote-counting process.  
-   • Conduct unit tests and debugging for voting logic.  
+VoterManager
 
-______________________________________________________________________________________________
+ResultProcessor
 
-📌 Bilawal Hussain – Database Management & Security  
+Coordinate data flow between objects.
 
-🔹 Week 3 - 4: Database Schema & Initial Setup  
-   • Finalize MySQL database schema.  
-   • Define relationships between tables (Voter, Candidate, Election, Vote).  
-   • Set up database connection with C++.  
+Integrate modules from Meeral & Bilawal.
 
-🔹 Week 5 - 6: CRUD Operations & Data Integrity  
-   • Implement CRUD (Create, Read, Update, Delete) operations for voters, candidates, and votes.  
-   • Apply foreign key constraints, indexing, and referential integrity checks.  
+Guide test scenarios & validations with Meeral.
 
-🔹 Week 7 - 8: Security & Performance Optimization  
-   • Implement SQL injection protection & user input validation.  
-   • Optimize query performance and indexing for large-scale elections.  
-   • Implement backup & recovery strategies.  
+🧱 2. Meeral Nafees – Class Development & Validation
+Focus: Class skeletons, OOP practice, simple logic.
 
-______________________________________________________________________________________________
+Week 1–2:
+Create basic model classes:
 
-📌 Meeral Nafees – CLI Interface & User Interaction  
+Voter, City, Constituency, PollingStation, Party
 
-🔹 Week 3 - 4: UI Design & Registration System  
-   • Design the command-line interface (CLI) layout.  
-   • Implement user authentication (voter registration, login, role-based access).  
-   • Ensure proper input validation & error handling.  
+Include:
 
-🔹 Week 5 - 6: Voting Process & Admin Features  
-   • Develop the vote-casting process via CLI.  
-   • Implement admin dashboard for managing voters & candidates.  
-   • Display real-time election progress & results.  
+Constructors
 
-🔹 Week 7 - 8: UI Enhancements & Final Testing  
-   • Improve CLI design (better prompts, color coding, progress indicators).  
-   • Conduct user testing & debug reported issues.  
-   • Ensure a smooth and intuitive user experience.  
+Getters/Setters
 
-______________________________________________________________________________________________
+toString() methods
 
-📌 Final Phase (Week 9 - 10) – Integration & Deployment  
-✅ Merge all components (backend, database, CLI) into a single system.  
-✅ Perform full system testing (performance, security, and usability).  
-✅ Document final project setup & instructions.  
-✅ Prepare final project report & presentation.  
+Week 3–4:
+Add validation in constructors/setters (e.g., age >= 18, CNIC format).
 
-______________________________________________________________________________________________
+Write test cases for each class using mock data.
 
-🚀 Key Guidelines for Success  
-🔸 Weekly Meetings: Regular team sync-ups to discuss progress, blockers, and next steps.  
-🔸 Version Control: Always push updates to GitHub and use proper commit messages.  
-🔸 Modular Development: Test each module individually before integration.  
-🔸 Documentation: Keep everything well-documented for future reference.  
+Assist Hanzla with unit testing integration.
+
+🛠️ 3. Bilawal Hussain – Database Handling (Full Ownership)
+Focus: Database schema, queries, data access layer.
+
+Week 1–2:
+Design relational schema (tables, FKs, PKs).
+
+Create SQL scripts to:
+
+Create tables
+
+Insert dummy data
+
+Setup indexes
+
+Week 3–4:
+Implement DatabaseHandler class:
+
+connect(), disconnect(), executeQuery()
+
+Write DAO (Data Access Objects) for:
+
+VoterDAO, ElectionDAO, VoteDAO, ResultDAO
+
+Coordinate with Hanzla for DB integration.
+
+🧩 Cross-Collaboration Rules:
+Weekly Code Merge: Every Sunday.
+
+Standup Check-ins: 2x/week (10 mins).
+
+Naming Conventions: Follow unified naming, class/file/package format.
+
+Code Reviews: Hanzla to review all major merges.
+
