@@ -7,8 +7,11 @@ class City {
 public:
 City();
     City(int id, const std::string& name);
-    // Add getters and setters here
-
+    void setCityID(int id);
+    void setName(const std::string& name);
+    int getCityID() const;
+    std::string getName() const;
+    void displayCityInfo() const;
 private:
     int cityID;
     std::string name;

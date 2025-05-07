@@ -9,7 +9,15 @@ Election();
     Election(int id, const std::string& name, const std::string& type, const std::string& date);
     void startElection();
     void endElection();
-    // Add getters and setters here
+    void setElectionID(int id);
+    void setName(const std::string& name);
+    void setType(const std::string& type);
+    void setDate(const std::string& date);
+    int getElectionID() const;
+    std::string getName() const;
+    std::string getType() const;
+    std::string getDate() const;
+    void displayElectionInfo() const;
 
 private:
     int electionID;

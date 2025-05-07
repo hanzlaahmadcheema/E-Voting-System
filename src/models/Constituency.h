@@ -7,7 +7,13 @@ class Constituency {
 public:
 Constituency();
     Constituency(int id, const std::string& name, int cityID);
-    // Add getters and setters here
+    void setConstituencyID(int id);
+    void setName(const std::string& name);
+    void setCityID(int cityID);
+    int getConstituencyID() const;
+    std::string getName() const;
+    int getCityID() const;
+    void displayConstituencyInfo() const;
 
 private:
     int constituencyID;
