@@ -2,6 +2,7 @@
 #include <iostream>
 #include <string>
 using namespace std;
+using namespace std;
 //Candidate
 Candidate::Candidate() : candidateID(0), name(""), partyID(0), electionID(0), constituencyID(0) {}
 

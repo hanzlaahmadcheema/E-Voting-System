@@ -2,19 +2,20 @@
 #define CITY_H
 
 #include <string>
+using namespace std;
 
 class City {
 public:
 City();
-    City(int id, const std::string& name);
+    City(int id, const string& name);
     void setCityID(int id);
-    void setName(const std::string& name);
+    void setName(const string& name);
     int getCityID() const;
-    std::string getName() const;
+    string getName() const;
     void displayCityInfo() const;
 private:
     int cityID;
-    std::string name;
+    string name;
 };
 
 #endif

@@ -2,36 +2,37 @@
 #define VOTER_H
 
 #include <string>
+using namespace std;
 
 class Voter {
 public:
 Voter();
-    Voter(int id, const std::string& name, const std::string& cnic, const std::string& gender, int age, const std::string& address, int cityID, int constituencyID);
+    Voter(int id, const string& name, const string& cnic, const string& gender, int age, const string& address, int cityID, int constituencyID);
     void displayVoterInfo() const;
     void setVoterID(int id);
-    void setName(const std::string& name);
-    void setCNIC(const std::string& cnic);
-    void setGender(const std::string& gender);
+    void setName(const string& name);
+    void setCNIC(const string& cnic);
+    void setGender(const string& gender);
     void setAge(int age);
-    void setAddress(const std::string& address);
+    void setAddress(const string& address);
     void setCityID(int cityID);
     void setConstituencyID(int constituencyID);
     int getVoterID() const;
-    std::string getName() const;
-    std::string getCNIC() const;
-    std::string getGender() const;
+    string getName() const;
+    string getCNIC() const;
+    string getGender() const;
     int getAge() const;
-    std::string getAddress() const;
+    string getAddress() const;
     int getCityID() const;
     int getConstituencyID() const;
 
 private:
     int voterID;
-    std::string name;
-    std::string cnic;
-    std::string gender;
+    string name;
+    string cnic;
+    string gender;
     int age;
-    std::string address;
+    string address;
     int cityID;
     int constituencyID;
 };

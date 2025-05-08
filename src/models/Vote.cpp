@@ -1,9 +1,10 @@
 #include "Vote.h"
 #include <iostream>
 #include <string>
+using namespace std;
 //Vote
 Vote::Vote() : voteID(0), voterID(0), candidateID(0), electionID(0), pollingStationID(0), timestamp("") {}
-Vote::Vote(int id, int voterID, int candidateID, int electionID, int pollingStationID, const std::string& timestamp) {
+Vote::Vote(int id, int voterID, int candidateID, int electionID, int pollingStationID, const string& timestamp) {
     voteID = id;
     this->voterID = voterID;
     this->candidateID = candidateID;
@@ -26,7 +27,7 @@ void Vote::setElectionID(int electionID) {
 void Vote::setPollingStationID(int pollingStationID) {
     this->pollingStationID = pollingStationID;
 }
-void Vote::setTimestamp(const std::string& timestamp) {
+void Vote::setTimestamp(const string& timestamp) {
     this->timestamp = timestamp;
 }
 int Vote::getVoteID() const {
@@ -44,14 +45,14 @@ int Vote::getElectionID() const {
 int Vote::getPollingStationID() const {
     return pollingStationID;
 }
-std::string Vote::getTimestamp() const {
+string Vote::getTimestamp() const {
     return timestamp;
 }
 void Vote::displayVoteInfo() const {
-    std::cout << "Vote ID: " << voteID << "\n"
+    cout << "Vote ID: " << voteID << "\n"
               << "Voter ID: " << voterID << "\n"
               << "Candidate ID: " << candidateID << "\n"
               << "Election ID: " << electionID << "\n"
               << "Polling Station ID: " << pollingStationID << "\n"
-              << "Timestamp: " << timestamp << std::endl;
+              << "Timestamp: " << timestamp << endl;
 }

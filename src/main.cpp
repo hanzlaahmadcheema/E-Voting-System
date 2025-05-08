@@ -1,6 +1,6 @@
 #include <iostream>
 
 int main() {
-    std::cout << "Welcome to the E-Voting System!" << std::endl;
+    cout << "Welcome to the E-Voting System!" << endl;
     return 0;
 }

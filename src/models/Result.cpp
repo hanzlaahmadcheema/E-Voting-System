@@ -1,6 +1,7 @@
 #include "Result.h"
 #include <iostream>
 #include <string>
+using namespace std;
 //Result
 Result::Result() : resultID(0), constituencyID(0), electionID(0), winnerCandidateID(0), totalVotes(0) {}
 Result::Result(int id, int constituencyID, int electionID, int winnerCandidateID, int totalVotes) {
@@ -11,9 +12,9 @@ Result::Result(int id, int constituencyID, int electionID, int winnerCandidateID
     this->totalVotes = totalVotes;
 }
 void Result::declareResult() {
-    std::cout << "Result declared for Election ID: " << electionID << "\n"
+    cout << "Result declared for Election ID: " << electionID << "\n"
               << "Winner Candidate ID: " << winnerCandidateID << "\n"
-              << "Total Votes: " << totalVotes << std::endl;
+              << "Total Votes: " << totalVotes << endl;
 }
 void Result::setResultID(int id) {
     resultID = id;
@@ -46,9 +47,9 @@ int Result::getTotalVotes() const {
     return totalVotes;
 }
 void Result::displayResultInfo() const {
-    std::cout << "Result ID: " << resultID << "\n"
+    cout << "Result ID: " << resultID << "\n"
               << "Constituency ID: " << constituencyID << "\n"
               << "Election ID: " << electionID << "\n"
               << "Winner Candidate ID: " << winnerCandidateID << "\n"
-              << "Total Votes: " << totalVotes << std::endl;
+              << "Total Votes: " << totalVotes << endl;
 }

@@ -2,22 +2,23 @@
 #define CONSTITUENCY_H
 
 #include <string>
+using namespace std;
 
 class Constituency {
 public:
 Constituency();
-    Constituency(int id, const std::string& name, int cityID);
+    Constituency(int id, const string& name, int cityID);
     void setConstituencyID(int id);
-    void setName(const std::string& name);
+    void setName(const string& name);
     void setCityID(int cityID);
     int getConstituencyID() const;
-    std::string getName() const;
+    string getName() const;
     int getCityID() const;
     void displayConstituencyInfo() const;
 
 private:
     int constituencyID;
-    std::string name;
+    string name;
     int cityID;
 };
 

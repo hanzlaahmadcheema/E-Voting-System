@@ -1,9 +1,10 @@
 #include "Voter.h"
 #include <iostream>
 #include <string>
+using namespace std;
 //Voter
 Voter::Voter() : voterID(0), name(""), cnic(""),  gender(""), age(0), address(""), cityID(0), constituencyID(0) {}
-Voter::Voter(int id, const std::string& name, const std::string& cnic, const std::string& gender, int age, const std::string& address, int cityID, int constituencyID) {
+Voter::Voter(int id, const string& name, const string& cnic, const string& gender, int age, const string& address, int cityID, int constituencyID) {
     voterID = id;
     this->name = name;
     this->cnic = cnic;
@@ -16,19 +17,19 @@ Voter::Voter(int id, const std::string& name, const std::string& cnic, const std
 void Voter::setVoterID(int id) {
     voterID = id;
 }
-void Voter::setName(const std::string& name) {
+void Voter::setName(const string& name) {
     this->name = name;
 }
-void Voter::setCNIC(const std::string& cnic) {
+void Voter::setCNIC(const string& cnic) {
     this->cnic = cnic;
 }
-void Voter::setGender(const std::string& gender) {
+void Voter::setGender(const string& gender) {
     this->gender = gender;
 }
 void Voter::setAge(int age) {
     this->age = age;
 }
-void Voter::setAddress(const std::string& address) {
+void Voter::setAddress(const string& address) {
     this->address = address;
 }
 void Voter::setCityID(int cityID) {
@@ -40,19 +41,19 @@ void Voter::setConstituencyID(int constituencyID) {
 int Voter::getVoterID() const {
     return voterID;
 }
-std::string Voter::getName() const {
+string Voter::getName() const {
     return name;
 }
-std::string Voter::getCNIC() const {
+string Voter::getCNIC() const {
     return cnic;
 }
-std::string Voter::getGender() const {
+string Voter::getGender() const {
     return gender;
 }
 int Voter::getAge() const {
     return age;
 }
-std::string Voter::getAddress() const {
+string Voter::getAddress() const {
     return address;
 }
 int Voter::getCityID() const {
@@ -62,12 +63,12 @@ int Voter::getConstituencyID() const {
     return constituencyID;
 }
 void Voter::displayVoterInfo() const {
-    std::cout << "Voter ID: " << voterID << "\n"
+    cout << "Voter ID: " << voterID << "\n"
               << "Name: " << name << "\n"
               << "CNIC: " << cnic << "\n"
               << "Gender: " << gender << "\n"
               << "Age: " << age << "\n"
               << "Address: " << address << "\n"
               << "City ID: " << cityID << "\n"
-              << "Constituency ID: " << constituencyID << std::endl;
+              << "Constituency ID: " << constituencyID << endl;
 }

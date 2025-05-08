@@ -3,6 +3,7 @@
 
 #include <string>
 using namespace std;
+using namespace std;
 
 class Candidate {
 public:

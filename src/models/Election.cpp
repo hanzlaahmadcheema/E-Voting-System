@@ -1,9 +1,10 @@
 #include "Election.h"
 #include <iostream>
 #include <string>
+using namespace std;
 //Election
 Election::Election() : electionID(0), name(""), type(""), date("") {}
-Election::Election(int id, const std::string& name, const std::string& type, const std::string& date) {
+Election::Election(int id, const string& name, const string& type, const string& date) {
     electionID = id;
     this->name = name;
     this->type = type;
@@ -12,31 +13,30 @@ Election::Election(int id, const std::string& name, const std::string& type, con
 void Election::setElectionID(int id) {
     electionID = id;
 }
-void Election::setName(const std::string& name) {
+void Election::setName(const string& name) {
     this->name = name;
 }
-void Election::setType(const std::string& type) {
+void Election::setType(const string& type) {
     this->type = type;
 }
-void Election::setDate(const std::string& date) {
+void Election::setDate(const string& date) {
     this->date = date;
 }
 int Election::getElectionID() const {
     return electionID;
 }
-std::string Election::getName() const {
+string Election::getName() const {
     return name;
 }
-std::string Election::getType() const {
+string Election::getType() const {
     return type;
 }
-std::string Election::getDate() const {
+string Election::getDate() const {
     return date;
 }
 void Election::displayElectionInfo() const {
-    std::cout << "Election ID: " << electionID << "\n"
+    cout << "Election ID: " << electionID << "\n"
               << "Name: " << name << "\n"
               << "Type: " << type << "\n"
-              << "Date: " << date << std::endl;
+              << "Date: " << date << endl;
 }
-

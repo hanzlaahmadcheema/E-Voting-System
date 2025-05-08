@@ -1,9 +1,10 @@
 #include "PollingStation.h"
 #include <iostream>
 #include <string>
+using namespace std;
 //PollingStation
 PollingStation::PollingStation() : pollingStationID(0), name(""), address(""), constituencyID(0) {}
-PollingStation::PollingStation(int id, const std::string& name, const std::string& address, int constituencyID) {
+PollingStation::PollingStation(int id, const string& name, const string& address, int constituencyID) {
     pollingStationID = id;
     this->name = name;
     this->address = address;
@@ -12,10 +13,10 @@ PollingStation::PollingStation(int id, const std::string& name, const std::strin
 void PollingStation::setPollingStationID(int id) {
     pollingStationID = id;
 }
-void PollingStation::setName(const std::string& name) {
+void PollingStation::setName(const string& name) {
     this->name = name;
 }
-void PollingStation::setAddress(const std::string& address) {
+void PollingStation::setAddress(const string& address) {
     this->address = address;
 }
 void PollingStation::setConstituencyID(int constituencyID) {
@@ -24,18 +25,18 @@ void PollingStation::setConstituencyID(int constituencyID) {
 int PollingStation::getPollingStationID() const {
     return pollingStationID;
 }
-std::string PollingStation::getName() const {
+string PollingStation::getName() const {
     return name;
 }
-std::string PollingStation::getAddress() const {
+string PollingStation::getAddress() const {
     return address;
 }
 int PollingStation::getConstituencyID() const {
     return constituencyID;
 }
 void PollingStation::displayPollingStationInfo() const {
-    std::cout << "Polling Station ID: " << pollingStationID << "\n"
+    cout << "Polling Station ID: " << pollingStationID << "\n"
               << "Name: " << name << "\n"
               << "Address: " << address << "\n"
-              << "Constituency ID: " << constituencyID << std::endl;
+              << "Constituency ID: " << constituencyID << endl;
 }

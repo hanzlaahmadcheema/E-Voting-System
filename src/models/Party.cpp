@@ -1,9 +1,10 @@
 #include "Party.h"
 #include <iostream>
 #include <string>
+using namespace std;
 //Party
 Party::Party() : partyID(0), name(""), symbol("") {}
-Party::Party(int id, const std::string& name, const std::string& symbol) {
+Party::Party(int id, const string& name, const string& symbol) {
     partyID = id;
     this->name = name;
     this->symbol = symbol;
@@ -11,23 +12,23 @@ Party::Party(int id, const std::string& name, const std::string& symbol) {
 void Party::setPartyID(int id) {
     partyID = id;
 }
-void Party::setName(const std::string& name) {
+void Party::setName(const string& name) {
     this->name = name;
 }
-void Party::setSymbol(const std::string& symbol) {
+void Party::setSymbol(const string& symbol) {
     this->symbol = symbol;
 }
 int Party::getPartyID() const {
     return partyID;
 }
-std::string Party::getName() const {
+string Party::getName() const {
     return name;
 }
-std::string Party::getSymbol() const {
+string Party::getSymbol() const {
     return symbol;
 }
 void Party::displayPartyInfo() const {
-    std::cout << "Party ID: " << partyID << "\n"
+    cout << "Party ID: " << partyID << "\n"
               << "Name: " << name << "\n"
-              << "Symbol: " << symbol << std::endl;
+              << "Symbol: " << symbol << endl;
 }
