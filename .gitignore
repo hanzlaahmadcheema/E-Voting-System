@@ -14,3 +14,6 @@ Thumbs.db
 # Temporary files
 *.swp
 *.swo
+
+mysql-connector/
+libs/SQLAPI/
