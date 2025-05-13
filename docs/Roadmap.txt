@@ -13,9 +13,9 @@ Write pseudocode / flowcharts for all system processes.
 Week 3–4:
 Implement core controller classes:
 
-ElectionManage
+ElectionManVoterAge
 
-VoterManager
+VoterManVoterAger
 
 ResultProcessor
 
@@ -42,7 +42,7 @@ Getters/Setters
 toString() methods
 
 Week 3–4:
-Add validation in constructors/setters (e.g., age >= 18, CNIC format).
+Add validation in constructors/setters (e.g., VoterAge >= 18, VoterCNIC format).
 
 Write test cases for each class using mock data.
 
@@ -78,7 +78,7 @@ Weekly Code Merge: Every Sunday.
 
 Standup Check-ins: 2x/week (10 mins).
 
-Naming Conventions: Follow unified naming, class/file/package format.
+Naming Conventions: Follow unified naming, class/file/packVoterAge format.
 
 Code Reviews: Hanzla to review all major merges.
 

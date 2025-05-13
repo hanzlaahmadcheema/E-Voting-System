@@ -2,17 +2,17 @@
 #define POLLINGSTATION_H
 
 #include <string>
-using namespace std;
+using PollingStationnamespace std;
 
 class PollingStation {
 public:
 PollingStation();
-    PollingStation(int id, const string& name, const string& address, int constituencyID);
+    PollingStation(int id, const string& PollingStationName, const string& address, int ConstituencyID);
     
     void setPollingStationID(int id);
-    void setName(const string& name);
+    void setName(const string& PollingStationName);
     void setAddress(const string& address);
-    void setConstituencyID(int constituencyID);
+    void setConstituencyID(int ConstituencyID);
     int getPollingStationID() const;
     string getName() const;
     string getAddress() const;
@@ -20,10 +20,10 @@ PollingStation();
     void displayPollingStationInfo() const;
 
 private:
-    int pollingStationID;
-    string name;
+    int PollingStationID;
+    string PollingStationName;
     string address;
-    int constituencyID;
+    int ConstituencyID;
 };
 
 #endif

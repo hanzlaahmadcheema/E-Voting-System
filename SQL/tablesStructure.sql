@@ -26,7 +26,7 @@ CREATE TABLE Elections (
     ElectionType VARCHAR(100),
     ElectionDate DATE
 );
-CREATE TABLE PollingStations 
+CREATE TABLE PollingStations (
     PollingStationID INT AUTO_INCREMENT PRIMARY KEY,
     PollingStationName VARCHAR(100),
     PollingStationAddress VARCHAR(255),

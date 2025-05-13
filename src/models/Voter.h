@@ -7,34 +7,34 @@ using namespace std;
 class Voter {
 public:
 Voter();
-    Voter(int id, const string& name, const string& cnic, const string& gender, int age, const string& address, int cityID, int constituencyID);
+    Voter(int VoterID, const string& VoterName, const string& VoterCNIC, const string& VoterGender, int VoterAge, const string& VoterAddress, int PollingStationID, int ConstituencyID);
     void displayVoterInfo() const;
-    void setVoterID(int id);
-    void setName(const string& name);
-    void setCNIC(const string& cnic);
-    void setGender(const string& gender);
-    void setAge(int age);
-    void setAddress(const string& address);
-    void setCityID(int cityID);
-    void setConstituencyID(int constituencyID);
+    void setVoterID(int VoterID);
+    void setVoterName(const string& VoterName);
+    void setVoterCNIC(const string& VoterCNIC);
+    void setVoterGender(const string& VoterGender);
+    void setVoterAge(int VoterAge);
+    void setVoterAddress(const string& VoterAddress);
+    void setPollingStationID(int PollingStationID);
+    void setConstituencyID(int ConstituencyID);
     int getVoterID() const;
-    string getName() const;
-    string getCNIC() const;
-    string getGender() const;
-    int getAge() const;
-    string getAddress() const;
-    int getCityID() const;
+    string getVoterName() const;
+    string getVoterCNIC() const;
+    string getVoterGender() const;
+    int getVoterAge() const;
+    string getVoterAddress() const;
+    int getPollingStationID() const;
     int getConstituencyID() const;
 
 private:
-    int voterID;
-    string name;
-    string cnic;
-    string gender;
-    int age;
-    string address;
-    int cityID;
-    int constituencyID;
+    int VoterID;
+    string VoterName;
+    string VoterCNIC;
+    string VoterGender;
+    int VoterAge;
+    string VoterAddress;
+    int PollingStationID;
+    int ConstituencyID;
 };
 
 #endif

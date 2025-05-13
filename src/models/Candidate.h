@@ -3,32 +3,28 @@
 
 #include <string>
 using namespace std;
-using namespace std;
 
 class Candidate {
 public:
 Candidate();
-    Candidate(int id, const string& name, int partyID, int electionID, int constituencyID);
+    Candidate(int id, const string& CandidateName, int partyID, int ElectionID, int ConstituencyID);
     void displayCandidateInfo() const;
     void setCandidateID(int id);
-    void setName(const string& name);
+    void setName(const string& CandidateName);
     void setPartyID(int partyID);
-    void setElectionID(int electionID);
-    void setConstituencyID(int constituencyID);
+    void setConstituencyID(int ConstituencyID);
     
     int getCandidateID() const;
     string getName() const;
     int getPartyID() const;
-    int getElectionID() const;
     int getConstituencyID() const;
 
 
 private:
-    int candidateID;
-    string name;
+    int CandidateID;
+    string CandidateName;
     int partyID;
-    int electionID;
-    int constituencyID;
+    int ConstituencyID;
 };
 
 #endif

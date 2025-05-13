@@ -7,13 +7,13 @@ using namespace std;
 class Vote {
 public:
 Vote();
-    Vote(int id, int voterID, int candidateID, int electionID, int pollingStationID, const string& timestamp);
+    Vote(int id, int VoterID, int CandidateID, int ElectionID, int PollingStationID, const string& VoteTime);
     void setVoteID(int id);
-    void setVoterID(int voterID);
-    void setCandidateID(int candidateID);
-    void setElectionID(int electionID);
-    void setPollingStationID(int pollingStationID);
-    void setTimestamp(const string& timestamp);
+    void setVoterID(int VoterID);
+    void setCandidateID(int CandidateID);
+    void setElectionID(int ElectionID);
+    void setPollingStationID(int PollingStationID);
+    void setTimestamp(const string& VoteTime);
     int getVoteID() const;
     int getVoterID() const;
     int getCandidateID() const;
@@ -23,12 +23,12 @@ Vote();
     void displayVoteInfo() const;
 
 private:
-    int voteID;
-    int voterID;
-    int candidateID;
-    int electionID;
-    int pollingStationID;
-    string timestamp;
+    int VoteID;
+    int VoterID;
+    int CandidateID;
+    int ElectionID;
+    int PollingStationID;
+    string VoteTime;
 };
 
 #endif

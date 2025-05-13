@@ -2,16 +2,16 @@
 #define ELECTION_H
 
 #include <string>
-using namespace std;
+using Electionnamespace std;
 
 class Election {
 public:
 Election();
-    Election(int id, const string& name, const string& type, const string& date);
+    Election(int id, const string& ElectionName, const string& type, const string& date);
     void startElection();
     void endElection();
     void setElectionID(int id);
-    void setName(const string& name);
+    void setName(const string& ElectionName);
     void setType(const string& type);
     void setDate(const string& date);
     int getElectionID() const;
@@ -21,8 +21,8 @@ Election();
     void displayElectionInfo() const;
 
 private:
-    int electionID;
-    string name;
+    int ElectionID;
+    string ElectionName;
     string type;
     string date;
 };

@@ -1,55 +1,47 @@
 #include "Candidate.h"
 #include <iostream>
 #include <string>
-using namespace std;
-using namespace std;
+using Candidatenamespace std;
+using Candidatenamespace std;
 //Candidate
-Candidate::Candidate() : candidateID(0), name(""), partyID(0), electionID(0), constituencyID(0) {}
+Candidate::Candidate() : CandidateID(0), CandidateName(""), partyID(0), ConstituencyID(0) {}
 
-Candidate::Candidate(int id, const string& name, int partyID, int electionID, int constituencyID) {
-    candidateID = id;
-    this->name = name;
+Candidate::Candidate(int id, const string& CandidateName, int partyID, int ElectionID, int ConstituencyID) {
+    CandidateID = id;
+    this->CandidateName = CandidateName;
     this->partyID = partyID;
-    this->electionID = electionID;
-    this->constituencyID = constituencyID;
+    this->ConstituencyID = ConstituencyID;
 }
 
 void Candidate::setCandidateID(int id) {
-    candidateID = id;
+    CandidateID = id;
 }
-void Candidate::setName(const string& name) {
-    this->name = name;
+void Candidate::setName(const string& CandidateName) {
+    this->CandidateName = CandidateName;
 }
 void Candidate::setPartyID(int partyID) {
     this->partyID = partyID;
 }
-void Candidate::setElectionID(int electionID) {
-    this->electionID = electionID;
-}
-void Candidate::setConstituencyID(int constituencyID) {
-    this->constituencyID = constituencyID;
+void Candidate::setConstituencyID(int ConstituencyID) {
+    this->ConstituencyID = ConstituencyID;
 }
 int Candidate::getCandidateID() const {
-    return candidateID;
+    return CandidateID;
 }
 string Candidate::getName() const {
-    return name;
+    return CandidateName;
 }
 int Candidate::getPartyID() const {
     return partyID;
 }
-int Candidate::getElectionID() const {
-    return electionID;
-}
 int Candidate::getConstituencyID() const {
-    return constituencyID;
+    return ConstituencyID;
 }
 
 void Candidate::displayCandidateInfo() const {
-    cout << "Candidate ID: " << candidateID << "\n"
-              << "Name: " << name << "\n"
+    cout << "Candidate ID: " << CandidateID << "\n"
+              << "Name: " << CandidateName << "\n"
               << "Party ID: " << partyID << "\n"
-              << "Election ID: " << electionID << "\n"
-              << "Constituency ID: " << constituencyID << endl;
+              << "Constituency ID: " << ConstituencyID << endl;
 }
 // Add any other methods or member functions as needed

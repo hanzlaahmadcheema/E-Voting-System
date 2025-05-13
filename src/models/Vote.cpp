@@ -3,56 +3,56 @@
 #include <string>
 using namespace std;
 //Vote
-Vote::Vote() : voteID(0), voterID(0), candidateID(0), electionID(0), pollingStationID(0), timestamp("") {}
-Vote::Vote(int id, int voterID, int candidateID, int electionID, int pollingStationID, const string& timestamp) {
-    voteID = id;
-    this->voterID = voterID;
-    this->candidateID = candidateID;
-    this->electionID = electionID;
-    this->pollingStationID = pollingStationID;
-    this->timestamp = timestamp;
+Vote::Vote() : VoteID(0), VoterID(0), CandidateID(0), ElectionID(0), PollingStationID(0), VoteTime("") {}
+Vote::Vote(int id, int VoterID, int CandidateID, int ElectionID, int PollingStationID, const string& VoteTime) {
+    VoteID = id;
+    this->VoterID = VoterID;
+    this->CandidateID = CandidateID;
+    this->ElectionID = ElectionID;
+    this->PollingStationID = PollingStationID;
+    this->VoteTime = VoteTime;
 }
 void Vote::setVoteID(int id) {
-    voteID = id;
+    VoteID = id;
 }
-void Vote::setVoterID(int voterID) {
-    this->voterID = voterID;
+void Vote::setVoterID(int VoterID) {
+    this->VoterID = VoterID;
 }
-void Vote::setCandidateID(int candidateID) {
-    this->candidateID = candidateID;
+void Vote::setCandidateID(int CandidateID) {
+    this->CandidateID = CandidateID;
 }
-void Vote::setElectionID(int electionID) {
-    this->electionID = electionID;
+void Vote::setElectionID(int ElectionID) {
+    this->ElectionID = ElectionID;
 }
-void Vote::setPollingStationID(int pollingStationID) {
-    this->pollingStationID = pollingStationID;
+void Vote::setPollingStationID(int PollingStationID) {
+    this->PollingStationID = PollingStationID;
 }
-void Vote::setTimestamp(const string& timestamp) {
-    this->timestamp = timestamp;
+void Vote::setTimestamp(const string& VoteTime) {
+    this->VoteTime = VoteTime;
 }
 int Vote::getVoteID() const {
-    return voteID;
+    return VoteID;
 }
 int Vote::getVoterID() const {
-    return voterID;
+    return VoterID;
 }
 int Vote::getCandidateID() const {
-    return candidateID;
+    return CandidateID;
 }
 int Vote::getElectionID() const {
-    return electionID;
+    return ElectionID;
 }
 int Vote::getPollingStationID() const {
-    return pollingStationID;
+    return PollingStationID;
 }
 string Vote::getTimestamp() const {
-    return timestamp;
+    return VoteTime;
 }
 void Vote::displayVoteInfo() const {
-    cout << "Vote ID: " << voteID << "\n"
-              << "Voter ID: " << voterID << "\n"
-              << "Candidate ID: " << candidateID << "\n"
-              << "Election ID: " << electionID << "\n"
-              << "Polling Station ID: " << pollingStationID << "\n"
-              << "Timestamp: " << timestamp << endl;
+    cout << "Vote ID: " << VoteID << "\n"
+              << "Voter ID: " << VoterID << "\n"
+              << "Candidate ID: " << CandidateID << "\n"
+              << "Election ID: " << ElectionID << "\n"
+              << "Polling Station ID: " << PollingStationID << "\n"
+              << "Timestamp: " << VoteTime << endl;
 }

@@ -7,15 +7,15 @@ using namespace std;
 class Result {
 public:
 Result();
-    Result(int id, int constituencyID, int electionID, int winnerCandidateID, int totalVotes);
+    Result(int id, int PollingStationID, int ElectionID, int winnerCandidateID, int totalVotes);
     void declareResult();
     void setResultID(int id);
-    void setConstituencyID(int constituencyID);
-    void setElectionID(int electionID);
+    void setPollingStationID(int PollingStationID);
+    void setElectionID(int ElectionID);
     void setWinnerCandidateID(int winnerCandidateID);
     void setTotalVotes(int totalVotes);
     int getResultID() const;
-    int getConstituencyID() const;
+    int getPollingStationID() const;
     int getElectionID() const;
     int getWinnerCandidateID() const;
     int getTotalVotes() const;
@@ -23,8 +23,8 @@ Result();
 
 private:
     int resultID;
-    int constituencyID;
-    int electionID;
+    int PollingStationID;
+    int ElectionID;
     int winnerCandidateID;
     int totalVotes;
 };

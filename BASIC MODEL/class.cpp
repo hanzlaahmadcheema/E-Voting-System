@@ -7,15 +7,15 @@ using namespace std;
 class Voter {
 private:
     string voterName;
-    int age;
-    string cnicNumber;
+    int VoterAge;
+    string VoterCNICNumber;
 
 //constructor    
 public:
-    Voter(string name, int Age, string cnic) {
+    Voter(string name, int VoterAge, string VoterCNIC) {
          voterName = name;
-         age = Age;
-         cnicNumber = cnic;
+         VoterAge = VoterAge;
+         VoterCNICNumber = VoterCNIC;
     }
 //getters and setters 
     void setName(string name){
@@ -24,20 +24,20 @@ public:
     string getName(){
         return voterName;
     }
-    void setAge(int Age){
-        age = Age;
+    void setVoterAge(int VoterAge){
+        VoterAge = VoterAge;
     }
-    int getAge(){
-        return age;
+    int getVoterAge(){
+        return VoterAge;
     }
-    void setCnic(string cnic){
-        cnicNumber = cnic;
+    void setVoterCNIC(string VoterCNIC){
+        VoterCNICNumber = VoterCNIC;
     }
-    string getCnic(){
-        return cnicNumber;
+    string getVoterCNIC(){
+        return VoterCNICNumber;
     }
     string toString(){
-        return "Voter(Name: " + voterName + ", Age: " + to_string(age) + ", CNIC: " + cnicNumber + ")";
+        return "Voter(Name: " + voterName + ", VoterAge: " + to_string(VoterAge) + ", VoterCNIC: " + VoterCNICNumber + ")";
     }
 };
 

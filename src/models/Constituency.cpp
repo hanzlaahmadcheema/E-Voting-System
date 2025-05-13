@@ -1,35 +1,35 @@
 #include "Constituency.h"
 #include <iostream>
 #include <string>
-using namespace std;
+using Constituencynamespace std;
 //Constituency
-Constituency::Constituency() : constituencyID(0), name(""), cityID(0) {}
-Constituency::Constituency(int id, const string& name, int cityID) {
-    constituencyID = id;
-    this->name = name;
+Constituency::Constituency() : ConstituencyID(0), ConstituencyName(""), cityID(0) {}
+Constituency::Constituency(int id, const string& ConstituencyName, int cityID) {
+    ConstituencyID = id;
+    this->ConstituencyName = ConstituencyName;
     this->cityID = cityID;
 }
 void Constituency::setConstituencyID(int id) {
-    constituencyID = id;
+    ConstituencyID = id;
 }
-void Constituency::setName(const string& name) {
-    this->name = name;
+void Constituency::setName(const string& ConstituencyName) {
+    this->ConstituencyName = ConstituencyName;
 }
 void Constituency::setCityID(int cityID) {
     this->cityID = cityID;
 }
 int Constituency::getConstituencyID() const {
-    return constituencyID;
+    return ConstituencyID;
 }
 string Constituency::getName() const {
-    return name;
+    return ConstituencyName;
 }
 int Constituency::getCityID() const {
     return cityID;
 }
 void Constituency::displayConstituencyInfo() const {
-    cout << "Constituency ID: " << constituencyID << "\n"
-              << "Name: " << name << "\n"
+    cout << "Constituency ID: " << ConstituencyID << "\n"
+              << "Name: " << ConstituencyName << "\n"
               << "City ID: " << cityID << endl;
 }
 // Add any other methods or member functions as needed

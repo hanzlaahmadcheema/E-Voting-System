@@ -3,72 +3,72 @@
 #include <string>
 using namespace std;
 //Voter
-Voter::Voter() : voterID(0), name(""), cnic(""),  gender(""), age(0), address(""), cityID(0), constituencyID(0) {}
-Voter::Voter(int id, const string& name, const string& cnic, const string& gender, int age, const string& address, int cityID, int constituencyID) {
-    voterID = id;
-    this->name = name;
-    this->cnic = cnic;
-    this->gender = gender;
-    this->age = age;
-    this->address = address;
-    this->cityID = cityID;
-    this->constituencyID = constituencyID;
+Voter::Voter() : VoterID(0), VoterName(""), VoterCNIC(""),  VoterGender(""), VoterAge(0), VoterAddress(""), PollingStationID(0), ConstituencyID(0) {}
+Voter::Voter(int VoterID, const string& VoterName, const string& VoterCNIC, const string& VoterGender, int VoterAge, const string& VoterAddress, int PollingStationID, int ConstituencyID) {
+    VoterID = VoterID;
+    this->VoterName = VoterName;
+    this->VoterCNIC = VoterCNIC;
+    this->VoterGender = VoterGender;
+    this->VoterAge = VoterAge;
+    this->VoterAddress = VoterAddress;
+    this->PollingStationID = PollingStationID;
+    this->ConstituencyID = ConstituencyID;
 }
-void Voter::setVoterID(int id) {
-    voterID = id;
+void Voter::setVoterID(int VoterID) {
+    VoterID = VoterID;
 }
-void Voter::setName(const string& name) {
-    this->name = name;
+void Voter::setVoterName(const string& VoterName) {
+    this->VoterName = VoterName;
 }
-void Voter::setCNIC(const string& cnic) {
-    this->cnic = cnic;
+void Voter::setVoterCNIC(const string& VoterCNIC) {
+    this->VoterCNIC = VoterCNIC;
 }
-void Voter::setGender(const string& gender) {
-    this->gender = gender;
+void Voter::setVoterGender(const string& VoterGender) {
+    this->VoterGender = VoterGender;
 }
-void Voter::setAge(int age) {
-    this->age = age;
+void Voter::setVoterAge(int VoterAge) {
+    this->VoterAge = VoterAge;
 }
-void Voter::setAddress(const string& address) {
-    this->address = address;
+void Voter::setVoterAddress(const string& VoterAddress) {
+    this->VoterAddress = VoterAddress;
 }
-void Voter::setCityID(int cityID) {
-    this->cityID = cityID;
+void Voter::setPollingStationID(int PollingStationID) {
+    this->PollingStationID = PollingStationID;
 }
-void Voter::setConstituencyID(int constituencyID) {
-    this->constituencyID = constituencyID;
+void Voter::setConstituencyID(int ConstituencyID) {
+    this->ConstituencyID = ConstituencyID;
 }
 int Voter::getVoterID() const {
-    return voterID;
+    return VoterID;
 }
-string Voter::getName() const {
-    return name;
+string Voter::getVoterName() const {
+    return VoterName;
 }
-string Voter::getCNIC() const {
-    return cnic;
+string Voter::getVoterCNIC() const {
+    return VoterCNIC;
 }
-string Voter::getGender() const {
-    return gender;
+string Voter::getVoterGender() const {
+    return VoterGender;
 }
-int Voter::getAge() const {
-    return age;
+int Voter::getVoterAge() const {
+    return VoterAge;
 }
-string Voter::getAddress() const {
-    return address;
+string Voter::getVoterAddress() const {
+    return VoterAddress;
 }
-int Voter::getCityID() const {
-    return cityID;
+int Voter::getPollingStationID() const {
+    return PollingStationID;
 }
 int Voter::getConstituencyID() const {
-    return constituencyID;
+    return ConstituencyID;
 }
 void Voter::displayVoterInfo() const {
-    cout << "Voter ID: " << voterID << "\n"
-              << "Name: " << name << "\n"
-              << "CNIC: " << cnic << "\n"
-              << "Gender: " << gender << "\n"
-              << "Age: " << age << "\n"
-              << "Address: " << address << "\n"
-              << "City ID: " << cityID << "\n"
-              << "Constituency ID: " << constituencyID << endl;
+    cout << "Voter ID: " << VoterID << "\n"
+              << "VoterName: " << VoterName << "\n"
+              << "VoterCNIC: " << VoterCNIC << "\n"
+              << "VoterGender: " << VoterGender << "\n"
+              << "VoterAge: " << VoterAge << "\n"
+              << "Address: " << VoterAddress << "\n"
+              << "Polling Station ID: " << PollingStationID << "\n"
+              << "Constituency ID: " << ConstituencyID << endl;
 }
