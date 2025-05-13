@@ -7,8 +7,8 @@ using namespace std;
 class Vote {
 public:
 Vote();
-    Vote(int id, int VoterID, int CandidateID, int ElectionID, int PollingStationID, const string& VoteTime);
-    void setVoteID(int id);
+    Vote(int VoteID, int VoterID, int CandidateID, int ElectionID, int PollingStationID, const string& VoteTime);
+    void setVoteID(int VoteID);
     void setVoterID(int VoterID);
     void setCandidateID(int CandidateID);
     void setElectionID(int ElectionID);

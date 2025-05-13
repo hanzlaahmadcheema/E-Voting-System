@@ -7,11 +7,11 @@ using namespace std;
 class Candidate {
 public:
 Candidate();
-    Candidate(int id, const string& CandidateName, int partyID, int ElectionID, int ConstituencyID);
+    Candidate(int CandidateID, const string& CandidateName, int PartyID, int ElectionID, int ConstituencyID);
     void displayCandidateInfo() const;
-    void setCandidateID(int id);
-    void setName(const string& CandidateName);
-    void setPartyID(int partyID);
+    void setCandidateID(int CandidateID);
+    void setCandidateName(const string& CandidateName);
+    void setPartyID(int PartyID);
     void setConstituencyID(int ConstituencyID);
     
     int getCandidateID() const;
@@ -23,7 +23,7 @@ Candidate();
 private:
     int CandidateID;
     string CandidateName;
-    int partyID;
+    int PartyID;
     int ConstituencyID;
 };
 

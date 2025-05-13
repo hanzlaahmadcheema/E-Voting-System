@@ -1,26 +1,26 @@
 #include "Election.h"
 #include <iostream>
 #include <string>
-using Electionnamespace std;
+using namespace std;
 //Election
-Election::Election() : ElectionID(0), ElectionName(""), type(""), date("") {}
-Election::Election(int id, const string& ElectionName, const string& type, const string& date) {
-    ElectionID = id;
+Election::Election() : ElectionID(0), ElectionName(""), ElectionType(""), ElectionDate("") {}
+Election::Election(int ElectionID, const string& ElectionName, const string& ElectionType, const string& ElectionDate) {
+    this->ElectionID = ElectionID;
     this->ElectionName = ElectionName;
-    this->type = type;
-    this->date = date;
+    this->ElectionType = ElectionType;
+    this->ElectionDate = ElectionDate;
 }
-void Election::setElectionID(int id) {
-    ElectionID = id;
+void Election::setElectionID(int ElectionID) {
+    this->ElectionID = ElectionID;
 }
-void Election::setName(const string& ElectionName) {
+void Election::setElectionName(const string& ElectionName) {
     this->ElectionName = ElectionName;
 }
-void Election::setType(const string& type) {
-    this->type = type;
+void Election::setType(const string& ElectionType) {
+    this->ElectionType = ElectionType;
 }
-void Election::setDate(const string& date) {
-    this->date = date;
+void Election::setDate(const string& ElectionDate) {
+    this->ElectionDate = ElectionDate;
 }
 int Election::getElectionID() const {
     return ElectionID;
@@ -29,14 +29,14 @@ string Election::getName() const {
     return ElectionName;
 }
 string Election::getType() const {
-    return type;
+    return ElectionType;
 }
 string Election::getDate() const {
-    return date;
+    return ElectionDate;
 }
 void Election::displayElectionInfo() const {
     cout << "Election ID: " << ElectionID << "\n"
               << "Name: " << ElectionName << "\n"
-              << "Type: " << type << "\n"
-              << "Date: " << date << endl;
+              << "Type: " << ElectionType << "\n"
+              << "Date: " << ElectionDate << endl;
 }

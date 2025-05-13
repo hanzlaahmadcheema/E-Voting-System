@@ -3,21 +3,21 @@
 #include <string>
 using namespace std;
 //Result
-Result::Result() : resultID(0), PollingStationID(0), ElectionID(0), winnerCandidateID(0), totalVotes(0) {}
-Result::Result(int id, int ConstituencyID, int ElectionID, int winnerCandidateID, int totalVotes) {
-    resultID = id;
+Result::Result() : ResultID(0), PollingStationID(0), ElectionID(0), WinnerCandidateID(0), TotalVotes(0) {}
+Result::Result(int ResultID, int ConstituencyID, int ElectionID, int WinnerCandidateID, int TotalVotes) {
+    this->ResultID = ResultID;
     this->PollingStationID = ConstituencyID;
     this->ElectionID = ElectionID;
-    this->winnerCandidateID = winnerCandidateID;
-    this->totalVotes = totalVotes;
+    this->WinnerCandidateID = WinnerCandidateID;
+    this->TotalVotes = TotalVotes;
 }
 void Result::declareResult() {
     cout << "Result declared for Election ID: " << ElectionID << "\n"
-              << "Winner Candidate ID: " << winnerCandidateID << "\n"
-              << "Total Votes: " << totalVotes << endl;
+              << "Winner Candidate ID: " << WinnerCandidateID << "\n"
+              << "Total Votes: " << TotalVotes << endl;
 }
-void Result::setResultID(int id) {
-    resultID = id;
+void Result::setResultID(int ResultID) {
+    this->ResultID = ResultID;
 }
 void Result::setPollingStationID(int PollingStationID) {
     this->PollingStationID = PollingStationID;
@@ -25,14 +25,14 @@ void Result::setPollingStationID(int PollingStationID) {
 void Result::setElectionID(int ElectionID) {
     this->ElectionID = ElectionID;
 }
-void Result::setWinnerCandidateID(int winnerCandidateID) {
-    this->winnerCandidateID = winnerCandidateID;
+void Result::setWinnerCandidateID(int WinnerCandidateID) {
+    this->WinnerCandidateID = WinnerCandidateID;
 }
-void Result::setTotalVotes(int totalVotes) {
-    this->totalVotes = totalVotes;
+void Result::setTotalVotes(int TotalVotes) {
+    this->TotalVotes = TotalVotes;
 }
 int Result::getResultID() const {
-    return resultID;
+    return ResultID;
 }
 int Result::getPollingStationID() const {
     return PollingStationID;
@@ -41,15 +41,15 @@ int Result::getElectionID() const {
     return ElectionID;
 }
 int Result::getWinnerCandidateID() const {
-    return winnerCandidateID;
+    return WinnerCandidateID;
 }
 int Result::getTotalVotes() const {
-    return totalVotes;
+    return TotalVotes;
 }
 void Result::displayResultInfo() const {
-    cout << "Result ID: " << resultID << "\n"
+    cout << "Result ID: " << ResultID << "\n"
               << "Polling Station ID: " << PollingStationID << "\n"
               << "Election ID: " << ElectionID << "\n"
-              << "Winner Candidate ID: " << winnerCandidateID << "\n"
-              << "Total Votes: " << totalVotes << endl;
+              << "Winner Candidate ID: " << WinnerCandidateID << "\n"
+              << "Total Votes: " << TotalVotes << endl;
 }

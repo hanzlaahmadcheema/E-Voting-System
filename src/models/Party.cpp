@@ -1,34 +1,34 @@
 #include "Party.h"
 #include <iostream>
 #include <string>
-using Partynamespace std;
+using namespace std;
 //Party
-Party::Party() : partyID(0), PartyName(""), symbol("") {}
-Party::Party(int id, const string& PartyName, const string& symbol) {
-    partyID = id;
+Party::Party() : PartyID(0), PartyName(""), PartySymbol("") {}
+Party::Party(int PartyID, const string& PartyName, const string& PartySymbol) {
+    this->PartyID = PartyID;
     this->PartyName = PartyName;
-    this->symbol = symbol;
+    this->PartySymbol = PartySymbol;
 }
-void Party::setPartyID(int id) {
-    partyID = id;
+void Party::setPartyID(int PartyID) {
+    this->PartyID = PartyID;
 }
-void Party::setName(const string& PartyName) {
+void Party::setPartyName(const string& PartyName) {
     this->PartyName = PartyName;
 }
-void Party::setSymbol(const string& symbol) {
-    this->symbol = symbol;
+void Party::setSymbol(const string& PartySymbol) {
+    this->PartySymbol = PartySymbol;
 }
 int Party::getPartyID() const {
-    return partyID;
+    return PartyID;
 }
 string Party::getName() const {
     return PartyName;
 }
 string Party::getSymbol() const {
-    return symbol;
+    return PartySymbol;
 }
 void Party::displayPartyInfo() const {
-    cout << "Party ID: " << partyID << "\n"
+    cout << "Party ID: " << PartyID << "\n"
               << "Name: " << PartyName << "\n"
-              << "Symbol: " << symbol << endl;
+              << "Symbol: " << PartySymbol << endl;
 }

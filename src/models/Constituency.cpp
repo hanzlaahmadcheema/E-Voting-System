@@ -1,22 +1,22 @@
 #include "Constituency.h"
 #include <iostream>
 #include <string>
-using Constituencynamespace std;
+using namespace std;
 //Constituency
-Constituency::Constituency() : ConstituencyID(0), ConstituencyName(""), cityID(0) {}
-Constituency::Constituency(int id, const string& ConstituencyName, int cityID) {
-    ConstituencyID = id;
+Constituency::Constituency() : ConstituencyID(0), ConstituencyName(""), CityID(0) {}
+Constituency::Constituency(int ConstituencyID, const string& ConstituencyName, int CityID) {
+    this->ConstituencyID = ConstituencyID;
     this->ConstituencyName = ConstituencyName;
-    this->cityID = cityID;
+    this->CityID = CityID;
 }
-void Constituency::setConstituencyID(int id) {
-    ConstituencyID = id;
+void Constituency::setConstituencyID(int ConstituencyID) {
+    this->ConstituencyID = ConstituencyID;
 }
-void Constituency::setName(const string& ConstituencyName) {
+void Constituency::setConstituencyName(const string& ConstituencyName) {
     this->ConstituencyName = ConstituencyName;
 }
-void Constituency::setCityID(int cityID) {
-    this->cityID = cityID;
+void Constituency::setCityID(int CityID) {
+    this->CityID = CityID;
 }
 int Constituency::getConstituencyID() const {
     return ConstituencyID;
@@ -25,11 +25,11 @@ string Constituency::getName() const {
     return ConstituencyName;
 }
 int Constituency::getCityID() const {
-    return cityID;
+    return CityID;
 }
 void Constituency::displayConstituencyInfo() const {
     cout << "Constituency ID: " << ConstituencyID << "\n"
               << "Name: " << ConstituencyName << "\n"
-              << "City ID: " << cityID << endl;
+              << "City ID: " << CityID << endl;
 }
 // Add any other methods or member functions as needed

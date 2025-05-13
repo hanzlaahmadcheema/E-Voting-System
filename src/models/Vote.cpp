@@ -4,16 +4,16 @@
 using namespace std;
 //Vote
 Vote::Vote() : VoteID(0), VoterID(0), CandidateID(0), ElectionID(0), PollingStationID(0), VoteTime("") {}
-Vote::Vote(int id, int VoterID, int CandidateID, int ElectionID, int PollingStationID, const string& VoteTime) {
-    VoteID = id;
+Vote::Vote(int VoteID, int VoterID, int CandidateID, int ElectionID, int PollingStationID, const string& VoteTime) {
+    this->VoteID = VoteID;
     this->VoterID = VoterID;
     this->CandidateID = CandidateID;
     this->ElectionID = ElectionID;
     this->PollingStationID = PollingStationID;
     this->VoteTime = VoteTime;
 }
-void Vote::setVoteID(int id) {
-    VoteID = id;
+void Vote::setVoteID(int VoteID) {
+    VoteID = VoteID;
 }
 void Vote::setVoterID(int VoterID) {
     this->VoterID = VoterID;

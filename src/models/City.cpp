@@ -1,27 +1,27 @@
 #include "City.h"
 #include <iostream>
 #include <string>
-using Citynamespace std;
+using namespace std;
 
 //City
-City::City() : cityID(0), CityName("") {}
-City::City(int id, const string& CityName) {
-    cityID = id;
+City::City() : CityID(0), CityName("") {}
+City::City(int CityID, const string& CityName) {
+    this->CityID = CityID;
     this->CityName = CityName;
 }
-void City::setCityID(int id) {
-    cityID = id;
+void City::setCityID(int CityID) {
+    this->CityID = CityID;
 }
-void City::setName(const string& CityName) {
+void City::setCityName(const string& CityName) {
     this->CityName = CityName;
 }
 int City::getCityID() const {
-    return cityID;
+    return CityID;
 }
 string City::getName() const {
     return CityName;
 }
 void City::displayCityInfo() const {
-    cout << "City ID: " << cityID << "\n"
+    cout << "City ID: " << CityID << "\n"
               << "Name: " << CityName << endl;
 }

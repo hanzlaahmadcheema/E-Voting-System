@@ -2,15 +2,15 @@
 #define PARTY_H
 
 #include <string>
-using Partynamespace std;
+using namespace std;
 
 class Party {
 public:
 Party();
-    Party(int id, const string& PartyName, const string& symbol);
-    void setPartyID(int id);
-    void setName(const string& PartyName);
-    void setSymbol(const string& symbol);
+    Party(int PartyID, const string& PartyName, const string& PartySymbol);
+    void setPartyID(int PartyID);
+    void setPartyName(const string& PartyName);
+    void setSymbol(const string& PartySymbol);
 
     int getPartyID() const;
     string getName() const;
@@ -18,9 +18,9 @@ Party();
     void displayPartyInfo() const;
 
 private:
-    int partyID;
+    int PartyID;
     string PartyName;
-    string symbol;
+    string PartySymbol;
 };
 
 #endif
