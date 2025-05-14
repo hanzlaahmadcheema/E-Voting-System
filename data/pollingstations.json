@@ -1,0 +1,26 @@
+[
+  {
+    "PollingStationID": 301,
+    "Name": "Govt School Polling",
+    "Address": "Model Town",
+    "ConstituencyID": 10
+  },
+  {
+    "PollingStationID": 302,
+    "Name": "Govt College Polling",
+    "Address": "Gulberg",
+    "ConstituencyID": 10
+  },
+  {
+    "PollingStationID": 303,
+    "Name": "Community Center Polling",
+    "Address": "DHA",
+    "ConstituencyID": 10
+  },
+  {
+    "PollingStationID": 304,
+    "Name": "Town Hall Polling",
+    "Address": "Faisal Town",
+    "ConstituencyID": 10
+  }
+]

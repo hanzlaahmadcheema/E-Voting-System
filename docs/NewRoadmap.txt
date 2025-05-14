@@ -1,0 +1,144 @@
+Here’s your **updated development roadmap** tailored to your current approach (using C++ + JSON) and aligned with the full system workflow you just described.
+
+---
+
+# 🚀 E-Voting System — Development Roadmap (C++ + JSON)
+
+### 💡 Goal: Build a complete CLI-based voting system — from voter registration to result declaration — using **modular C++ classes**, **JSON for data storage**, and **file-based logic**.
+
+---
+
+## 🧱 Phase 1: Class Implementation (Days 1–2)
+
+**Objective:** Finalize all entity class logic to reflect database structure.
+
+🔹 Files:
+
+* `models/*.h/.cpp`
+
+🔹 Tasks:
+
+* [ ] Implement constructors for all model classes (Voter, Candidate, etc.)
+* [ ] Add `toJSON()` and `fromJSON(const json&)` methods
+* [ ] Add `display()` methods for testing
+* [ ] Write sample test cases for each model in `/tests/`
+
+✅ Output: Functional object classes with real data-ready structure
+
+---
+
+## 💾 Phase 2: JSON-Based File Storage System (Days 3–5)
+
+**Objective:** Replace SQL with JSON file read/write logic using `nlohmann/json`.
+
+🔹 Files:
+
+* `db/Database.cpp/.h`
+
+🔹 Tasks:
+
+* [ ] `saveVoter(const Voter&)`, `loadVoters()`
+* [ ] `saveCandidate()`, `loadCandidates()`
+* [ ] `saveVote()`, `loadVotes()`
+* [ ] `saveResult()`, `loadResults()`
+
+✅ Output: All major entities can be saved to and loaded from `.json` files
+
+---
+
+## ⚙️ Phase 3: Voting Logic Engine (Days 6–8)
+
+**Objective:** Connect user actions with system behavior — no UI yet.
+
+🔹 Files:
+
+* `core/VotingSystem.cpp/.h`
+
+🔹 Tasks:
+
+* [ ] `registerVoter()` → checks CNIC, age, assigns ID
+* [ ] `castVote()` → checks eligibility, prevents double voting
+* [ ] `calculateResult()` → groups by constituency, determines winner
+* [ ] `listCandidatesByConstituency()`, `getVoterByCNIC()`
+
+✅ Output: In-memory and file-integrated logic for registration → voting → result
+
+---
+
+## 🖥️ Phase 4: CLI User Interface (Days 9–11)
+
+**Objective:** Provide admin and voter interfaces for real-time interaction.
+
+🔹 Files:
+
+* `cli/CLI.cpp/.h`
+
+🔹 Tasks:
+
+* [ ] `start()` — ask user: voter or admin
+* [ ] `adminMenu()` — add election, add candidate, view results
+* [ ] `voterMenu()` — register, login, vote
+* [ ] Show messages from system logic via `VotingSystem`
+
+✅ Output: CLI menus driving full app flow (all logic functional)
+
+---
+
+## 🔍 Phase 5: Testing & Data Simulation (Days 12–13)
+
+**Objective:** Confirm everything works with mock data before full run.
+
+🔹 Files:
+
+* `tests/`
+* `logs/`, `data/`
+
+🔹 Tasks:
+
+* [ ] Create mock data: 5 voters, 3 cities, 6 candidates, 2 elections
+* [ ] Simulate voting session
+* [ ] Check vote duplication protection, age validation, result accuracy
+* [ ] Log errors or unusual behavior to `/logs/system.log`
+
+✅ Output: Bug-free CLI experience with real data tests
+
+---
+
+## 📦 Phase 6: Final Wrap-Up (Day 14)
+
+**Objective:** Finalize deliverables, polish, and prepare submission.
+
+🔹 Tasks:
+
+* [ ] Write project report
+* [ ] Create slide deck
+* [ ] Polish code (comments, cleanup)
+* [ ] Generate `.exe` using `g++` or Makefile
+
+✅ Output:
+
+* `bin/eVotingSystem.exe`
+* `docs/README.md`
+* Final code & JSON data
+
+---
+
+## 🧠 BONUS: JSON File List for Storage
+
+| File Name              | Purpose                        |
+| ---------------------- | ------------------------------ |
+| `voters.json`          | Stores all registered voters   |
+| `candidates.json`      | Stores all election candidates |
+| `elections.json`       | Stores active election details |
+| `votes.json`           | Tracks each vote cast          |
+| `results.json`         | Stores final results per area  |
+| `constituencies.json`  | All constituency info          |
+| `cities.json`          | City data                      |
+| `pollingStations.json` | Polling station data           |
+| `parties.json`         | Party list                     |
+
+---
+
+## ✅ You’re Ready to Start Phase 1
+
+Let me know if you want help auto-generating the `toJSON()` / `fromJSON()` methods or setting up the `Database.cpp` with sample JSON logic.

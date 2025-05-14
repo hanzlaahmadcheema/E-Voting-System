@@ -68,4 +68,4 @@ CREATE TABLE Results (
     FOREIGN KEY (CandidateID) REFERENCES Candidates(CandidateID),
     FOREIGN KEY (ElectionID) REFERENCES Elections(ElectionID)
 );
- 
+    

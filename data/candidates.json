@@ -1,0 +1,30 @@
+[
+  {
+    "CandidateID": 201,
+    "Name": "Asad Umar",
+    "PartyID": 1,
+    "ElectionID": 1001,
+    "ConstituencyID": 10
+  },
+  {
+    "CandidateID": 202,
+    "Name": "Maryam Nawaz",
+    "PartyID": 2,
+    "ElectionID": 1001,
+    "ConstituencyID": 10
+  },
+  {
+    "CandidateID": 203,
+    "Name": "Bilawal Bhutto",
+    "PartyID": 3,
+    "ElectionID": 1001,
+    "ConstituencyID": 10
+  },
+  {
+    "CandidateID": 204,
+    "Name": "Shahbaz Sharif",
+    "PartyID": 4,
+    "ElectionID": 1001,
+    "ConstituencyID": 10
+  }
+]

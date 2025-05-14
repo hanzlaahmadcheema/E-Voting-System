@@ -1,0 +1,12 @@
+[
+  {
+    "VoterID": 101,
+    "Name": "Ahmed Khan",
+    "CNIC": "35202-1234567-1",
+    "Gender": "Male",
+    "Age": 24,
+    "Address": "Lahore, Punjab",
+    "CityID": 1,
+    "ConstituencyID": 10
+  }
+]
