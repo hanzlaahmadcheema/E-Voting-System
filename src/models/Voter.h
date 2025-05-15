@@ -11,7 +11,6 @@ class Voter {
 public:
 Voter();
     Voter(int VoterID, const string& VoterName, const string& VoterCNIC, const string& VoterGender, int VoterAge, const string& VoterAddress, int PollingStationID, int ConstituencyID);
-    void displayVoterInfo() const;
     void setVoterID(int VoterID);
     void setVoterName(const string& VoterName);
     void setVoterCNIC(const string& VoterCNIC);
@@ -36,6 +35,7 @@ Voter();
     static vector<Voter> loadAllVoters();
     static void saveAllVoters(const vector<Voter>& voters);
     static void registerVoter(const Voter& newVoter);
+    static void editVoterByID(int voterID, const Voter& updatedVoter);
     static void listAllVoters();
     static void deleteVoterByID(int voterID);
     static void updateVoterByID(int voterID, const Voter& updatedVoter);

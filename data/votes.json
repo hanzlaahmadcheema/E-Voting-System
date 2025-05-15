@@ -1,34 +1,11 @@
 [
-  {
-    "VoteID": 501,
-    "VoterID": 101,
-    "CandidateID": 201,
-    "PollingStationID": 301,
-    "ElectionID": 1001,
-    "Timestamp": "2025-08-01T12:32:00"
-  },
     {
-        "VoteID": 502,
-        "VoterID": 102,
         "CandidateID": 202,
-        "PollingStationID": 302,
-        "ElectionID": 1001,
-        "Timestamp": "2025-08-01T12:35:00"
-    },
-    {
-        "VoteID": 503,
-        "VoterID": 103,
-        "CandidateID": 203,
-        "PollingStationID": 303,
-        "ElectionID": 1001,
-        "Timestamp": "2025-08-01T12:40:00"
-    },
-    {
-        "VoteID": 504,
-        "VoterID": 104,
-        "CandidateID": 204,
-        "PollingStationID": 304,
-        "ElectionID": 1001,
-        "Timestamp": "2025-08-01T12:45:00"
+        "ConstituencyID": 999,
+        "ElectionID": 303,
+        "PollingStationID": 404,
+        "VoteID": 1,
+        "VoteTime": "2023-10-01T12:00:00",
+        "VoterID": 101
     }
 ]

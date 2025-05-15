@@ -63,15 +63,32 @@ PollingStation PollingStation::fromJSON(const json& j) {
 
 const string STATION_FILE = "../../data/polling_stations.json";
 
+// Helper: Check if string is empty or whitespace
+bool isBlank(const string& str) {
+    return str.find_first_not_of(" \t\n\r") == string::npos;
+}
+
+// Helper: Check if station ID is unique
+bool isUniqueStationID(int id, const vector<PollingStation>& list) {
+    for (const auto& s : list) {
+        if (s.getPollingStationID() == id) return false;
+    }
+    return true;
+}
+
 // Load all stations
 vector<PollingStation> loadAllStations() {
     vector<PollingStation> list;
     ifstream file(STATION_FILE);
     if (file.is_open()) {
         json j;
-        file >> j;
-        for (auto& obj : j) {
-            list.push_back(PollingStation::fromJSON(obj));
+        try {
+            file >> j;
+            for (auto& obj : j) {
+                list.push_back(PollingStation::fromJSON(obj));
+            }
+        } catch (...) {
+            cerr << "❌ Error: Corrupted polling station data.\n";
         }
     }
     return list;
@@ -80,6 +97,10 @@ vector<PollingStation> loadAllStations() {
 // Save all stations
 void saveAllStations(const vector<PollingStation>& list) {
     ofstream file(STATION_FILE);
+    if (!file.is_open()) {
+        cerr << "❌ Error: Cannot open file to save polling stations.\n";
+        return;
+    }
     json j;
     for (const auto& s : list) {
         j.push_back(s.toJSON());
@@ -90,6 +111,29 @@ void saveAllStations(const vector<PollingStation>& list) {
 // Admin: Add station
 void addPollingStation(const PollingStation& s) {
     vector<PollingStation> list = loadAllStations();
+
+    // Validation
+    if (s.getPollingStationID() <= 0) {
+        cout << "❌ Invalid Polling Station ID.\n";
+        return;
+    }
+    if (!isUniqueStationID(s.getPollingStationID(), list)) {
+        cout << "❌ Polling Station ID already exists.\n";
+        return;
+    }
+    if (isBlank(s.getPollingStationName())) {
+        cout << "❌ Polling Station name cannot be empty.\n";
+        return;
+    }
+    if (isBlank(s.getPollingStationAddress())) {
+        cout << "❌ Polling Station address cannot be empty.\n";
+        return;
+    }
+    if (s.getConstituencyID() <= 0) {
+        cout << "❌ Invalid Constituency ID.\n";
+        return;
+    }
+
     list.push_back(s);
     saveAllStations(list);
     cout << "✅ Polling station added.\n";
@@ -98,12 +142,32 @@ void addPollingStation(const PollingStation& s) {
 // Admin: Edit station
 void editPollingStation(int id, const string& newName, const string& newAddress) {
     vector<PollingStation> list = loadAllStations();
+    bool found = false;
+
+    if (id <= 0) {
+        cout << "❌ Invalid Polling Station ID.\n";
+        return;
+    }
+    if (isBlank(newName)) {
+        cout << "❌ New name cannot be empty.\n";
+        return;
+    }
+    if (isBlank(newAddress)) {
+        cout << "❌ New address cannot be empty.\n";
+        return;
+    }
+
     for (auto& s : list) {
         if (s.getPollingStationID() == id) {
             s.setPollingStationName(newName);
             s.setPollingStationAddress(newAddress);
+            found = true;
             break;
         }
+    }
+    if (!found) {
+        cout << "❌ Polling station not found.\n";
+        return;
     }
     saveAllStations(list);
     cout << "✏️ Polling station updated.\n";
@@ -111,10 +175,18 @@ void editPollingStation(int id, const string& newName, const string& newAddress)
 
 // Admin: Delete station
 void deletePollingStation(int id) {
+    if (id <= 0) {
+        cout << "❌ Invalid Polling Station ID.\n";
+        return;
+    }
     vector<PollingStation> list = loadAllStations();
     auto it = remove_if(list.begin(), list.end(), [id](const PollingStation& s) {
         return s.getPollingStationID() == id;
     });
+    if (it == list.end()) {
+        cout << "❌ Polling station not found.\n";
+        return;
+    }
     list.erase(it, list.end());
     saveAllStations(list);
     cout << "🗑️ Polling station deleted.\n";
@@ -122,11 +194,32 @@ void deletePollingStation(int id) {
 
 // Admin/User: View all stations by constituency
 void listStationsByConstituency(int constID) {
+    if (constID <= 0) {
+        cout << "❌ Invalid Constituency ID.\n";
+        return;
+    }
     vector<PollingStation> list = loadAllStations();
+    bool found = false;
     for (const auto& s : list) {
         if (s.getConstituencyID() == constID) {
             cout << "🏫 " << s.getPollingStationID() << " - " << s.getPollingStationName()
                  << " (" << s.getPollingStationAddress() << ")" << endl;
+            found = true;
         }
     }
+    if (!found) {
+        cout << "ℹ️ No polling stations found for this constituency.\n";
+    }
 }
+
+// int main() {
+//     // Example usage
+//     // PollingStation ps(1, "Main Street Station", "123 Main St", 101);
+//     // addPollingStation(ps);
+//     // listStationsByConstituency(101);
+//     // editPollingStation(1, "Updated Station", "456 Updated St");
+//     // listStationsByConstituency(101);
+//     // deletePollingStation(1);
+//     // listStationsByConstituency(101);
+//     return 0;
+// }

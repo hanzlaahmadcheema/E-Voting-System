@@ -9,6 +9,7 @@ using namespace std;
 
 vector<Vote> loadAllVotes();
 
+
 //Result
 Result::Result() : ResultID(0), PollingStationID(0), ElectionID(0), WinnerCandidateID(0), TotalVotes(0), ConstituencyID(0) {}
 Result::Result(int ResultID, int PollingStationID, int ElectionID, int WinnerCandidateID, int TotalVotes, int ConstituencyID) {
@@ -97,15 +98,43 @@ const string RESULT_FILE = "../../data/results.json";
 const string VOTE_FILE = "../../data/votes.json";
 
 // Load all results
+#include <sys/stat.h>
+
 vector<Result> loadAllResults() {
     vector<Result> results;
+    struct stat buffer;
+    if (stat(RESULT_FILE.c_str(), &buffer) != 0) {
+        // File does not exist, create an empty JSON array file
+        ofstream createFile(RESULT_FILE);
+        if (createFile.is_open()) {
+            createFile << "[]";
+            createFile.close();
+        } else {
+            cerr << "Error: Could not create results file: " << RESULT_FILE << endl;
+            return results;
+        }
+    }
     ifstream file(RESULT_FILE);
-    if (file.is_open()) {
+    if (!file.is_open()) {
+        cerr << "Error: Could not open results file: " << RESULT_FILE << endl;
+        return results;
+    }
+    try {
         json j;
         file >> j;
-        for (auto& obj : j) {
-            results.push_back(Result::fromJSON(obj));
+        if (!j.is_array()) {
+            cerr << "Error: Results file is not a valid JSON array." << endl;
+            return results;
         }
+        for (auto& obj : j) {
+            try {
+                results.push_back(Result::fromJSON(obj));
+            } catch (const std::exception& e) {
+                cerr << "Warning: Skipping invalid result entry: " << e.what() << endl;
+            }
+        }
+    } catch (const std::exception& e) {
+        cerr << "Error: Failed to parse results file: " << e.what() << endl;
     }
     return results;
 }
@@ -113,38 +142,77 @@ vector<Result> loadAllResults() {
 // Save all results
 void saveAllResults(const vector<Result>& results) {
     ofstream file(RESULT_FILE);
-    json j;
+    if (!file.is_open()) {
+        cerr << "Error: Could not open results file for writing: " << RESULT_FILE << endl;
+        return;
+    }
+    json j = json::array();
     for (const auto& r : results) {
-        j.push_back(r.toJSON());
+        try {
+            j.push_back(r.toJSON());
+        } catch (const std::exception& e) {
+            cerr << "Warning: Could not serialize result: " << e.what() << endl;
+        }
     }
     file << j.dump(4);
 }
 
 // Admin: Compute results for a constituency in an election
 void computeConstituencyResult(int electionID, int constituencyID) {
+    if (electionID <= 0 || constituencyID <= 0) {
+        cerr << "Error: Invalid electionID or constituencyID." << endl;
+        return;
+    }
     vector<Vote> votes = loadAllVotes();
+    if (votes.empty()) {
+        cerr << "Error: No votes found." << endl;
+        return;
+    }
     unordered_map<int, int> voteCounts; // CandidateID -> Vote count
 
     for (const auto& vote : votes) {
-        if (vote.getElectionID() == electionID) {
-            // Assume candidate IDs are filtered by constituency outside this logic
-            voteCounts[vote.getCandidateID()]++;
+        if (vote.getElectionID() == electionID && vote.getConstituencyID() == constituencyID) {
+            int candidateID = vote.getCandidateID();
+            if (candidateID > 0)
+                voteCounts[candidateID]++;
         }
+    }
+
+    if (voteCounts.empty()) {
+        cerr << "Error: No votes found for this election and constituency." << endl;
+        return;
     }
 
     // Find the candidate with the most votes
     int maxVotes = 0;
     int winnerCandidateID = -1;
+    bool tie = false;
     for (const auto& pair : voteCounts) {
         if (pair.second > maxVotes) {
             maxVotes = pair.second;
             winnerCandidateID = pair.first;
+            tie = false;
+        } else if (pair.second == maxVotes) {
+            tie = true;
+        }
+    }
+
+    if (tie) {
+        cerr << "Warning: There is a tie between candidates for this constituency." << endl;
+        // Optionally, handle tie-break logic here.
+    }
+
+    // Check for duplicate result
+    vector<Result> allResults = loadAllResults();
+    for (const auto& r : allResults) {
+        if (r.getElectionID() == electionID && r.getConstituencyID() == constituencyID) {
+            cerr << "Error: Result for this election and constituency already exists." << endl;
+            return;
         }
     }
 
     // Save result
     Result result(0, constituencyID, electionID, winnerCandidateID, maxVotes, constituencyID);
-    vector<Result> allResults = loadAllResults();
     allResults.push_back(result);
     saveAllResults(allResults);
 
@@ -155,7 +223,15 @@ void computeConstituencyResult(int electionID, int constituencyID) {
 
 // Admin/User: View result for a constituency
 void viewResultByConstituency(int electionID, int constituencyID) {
+    if (electionID <= 0 || constituencyID <= 0) {
+        cerr << "Error: Invalid electionID or constituencyID." << endl;
+        return;
+    }
     vector<Result> results = loadAllResults();
+    if (results.empty()) {
+        cerr << "Error: No results found." << endl;
+        return;
+    }
     for (const auto& r : results) {
         if (r.getElectionID() == electionID && r.getConstituencyID() == constituencyID) {
             cout << "📊 Constituency " << constituencyID << " | Winner: CandidateID "
@@ -169,6 +245,10 @@ void viewResultByConstituency(int electionID, int constituencyID) {
 // Admin/User: List all results
 void listAllResults() {
     vector<Result> results = loadAllResults();
+    if (results.empty()) {
+        cout << "No results to display." << endl;
+        return;
+    }
     for (const auto& r : results) {
         cout << "📌 ElectionID: " << r.getElectionID()
              << " | ConstID: " << r.getConstituencyID()
@@ -176,3 +256,15 @@ void listAllResults() {
              << " | Votes: " << r.getTotalVotes() << endl;
     }
 }
+
+// int main() {
+//     // Example usage
+//     Result r1(1, 101, 2023, 5, 1000, 1);
+//     r1.declareResult();
+//     r1.displayResultInfo();
+//     computeConstituencyResult(2023, 1);
+//     viewResultByConstituency(2023, 1);
+//     listAllResults();
+
+//     return 0;
+// }

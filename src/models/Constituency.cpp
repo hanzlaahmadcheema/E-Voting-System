@@ -51,7 +51,24 @@ Constituency Constituency::fromJSON(const json& j) {
     );
 }
 
-const string CONSTITUENCY_FILE = "data/constituencies.json";
+const string CONSTITUENCY_FILE = "../../data/constituencies.json";
+
+// Helper: Check if constituency ID exists
+bool constituencyIDExists(const vector<Constituency>& list, int id) {
+    return any_of(list.begin(), list.end(), [id](const Constituency& c) {
+        return c.getConstituencyID() == id;
+    });
+}
+
+// Helper: Check if constituency name exists (case-insensitive)
+bool constituencyNameExists(const vector<Constituency>& list, const string& name) {
+    return any_of(list.begin(), list.end(), [&name](const Constituency& c) {
+        string n1 = c.getConstituencyName(), n2 = name;
+        transform(n1.begin(), n1.end(), n1.begin(), ::tolower);
+        transform(n2.begin(), n2.end(), n2.begin(), ::tolower);
+        return n1 == n2;
+    });
+}
 
 // Load all constituencies
 vector<Constituency> loadAllConstituencies() {
@@ -59,9 +76,13 @@ vector<Constituency> loadAllConstituencies() {
     ifstream file(CONSTITUENCY_FILE);
     if (file.is_open()) {
         json j;
-        file >> j;
-        for (auto& obj : j) {
-            list.push_back(Constituency::fromJSON(obj));
+        try {
+            file >> j;
+            for (auto& obj : j) {
+                list.push_back(Constituency::fromJSON(obj));
+            }
+        } catch (...) {
+            cerr << "❌ Error: Invalid JSON format in constituency file.\n";
         }
     }
     return list;
@@ -70,6 +91,10 @@ vector<Constituency> loadAllConstituencies() {
 // Save all constituencies
 void saveAllConstituencies(const vector<Constituency>& list) {
     ofstream file(CONSTITUENCY_FILE);
+    if (!file.is_open()) {
+        cerr << "❌ Error: Unable to open file for writing.\n";
+        return;
+    }
     json j;
     for (const auto& c : list) {
         j.push_back(c.toJSON());
@@ -80,6 +105,29 @@ void saveAllConstituencies(const vector<Constituency>& list) {
 // Admin: Add constituency
 void addConstituency(const Constituency& newConst) {
     vector<Constituency> list = loadAllConstituencies();
+
+    // Validation: ID positive, unique; Name non-empty, unique; CityID positive
+    if (newConst.getConstituencyID() <= 0) {
+        cout << "❌ Error: Constituency ID must be positive.\n";
+        return;
+    }
+    if (constituencyIDExists(list, newConst.getConstituencyID())) {
+        cout << "❌ Error: Constituency ID already exists.\n";
+        return;
+    }
+    if (newConst.getConstituencyName().empty()) {
+        cout << "❌ Error: Constituency name cannot be empty.\n";
+        return;
+    }
+    if (constituencyNameExists(list, newConst.getConstituencyName())) {
+        cout << "❌ Error: Constituency name already exists.\n";
+        return;
+    }
+    if (newConst.getCityID() <= 0) {
+        cout << "❌ Error: City ID must be positive.\n";
+        return;
+    }
+
     list.push_back(newConst);
     saveAllConstituencies(list);
     cout << "✅ Constituency added.\n";
@@ -88,11 +136,31 @@ void addConstituency(const Constituency& newConst) {
 // Admin: Edit constituency name
 void editConstituency(int id, const string& newName) {
     vector<Constituency> list = loadAllConstituencies();
+    bool found = false;
+
+    if (id <= 0) {
+        cout << "❌ Error: Invalid constituency ID.\n";
+        return;
+    }
+    if (newName.empty()) {
+        cout << "❌ Error: New name cannot be empty.\n";
+        return;
+    }
+    if (constituencyNameExists(list, newName)) {
+        cout << "❌ Error: Constituency name already exists.\n";
+        return;
+    }
+
     for (auto& c : list) {
         if (c.getConstituencyID() == id) {
             c.setConstituencyName(newName);
+            found = true;
             break;
         }
+    }
+    if (!found) {
+        cout << "❌ Error: Constituency ID not found.\n";
+        return;
     }
     saveAllConstituencies(list);
     cout << "✏️ Constituency updated.\n";
@@ -100,21 +168,51 @@ void editConstituency(int id, const string& newName) {
 
 // Admin: Delete constituency by ID
 void deleteConstituency(int id) {
+    if (id <= 0) {
+        cout << "❌ Error: Invalid constituency ID.\n";
+        return;
+    }
     vector<Constituency> list = loadAllConstituencies();
+    size_t before = list.size();
     auto it = remove_if(list.begin(), list.end(), [id](const Constituency& c) {
         return c.getConstituencyID() == id;
     });
     list.erase(it, list.end());
+    if (list.size() == before) {
+        cout << "❌ Error: Constituency ID not found.\n";
+        return;
+    }
     saveAllConstituencies(list);
-    cout << "🗑️ Constituency deleted if existed.\n";
+    cout << "🗑️ Constituency deleted.\n";
 }
 
 // Admin/User: List by city
 void listConstituenciesByCity(int cityID) {
+    if (cityID <= 0) {
+        cout << "❌ Error: Invalid city ID.\n";
+        return;
+    }
     vector<Constituency> list = loadAllConstituencies();
+    bool found = false;
     for (const auto& c : list) {
         if (c.getCityID() == cityID) {
             cout << "📍 " << c.getConstituencyID() << " - " << c.getConstituencyName() << endl;
+            found = true;
         }
     }
+    if (!found) {
+        cout << "ℹ️ No constituencies found for this city.\n";
+    }
 }
+
+// int main() {
+//     // Example usage
+//     Constituency c1(1, "Downtown", 101);
+//     addConstituency(c1);
+//     listConstituenciesByCity(101);
+//     editConstituency(1, "Uptown");
+//     listConstituenciesByCity(101);
+//     deleteConstituency(1);
+//     listConstituenciesByCity(101);
+//     return 0;
+// }

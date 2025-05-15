@@ -6,16 +6,17 @@
 using namespace std;
 //Vote
 Vote::Vote() : VoteID(0), VoterID(0), CandidateID(0), ElectionID(0), PollingStationID(0), VoteTime("") {}
-Vote::Vote(int VoteID, int VoterID, int CandidateID, int ElectionID, int PollingStationID, const string& VoteTime) {
+Vote::Vote(int VoteID, int VoterID, int CandidateID, int ElectionID, int PollingStationID, int ConstituencyID, const string& VoteTime) {
     this->VoteID = VoteID;
     this->VoterID = VoterID;
     this->CandidateID = CandidateID;
     this->ElectionID = ElectionID;
     this->PollingStationID = PollingStationID;
+    this->ConstituencyID = ConstituencyID;
     this->VoteTime = VoteTime;
 }
 void Vote::setVoteID(int VoteID) {
-    VoteID = VoteID;
+    this->VoteID = VoteID;
 }
 void Vote::setVoterID(int VoterID) {
     this->VoterID = VoterID;
@@ -28,6 +29,9 @@ void Vote::setElectionID(int ElectionID) {
 }
 void Vote::setPollingStationID(int PollingStationID) {
     this->PollingStationID = PollingStationID;
+}
+void Vote::setConstituencyID(int ConstituencyID) {
+    this->ConstituencyID = ConstituencyID;
 }
 void Vote::setTimestamp(const string& VoteTime) {
     this->VoteTime = VoteTime;
@@ -47,6 +51,9 @@ int Vote::getElectionID() const {
 int Vote::getPollingStationID() const {
     return PollingStationID;
 }
+int Vote::getConstituencyID() const {
+    return ConstituencyID;
+}
 string Vote::getTimestamp() const {
     return VoteTime;
 }
@@ -56,6 +63,7 @@ void Vote::displayVoteInfo() const {
               << "Candidate ID: " << CandidateID << "\n"
               << "Election ID: " << ElectionID << "\n"
               << "Polling Station ID: " << PollingStationID << "\n"
+              << "Constituency ID: " << ConstituencyID << "\n"
               << "Timestamp: " << VoteTime << endl;
 }
 
@@ -66,6 +74,7 @@ json Vote::toJSON() const {
         {"CandidateID", CandidateID},
         {"ElectionID", ElectionID},
         {"PollingStationID", PollingStationID},
+        {"ConstituencyID", ConstituencyID},
         {"VoteTime", VoteTime}
     };
 }
@@ -77,6 +86,7 @@ Vote Vote::fromJSON(const json& j) {
         j.at("CandidateID").get<int>(),
         j.at("ElectionID").get<int>(),
         j.at("PollingStationID").get<int>(),
+        j.at("ConstituencyID").get<int>(),
         j.at("VoteTime").get<std::string>()
     );
 }
@@ -84,14 +94,21 @@ Vote Vote::fromJSON(const json& j) {
 const string VOTE_FILE = "../../data/votes.json";
 
 // Load all votes
+#include <set>
+#include <regex>
+
 vector<Vote> loadAllVotes() {
     vector<Vote> list;
     ifstream file(VOTE_FILE);
     if (file.is_open()) {
         json j;
-        file >> j;
-        for (auto& obj : j) {
-            list.push_back(Vote::fromJSON(obj));
+        try {
+            file >> j;
+            for (auto& obj : j) {
+                list.push_back(Vote::fromJSON(obj));
+            }
+        } catch (const std::exception& e) {
+            cerr << "Error loading votes: " << e.what() << endl;
         }
     }
     return list;
@@ -107,15 +124,60 @@ void saveAllVotes(const vector<Vote>& list) {
     file << j.dump(4);
 }
 
+// Helper: Validate Vote fields
+bool isValidVote(const Vote& vote, const vector<Vote>& existingVotes, string& errorMsg) {
+    // Check for positive IDs
+    if (vote.getVoteID() <= 0) {
+        errorMsg = "VoteID must be positive.";
+        return false;
+    }
+    if (vote.getVoterID() <= 0) {
+        errorMsg = "VoterID must be positive.";
+        return false;
+    }
+    if (vote.getCandidateID() <= 0) {
+        errorMsg = "CandidateID must be positive.";
+        return false;
+    }
+    if (vote.getElectionID() <= 0) {
+        errorMsg = "ElectionID must be positive.";
+        return false;
+    }
+    if (vote.getPollingStationID() <= 0) {
+        errorMsg = "PollingStationID must be positive.";
+        return false;
+    }
+    // Check for duplicate VoteID
+    for (const auto& v : existingVotes) {
+        if (v.getVoteID() == vote.getVoteID()) {
+            errorMsg = "Duplicate VoteID.";
+            return false;
+        }
+    }
+    // Check for duplicate vote by same voter in same election
+    for (const auto& v : existingVotes) {
+        if (v.getVoterID() == vote.getVoterID() && v.getElectionID() == vote.getElectionID()) {
+            errorMsg = "You have already voted in this election.";
+            return false;
+        }
+    }
+    // Check timestamp format (basic ISO 8601 check)
+    std::regex iso8601(R"(^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2})");
+    if (!std::regex_search(vote.getTimestamp(), iso8601)) {
+        errorMsg = "Invalid timestamp format. Use YYYY-MM-DDTHH:MM:SS";
+        return false;
+    }
+    // All checks passed
+    return true;
+}
+
 // User: Cast vote
 bool castVote(const Vote& newVote) {
     vector<Vote> votes = loadAllVotes();
-    for (const auto& v : votes) {
-        if (v.getVoterID() == newVote.getVoterID() &&
-            v.getElectionID() == newVote.getElectionID()) {
-            cout << "❌ You have already voted in this election.\n";
-            return false;
-        }
+    string errorMsg;
+    if (!isValidVote(newVote, votes, errorMsg)) {
+        cout << "❌ Vote not cast: " << errorMsg << endl;
+        return false;
     }
     votes.push_back(newVote);
     saveAllVotes(votes);
@@ -126,12 +188,34 @@ bool castVote(const Vote& newVote) {
 // Admin: View all votes
 void listAllVotes() {
     vector<Vote> votes = loadAllVotes();
+    set<int> seenVoteIDs;
     for (const auto& v : votes) {
+        // Extra: Validate each vote before displaying
+        string errorMsg;
+        if (!isValidVote(v, {}, errorMsg)) {
+            cout << "⚠️ Invalid vote (VoteID: " << v.getVoteID() << "): " << errorMsg << endl;
+            continue;
+        }
+        // Check for duplicate VoteID in file
+        if (seenVoteIDs.count(v.getVoteID())) {
+            cout << "⚠️ Duplicate VoteID detected: " << v.getVoteID() << endl;
+            continue;
+        }
+        seenVoteIDs.insert(v.getVoteID());
         cout << "🗳️ VoteID: " << v.getVoteID()
              << " | VoterID: " << v.getVoterID()
              << " | CandidateID: " << v.getCandidateID()
              << " | ElectionID: " << v.getElectionID()
-             << " | PollingStationID: " << v.getPollingStationID()
+             << " | PollingStationID:" << v.getPollingStationID()
+             << " | ConstituencyID: " << v.getConstituencyID()
              << " | Time: " << v.getTimestamp() << endl;
     }
 }
+ 
+// int main() {
+//     // Example usage
+//     Vote v1(1, 101, 202, 303, 404, 999, "2023-10-01T12:00:00");
+//     castVote(v1);
+//     listAllVotes();
+//     return 0;
+// }

@@ -28,6 +28,7 @@ Candidate();
     static vector<Candidate> loadAllCandidates();
     static void saveAllCandidates(const vector<Candidate>& candidates);
     static void addCandidate(const Candidate& newCandidate);
+    static void editCandidate(int candidateID, const string& newName, int newPartyID, int newConstituencyID);
     static void deleteCandidateByID(int candidateID);
     static void listAllCandidates();
     static void viewCandidatesByConstituency(int constID);

@@ -1,12 +1,12 @@
 [
-  {
-    "VoterID": 101,
-    "Name": "Ahmed Khan",
-    "CNIC": "35202-1234567-1",
-    "Gender": "Male",
-    "Age": 24,
-    "Address": "Lahore, Punjab",
-    "ConstituencyID": 10,
-    "PollingStationID": 1001
-  }
+    {
+        "ConstituencyID": 1,
+        "PollingStationID": 101,
+        "VoterAddress": "123 Main St",
+        "VoterAge": 30,
+        "VoterCNIC": "1234567890123",
+        "VoterGender": "Male",
+        "VoterID": 1,
+        "VoterName": "John Doe"
+    }
 ]
