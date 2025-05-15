@@ -2,7 +2,7 @@
 #define CONSTITUENCY_H
 
 #include <string>
-#include <include../../json.hpp>
+#include "../../include/json.hpp"
 
 using namespace std;
 using json = nlohmann::json;
@@ -15,12 +15,20 @@ Constituency();
     void setConstituencyName(const string& ConstituencyName);
     void setCityID(int CityID);
     int getConstituencyID() const;
-    string getName() const;
+    string getConstituencyName() const;
     int getCityID() const;
     void displayConstituencyInfo() const;    
     
     json toJSON() const;
     static Constituency fromJSON(const json& j);
+
+    static const string CONSTITUENCY_FILE;
+    static vector<Constituency> loadAllConstituencies();
+    static void saveAllConstituencies(const vector<Constituency>& constituencies);
+    static void addConstituency(const Constituency& newConstituency);
+    static void editConstituency(const Constituency& newConstituency);
+    static void deleteConstituencyByID(int constituencyID);
+    static void listConstituenciesByCity(int cityID);
 
 private:
     int ConstituencyID;

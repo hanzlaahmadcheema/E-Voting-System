@@ -1,5 +1,7 @@
 #include "Voter.h"
 #include <iostream>
+#include <vector>
+#include <fstream>
 #include <string>
 using namespace std;
 //Voter
@@ -98,4 +100,81 @@ void Voter::displayVoterInfo() const {
               << "Address: " << VoterAddress << "\n"
               << "Polling Station ID: " << PollingStationID << "\n"
               << "Constituency ID: " << ConstituencyID << endl;
+}
+
+const string VOTER_FILE = "../../data/voters.json";
+
+// Load all voters from JSON file
+vector<Voter> loadAllVoters() {
+    vector<Voter> voters;
+    ifstream file(VOTER_FILE);
+    if (file.is_open()) {
+        json j;
+        file >> j;
+        for (auto& obj : j) {
+            voters.push_back(Voter::fromJSON(obj));
+        }
+    }
+    return voters;
+}
+
+// Save all voters to JSON file
+void saveAllVoters(const vector<Voter>& voters) {
+    ofstream file(VOTER_FILE);
+    json j;
+    for (const auto& v : voters) {
+        j.push_back(v.toJSON());
+    }
+    file << j.dump(4);
+}
+
+// Admin: Register new voter
+void registerVoter(const Voter& newVoter) {
+    vector<Voter> voters = loadAllVoters();
+    voters.push_back(newVoter);
+    saveAllVoters(voters);
+    cout << "✅ Voter registered successfully.\n";
+}
+
+// Admin: List all voters
+void listAllVoters() {
+    vector<Voter> voters = loadAllVoters();
+    for (const auto& v : voters) {
+        cout << v.getVoterID() << " | " << v.getVoterName() << " | " << v.getVoterCNIC() << endl;
+    }
+}
+
+// Admin: Delete voter by ID
+void deleteVoterByID(int voterID) {
+    vector<Voter> voters = loadAllVoters();
+    auto it = remove_if(voters.begin(), voters.end(), [voterID](const Voter& v) {
+        return v.getVoterID() == voterID;
+    });
+    voters.erase(it, voters.end());
+    saveAllVoters(voters);
+    cout << "🗑️ Voter deleted if existed.\n";
+}
+
+// User: Login by CNIC (returns voter object or null)
+Voter* loginByCNIC(const string& cnic) {
+    vector<Voter> voters = loadAllVoters();
+    for (auto& v : voters) {
+        if (v.getVoterCNIC() == cnic) {
+            return new Voter(v);
+        }
+    }
+    return nullptr;
+}
+
+// User: View own profile
+void viewProfile(const Voter& v) {
+    cout << "👤 Voter Profile\n";
+    cout << "ID: " << v.getVoterID() << "\n";
+    cout << "Name: " << v.getVoterName() << "\n";
+    cout << "CNIC: " << v.getVoterCNIC() << "\n";
+    cout << "Gender: " << v.getVoterGender() << "\n";
+    cout << "Age: " << v.getVoterAge() << "\n";
+    cout << "Address: " << v.getVoterAddress() << "\n";
+    cout << "Constituency ID: " << v.getConstituencyID() << "\n";
+    cout << "Polling Station ID: " << v.getPollingStationID() << "\n";
 }

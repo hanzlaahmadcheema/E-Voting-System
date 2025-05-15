@@ -2,7 +2,7 @@
 #define VOTER_H
 
 #include <string>
-#include <include../../json.hpp>
+#include "../../include/json.hpp"
 
 using namespace std;
 using json = nlohmann::json;
@@ -31,6 +31,16 @@ Voter();
 
     json toJSON() const;
     static Voter fromJSON(const json& j);
+
+    static const string VOTER_FILE;
+    static vector<Voter> loadAllVoters();
+    static void saveAllVoters(const vector<Voter>& voters);
+    static void registerVoter(const Voter& newVoter);
+    static void listAllVoters();
+    static void deleteVoterByID(int voterID);
+    static void updateVoterByID(int voterID, const Voter& updatedVoter);
+    static vector<Voter> loginByCNIC(const string& cnic);
+    static void viewProfile(const Voter& v);
 
 private:
     int VoterID;

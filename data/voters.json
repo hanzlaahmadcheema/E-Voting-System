@@ -6,7 +6,7 @@
     "Gender": "Male",
     "Age": 24,
     "Address": "Lahore, Punjab",
-    "CityID": 1,
-    "ConstituencyID": 10
+    "ConstituencyID": 10,
+    "PollingStationID": 1001
   }
 ]

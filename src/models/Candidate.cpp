@@ -1,5 +1,7 @@
 #include "Candidate.h"
 #include <iostream>
+#include <fstream>
+#include <vector>
 #include <string>
 using namespace std;
 //Candidate
@@ -27,7 +29,7 @@ void Candidate::setConstituencyID(int ConstituencyID) {
 int Candidate::getCandidateID() const {
     return CandidateID;
 }
-string Candidate::getName() const {
+string Candidate::getCandidateName() const {
     return CandidateName;
 }
 int Candidate::getPartyID() const {
@@ -59,4 +61,78 @@ Candidate Candidate::fromJSON(const json& j) {
         j.at("PartyID").get<int>(),
         j.at("ConstituencyID").get<int>()
     );
+}
+
+const string CANDIDATE_FILE = "../../data/candidates.json";
+
+// Load all candidates from file
+vector<Candidate> loadAllCandidates() {
+    vector<Candidate> candidates;
+    ifstream file(CANDIDATE_FILE);
+    if (file.is_open()) {
+        json j;
+        file >> j;
+        for (auto& obj : j) {
+            candidates.push_back(Candidate::fromJSON(obj));
+        }
+    }
+    return candidates;
+}
+
+// Save all candidates to file
+void saveAllCandidates(const vector<Candidate>& candidates) {
+    ofstream file(CANDIDATE_FILE);
+    json j;
+    for (const auto& c : candidates) {
+        j.push_back(c.toJSON());
+    }
+    file << j.dump(4);
+}
+
+// Admin: Add a new candidate
+void addCandidate(const Candidate& newCandidate) {
+    vector<Candidate> candidates = loadAllCandidates();
+    candidates.push_back(newCandidate);
+    saveAllCandidates(candidates);
+    cout << "✅ Candidate added successfully.\\n";
+}
+
+// Admin: Delete candidate by ID
+void deleteCandidateByID(int candidateID) {
+    vector<Candidate> candidates = loadAllCandidates();
+    auto it = remove_if(candidates.begin(), candidates.end(), [candidateID](const Candidate& c) {
+        return c.getCandidateID() == candidateID;
+    });
+    candidates.erase(it, candidates.end());
+    saveAllCandidates(candidates);
+    cout << "🗑️ Candidate deleted if existed.\\n";
+}
+
+// Admin: List all candidates
+void listAllCandidates() {
+    vector<Candidate> candidates = loadAllCandidates();
+    for (const auto& c : candidates) {
+        cout << c.getCandidateID() << " | " << c.getCandidateName() << " | PartyID: " << c.getPartyID() << " | ConstID: " << c.getConstituencyID() << endl;
+    }
+}
+
+// User: View candidates in a constituency
+void viewCandidatesByConstituency(int constID) {
+    vector<Candidate> candidates = loadAllCandidates();
+    for (const auto& c : candidates) {
+        if (c.getConstituencyID() == constID) {
+            cout << "🗳️ " << c.getCandidateID() << " - " << c.getCandidateName() << " (PartyID: " << c.getPartyID() << ")" << endl;
+        }
+    }
+}
+
+// User: Get candidate by ID
+Candidate* getCandidateByID(int candidateID) {
+    vector<Candidate> candidates = loadAllCandidates();
+    for (auto& c : candidates) {
+        if (c.getCandidateID() == candidateID) {
+            return new Candidate(c);
+        }
+    }
+    return nullptr;
 }

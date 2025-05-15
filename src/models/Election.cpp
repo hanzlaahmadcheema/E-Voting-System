@@ -1,5 +1,7 @@
 #include "Election.h"
 #include <iostream>
+#include <fstream>
+#include <vector>
 #include <string>
 using namespace std;
 //Election
@@ -16,22 +18,22 @@ void Election::setElectionID(int ElectionID) {
 void Election::setElectionName(const string& ElectionName) {
     this->ElectionName = ElectionName;
 }
-void Election::setType(const string& ElectionType) {
+void Election::setElectionType(const string& ElectionType) {
     this->ElectionType = ElectionType;
 }
-void Election::setDate(const string& ElectionDate) {
+void Election::setElectionDate(const string& ElectionDate) {
     this->ElectionDate = ElectionDate;
 }
 int Election::getElectionID() const {
     return ElectionID;
 }
-string Election::getName() const {
+string Election::getElectionName() const {
     return ElectionName;
 }
-string Election::getType() const {
+string Election::getElectionType() const {
     return ElectionType;
 }
-string Election::getDate() const {
+string Election::getElectionDate() const {
     return ElectionDate;
 }
 void Election::displayElectionInfo() const {
@@ -56,4 +58,73 @@ Election Election::fromJSON(const json& j) {
         j.at("ElectionType").get<std::string>(),
         j.at("ElectionDate").get<std::string>()
     );
+}
+
+const string ELECTION_FILE = "../../data/elections.json";
+
+// Load elections
+vector<Election> loadAllElections() {
+    vector<Election> list;
+    ifstream file(ELECTION_FILE);
+    if (file.is_open()) {
+        json j;
+        file >> j;
+        for (auto& obj : j) {
+            list.push_back(Election::fromJSON(obj));
+        }
+    }
+    return list;
+}
+
+// Save elections
+void saveAllElections(const vector<Election>& list) {
+    ofstream file(ELECTION_FILE);
+    json j;
+    for (const auto& e : list) {
+        j.push_back(e.toJSON());
+    }
+    file << j.dump(4);
+}
+
+// Admin: Create election
+void createElection(const Election& e) {
+    vector<Election> list = loadAllElections();
+    list.push_back(e);
+    saveAllElections(list);
+    cout << "🗳️ Election created.\n";
+}
+
+// Admin: Edit election
+void editElection(int electionID, const string& newName, const string& newType, const string& newDate) {
+    vector<Election> list = loadAllElections();
+    for (auto& e : list) {
+        if (e.getElectionID() == electionID) {
+            e.setElectionName(newName);
+            e.setElectionType(newType);
+            e.setElectionDate(newDate);
+            break;
+        }
+    }
+    saveAllElections(list);
+    cout << "✏️ Election updated.\n";
+}
+
+// Admin: Delete election
+void deleteElection(int electionID) {
+    vector<Election> list = loadAllElections();
+    auto it = remove_if(list.begin(), list.end(), [electionID](const Election& e) {
+        return e.getElectionID() == electionID;
+    });
+    list.erase(it, list.end());
+    saveAllElections(list);
+    cout << "🗑️ Election deleted.\n";
+}
+
+// Admin/User: List all elections
+void listAllElections() {
+    vector<Election> list = loadAllElections();
+    for (const auto& e : list) {
+        cout << "📆 " << e.getElectionID() << " | " << e.getElectionName()
+             << " | " << e.getElectionType() << " | " << e.getElectionDate() << endl;
+    }
 }

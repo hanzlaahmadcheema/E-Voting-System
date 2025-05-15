@@ -2,7 +2,7 @@
 #define POLLINGSTATION_H
 
 #include <string>
-#include <include../../json.hpp>
+#include "../../include/json.hpp"
 
 using namespace std;
 using json = nlohmann::json;
@@ -24,6 +24,14 @@ PollingStation();
     
     json toJSON() const;
     static PollingStation fromJSON(const json& j);
+
+    static const string POLLINGSTATION_FILE;
+    static vector<PollingStation> loadAllPollingStations();
+    static void saveAllPollingStations(const vector<PollingStation>& pollingStations);
+    static void addPollingStation(const PollingStation& newPollingStation);
+    static void deletePollingStationByID(int pollingStationID);
+    static void listAllPollingStations();
+    static void listPollingStationsByConstituency(int constituencyID);
 
 private:
     int PollingStationID;

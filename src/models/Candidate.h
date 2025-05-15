@@ -2,8 +2,7 @@
 #define CANDIDATE_H
 
 #include <string>
-#include <include../../json.hpp>
-
+#include "../../include/json.hpp"
 using namespace std;
 using json = nlohmann::json;
 
@@ -18,13 +17,21 @@ Candidate();
     void setConstituencyID(int ConstituencyID);
     
     int getCandidateID() const;
-    string getName() const;
+    string getCandidateName() const;
     int getPartyID() const;
     int getConstituencyID() const;
 
     json toJSON() const;
     static Candidate fromJSON(const json& j);
 
+    static const string CANDIDATE_FILE;
+    static vector<Candidate> loadAllCandidates();
+    static void saveAllCandidates(const vector<Candidate>& candidates);
+    static void addCandidate(const Candidate& newCandidate);
+    static void deleteCandidateByID(int candidateID);
+    static void listAllCandidates();
+    static void viewCandidatesByConstituency(int constID);
+    static Candidate* getCandidateByID(int candidateID);
 private:
     int CandidateID;
     string CandidateName;

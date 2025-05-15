@@ -1,5 +1,7 @@
 #include "Vote.h"
 #include <iostream>
+#include <fstream>
+#include <vector>
 #include <string>
 using namespace std;
 //Vote
@@ -77,4 +79,59 @@ Vote Vote::fromJSON(const json& j) {
         j.at("PollingStationID").get<int>(),
         j.at("VoteTime").get<std::string>()
     );
+}
+
+const string VOTE_FILE = "../../data/votes.json";
+
+// Load all votes
+vector<Vote> loadAllVotes() {
+    vector<Vote> list;
+    ifstream file(VOTE_FILE);
+    if (file.is_open()) {
+        json j;
+        file >> j;
+        for (auto& obj : j) {
+            list.push_back(Vote::fromJSON(obj));
+        }
+    }
+    return list;
+}
+
+// Save all votes
+void saveAllVotes(const vector<Vote>& list) {
+    ofstream file(VOTE_FILE);
+    json j;
+    for (const auto& v : list) {
+        j.push_back(v.toJSON());
+    }
+    file << j.dump(4);
+}
+
+// User: Cast vote
+bool castVote(const Vote& newVote) {
+    vector<Vote> votes = loadAllVotes();
+    for (const auto& v : votes) {
+        if (v.getVoterID() == newVote.getVoterID() &&
+            v.getElectionID() == newVote.getElectionID()) {
+            cout << "❌ You have already voted in this election.\n";
+            return false;
+        }
+    }
+    votes.push_back(newVote);
+    saveAllVotes(votes);
+    cout << "✅ Vote cast successfully.\n";
+    return true;
+}
+
+// Admin: View all votes
+void listAllVotes() {
+    vector<Vote> votes = loadAllVotes();
+    for (const auto& v : votes) {
+        cout << "🗳️ VoteID: " << v.getVoteID()
+             << " | VoterID: " << v.getVoterID()
+             << " | CandidateID: " << v.getCandidateID()
+             << " | ElectionID: " << v.getElectionID()
+             << " | PollingStationID: " << v.getPollingStationID()
+             << " | Time: " << v.getTimestamp() << endl;
+    }
 }
