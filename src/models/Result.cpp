@@ -53,3 +53,25 @@ void Result::displayResultInfo() const {
               << "Winner Candidate ID: " << WinnerCandidateID << "\n"
               << "Total Votes: " << TotalVotes << endl;
 }
+
+json Result::toJSON() const {
+    return json{
+        {"ResultID", ResultID},
+        {"PollingStationID", PollingStationID},
+        {"ElectionID", ElectionID},
+        {"WinnerCandidateID", WinnerCandidateID},
+        {"TotalVotes", TotalVotes}
+       
+    };
+}
+
+Result Result::fromJSON(const json& j) {
+    return Result(
+        j.at("ResultID").get<int>(),
+        j.at("PollingStationID").get<int>(),
+        j.at("ElectionID").get<int>(),
+        j.at("WinnerCandidateID").get<int>(),
+        j.at("TotalVotes").get<int>()
+        
+    );
+}

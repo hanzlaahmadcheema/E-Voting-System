@@ -2,7 +2,10 @@
 #define ELECTION_H
 
 #include <string>
+#include <include../../json.hpp>
+
 using namespace std;
+using json = nlohmann::json;
 
 class Election {
 public:
@@ -18,7 +21,10 @@ Election();
     string getName() const;
     string getType() const;
     string getDate() const;
-    void displayElectionInfo() const;
+    void displayElectionInfo() const;    
+    
+    json toJSON() const;
+    static Election fromJSON(const json& j);
 
 private:
     int ElectionID;

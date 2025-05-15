@@ -2,7 +2,10 @@
 #define RESULT_H
 
 #include <string>
+#include <include../../json.hpp>
+
 using namespace std;
+using json = nlohmann::json;
 
 class Result {
 public:
@@ -19,7 +22,10 @@ Result();
     int getElectionID() const;
     int getWinnerCandidateID() const;
     int getTotalVotes() const;
-    void displayResultInfo() const;
+    void displayResultInfo() const;    
+    
+    json toJSON() const;
+    static Result fromJSON(const json& j);
 
 private:
     int ResultID;

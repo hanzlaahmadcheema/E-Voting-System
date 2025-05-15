@@ -40,3 +40,21 @@ void PollingStation::displayPollingStationInfo() const {
               << "Address: " << PollingStationAddress << "\n"
               << "Constituency ID: " << ConstituencyID << endl;
 }
+
+json PollingStation::toJSON() const {
+    return json{
+        {"PollingStationID", PollingStationID},
+        {"PollingStationName", PollingStationName},
+        {"PollingStationAddress", PollingStationAddress},
+        {"ConstituencyID", ConstituencyID}
+    };
+}
+
+PollingStation PollingStation::fromJSON(const json& j) {
+    return PollingStation(
+        j.at("PollingStationID").get<int>(),
+        j.at("PollingStationName").get<std::string>(),
+        j.at("PollingStationAddress").get<std::string>(),
+        j.at("ConstituencyID").get<int>()
+    );
+}

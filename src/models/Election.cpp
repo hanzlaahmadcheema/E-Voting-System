@@ -40,3 +40,20 @@ void Election::displayElectionInfo() const {
               << "Type: " << ElectionType << "\n"
               << "Date: " << ElectionDate << endl;
 }
+
+json Election::toJSON() const {
+    return json{
+        {"ElectionID", ElectionID},
+        {"ElectionName", ElectionName},
+        {"ElectionType", ElectionType},
+        {"ElectionDate", ElectionDate}
+    };
+}
+Election Election::fromJSON(const json& j) {
+    return Election(
+        j.at("ElectionID").get<int>(),
+        j.at("ElectionName").get<std::string>(),
+        j.at("ElectionType").get<std::string>(),
+        j.at("ElectionDate").get<std::string>()
+    );
+}

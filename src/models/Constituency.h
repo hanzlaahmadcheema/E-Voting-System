@@ -2,7 +2,10 @@
 #define CONSTITUENCY_H
 
 #include <string>
+#include <include../../json.hpp>
+
 using namespace std;
+using json = nlohmann::json;
 
 class Constituency {
 public:
@@ -14,7 +17,10 @@ Constituency();
     int getConstituencyID() const;
     string getName() const;
     int getCityID() const;
-    void displayConstituencyInfo() const;
+    void displayConstituencyInfo() const;    
+    
+    json toJSON() const;
+    static Constituency fromJSON(const json& j);
 
 private:
     int ConstituencyID;

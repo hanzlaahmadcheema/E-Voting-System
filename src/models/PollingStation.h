@@ -2,7 +2,10 @@
 #define POLLINGSTATION_H
 
 #include <string>
+#include <include../../json.hpp>
+
 using namespace std;
+using json = nlohmann::json;
 
 class PollingStation {
 public:
@@ -17,7 +20,10 @@ PollingStation();
     string getPollingStationName() const;
     string getPollingStationAddress() const;
     int getConstituencyID() const;
-    void displayPollingStationInfo() const;
+    void displayPollingStationInfo() const;    
+    
+    json toJSON() const;
+    static PollingStation fromJSON(const json& j);
 
 private:
     int PollingStationID;

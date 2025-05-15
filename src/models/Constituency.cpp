@@ -2,6 +2,7 @@
 #include <iostream>
 #include <string>
 using namespace std;
+
 //Constituency
 Constituency::Constituency() : ConstituencyID(0), ConstituencyName(""), CityID(0) {}
 Constituency::Constituency(int ConstituencyID, const string& ConstituencyName, int CityID) {
@@ -33,3 +34,17 @@ void Constituency::displayConstituencyInfo() const {
               << "City ID: " << CityID << endl;
 }
 // Add any other methods or member functions as needed
+json Constituency::toJSON() const {
+    return json{
+        {"ConstituencyID", ConstituencyID},
+        {"ConstituencyName", ConstituencyName},
+        {"CityID", CityID}
+    };
+}
+Constituency Constituency::fromJSON(const json& j) {
+    return Constituency(
+        j.at("ConstituencyID").get<int>(),
+        j.at("ConstituencyName").get<std::string>(),
+        j.at("CityID").get<int>()
+    );
+}

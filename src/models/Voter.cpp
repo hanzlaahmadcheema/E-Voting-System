@@ -5,7 +5,7 @@ using namespace std;
 //Voter
 Voter::Voter() : VoterID(0), VoterName(""), VoterCNIC(""),  VoterGender(""), VoterAge(0), VoterAddress(""), PollingStationID(0), ConstituencyID(0) {}
 Voter::Voter(int VoterID, const string& VoterName, const string& VoterCNIC, const string& VoterGender, int VoterAge, const string& VoterAddress, int PollingStationID, int ConstituencyID) {
-    VoterID = VoterID;
+    this->VoterID = VoterID;
     this->VoterName = VoterName;
     this->VoterCNIC = VoterCNIC;
     this->VoterGender = VoterGender;
@@ -15,7 +15,7 @@ Voter::Voter(int VoterID, const string& VoterName, const string& VoterCNIC, cons
     this->ConstituencyID = ConstituencyID;
 }
 void Voter::setVoterID(int VoterID) {
-    VoterID = VoterID;
+    this->VoterID = VoterID;
 }
 void Voter::setVoterName(const string& VoterName) {
     this->VoterName = VoterName;
@@ -62,6 +62,33 @@ int Voter::getPollingStationID() const {
 int Voter::getConstituencyID() const {
     return ConstituencyID;
 }
+
+json Voter::toJSON() const {
+    return json{
+        {"VoterID", VoterID},
+        {"VoterName", VoterName},
+        {"VoterCNIC", VoterCNIC},
+        {"VoterGender", VoterGender},
+        {"VoterAge", VoterAge},
+        {"VoterAddress", VoterAddress},
+        {"PollingStationID", PollingStationID},
+        {"ConstituencyID", ConstituencyID}
+    };
+}
+
+Voter Voter::fromJSON(const json& j) {
+    return Voter(
+        j.at("VoterID").get<int>(),
+        j.at("VoterName").get<std::string>(),
+        j.at("VoterCNIC").get<std::string>(),
+        j.at("VoterGender").get<std::string>(),
+        j.at("VoterAge").get<int>(),
+        j.at("VoterAddress").get<std::string>(),
+        j.at("PollingStationID").get<int>(),
+        j.at("ConstituencyID").get<int>()
+    );
+}
+
 void Voter::displayVoterInfo() const {
     cout << "Voter ID: " << VoterID << "\n"
               << "VoterName: " << VoterName << "\n"

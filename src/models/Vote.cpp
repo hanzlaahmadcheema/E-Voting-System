@@ -56,3 +56,25 @@ void Vote::displayVoteInfo() const {
               << "Polling Station ID: " << PollingStationID << "\n"
               << "Timestamp: " << VoteTime << endl;
 }
+
+json Vote::toJSON() const {
+    return json{
+        {"VoteID", VoteID},
+        {"VoterID", VoterID},
+        {"CandidateID", CandidateID},
+        {"ElectionID", ElectionID},
+        {"PollingStationID", PollingStationID},
+        {"VoteTime", VoteTime}
+    };
+}
+
+Vote Vote::fromJSON(const json& j) {
+    return Vote(
+        j.at("VoteID").get<int>(),
+        j.at("VoterID").get<int>(),
+        j.at("CandidateID").get<int>(),
+        j.at("ElectionID").get<int>(),
+        j.at("PollingStationID").get<int>(),
+        j.at("VoteTime").get<std::string>()
+    );
+}

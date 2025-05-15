@@ -2,7 +2,10 @@
 #define VOTE_H
 
 #include <string>
+#include <include../../json.hpp>
+
 using namespace std;
+using json = nlohmann::json;
 
 class Vote {
 public:
@@ -20,7 +23,10 @@ Vote();
     int getElectionID() const;
     int getPollingStationID() const;
     string getTimestamp() const;
-    void displayVoteInfo() const;
+    void displayVoteInfo() const;    
+    
+    json toJSON() const;
+    static Vote fromJSON(const json& j);
 
 private:
     int VoteID;

@@ -25,3 +25,16 @@ void City::displayCityInfo() const {
     cout << "City ID: " << CityID << "\n"
               << "Name: " << CityName << endl;
 }
+
+json City::toJSON() const {
+    return json{
+        {"CityID", CityID},
+        {"CityName", CityName}
+    };
+}
+City City::fromJSON(const json& j) {
+    return City(
+        j.at("CityID").get<int>(),
+        j.at("CityName").get<std::string>()
+    );
+}

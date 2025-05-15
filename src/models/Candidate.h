@@ -2,12 +2,15 @@
 #define CANDIDATE_H
 
 #include <string>
+#include <include../../json.hpp>
+
 using namespace std;
+using json = nlohmann::json;
 
 class Candidate {
 public:
 Candidate();
-    Candidate(int CandidateID, const string& CandidateName, int PartyID, int ElectionID, int ConstituencyID);
+    Candidate(int CandidateID, const string& CandidateName, int PartyID, int ConstituencyID);
     void displayCandidateInfo() const;
     void setCandidateID(int CandidateID);
     void setCandidateName(const string& CandidateName);
@@ -19,6 +22,8 @@ Candidate();
     int getPartyID() const;
     int getConstituencyID() const;
 
+    json toJSON() const;
+    static Candidate fromJSON(const json& j);
 
 private:
     int CandidateID;

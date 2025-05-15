@@ -32,3 +32,19 @@ void Party::displayPartyInfo() const {
               << "Name: " << PartyName << "\n"
               << "Symbol: " << PartySymbol << endl;
 }
+
+json Party::toJSON() const {
+    return json{
+        {"PartyID", PartyID},
+        {"PartyName", PartyName},
+        {"PartySymbol", PartySymbol}
+    };
+}
+
+Party Party::fromJSON(const json& j) {
+    return Party(
+        j.at("PartyID").get<int>(),
+        j.at("PartyName").get<std::string>(),
+        j.at("PartySymbol").get<std::string>()
+    );
+}

@@ -5,7 +5,7 @@ using namespace std;
 //Candidate
 Candidate::Candidate() : CandidateID(0), CandidateName(""), PartyID(0), ConstituencyID(0) {}
 
-Candidate::Candidate(int CandidateID, const string& CandidateName, int PartyID, int ElectionID, int ConstituencyID) {
+Candidate::Candidate(int CandidateID, const string& CandidateName, int PartyID, int ConstituencyID) {
     this->CandidateID = CandidateID;
     this->CandidateName = CandidateName;
     this->PartyID = PartyID;
@@ -44,3 +44,19 @@ void Candidate::displayCandidateInfo() const {
               << "Constituency ID: " << ConstituencyID << endl;
 }
 // Add any other methods or member functions as needed
+json Candidate::toJSON() const {
+    return json{
+        {"CandidateID", CandidateID},
+        {"CandidateName", CandidateName},
+        {"PartyID", PartyID},
+        {"ConstituencyID", ConstituencyID}
+    };
+}
+Candidate Candidate::fromJSON(const json& j) {
+    return Candidate(
+        j.at("CandidateID").get<int>(),
+        j.at("CandidateName").get<std::string>(),
+        j.at("PartyID").get<int>(),
+        j.at("ConstituencyID").get<int>()
+    );
+}

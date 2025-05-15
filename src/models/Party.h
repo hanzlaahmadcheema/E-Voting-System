@@ -2,7 +2,10 @@
 #define PARTY_H
 
 #include <string>
+#include <include../../json.hpp>
+
 using namespace std;
+using json = nlohmann::json;
 
 class Party {
 public:
@@ -15,7 +18,10 @@ Party();
     int getPartyID() const;
     string getName() const;
     string getSymbol() const;
-    void displayPartyInfo() const;
+    void displayPartyInfo() const;    
+    
+    json toJSON() const;
+    static Party fromJSON(const json& j);
 
 private:
     int PartyID;
