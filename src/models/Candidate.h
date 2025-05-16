@@ -34,6 +34,8 @@ public:
     static void listAllCandidates();
     static void viewCandidatesByConstituency(int constID);
     static Candidate *getCandidateByID(int candidateID);
+    static bool candidateExists(int id);
+    static void manageCandidates();
 
 private:
     int CandidateID;

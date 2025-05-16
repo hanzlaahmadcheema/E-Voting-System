@@ -32,8 +32,10 @@ public:
     static void saveAllElections(const vector<Election> &elections);
     static void createElection(const Election &e);
     static void editElection(int electionID, const string &newName, const string &newType, const string &newDate);
-    static void deleteElectionByID(int electionID);
+    static void deleteElection(int electionID);
     static void listAllElections();
+    static bool electionExists(int id);
+    static void manageElections();
 
 private:
     int ElectionID;

@@ -3,7 +3,12 @@
 #include <fstream>
 #include <vector>
 #include <string>
+#include <ctime>
+
 using namespace std;
+
+std::time_t now = std::time(nullptr);
+
 // Vote
 Vote::Vote() : VoteID(0), VoterID(0), CandidateID(0), ElectionID(0), PollingStationID(0), VoteTime("") {}
 Vote::Vote(int VoteID, int VoterID, int CandidateID, int ElectionID, int PollingStationID, int ConstituencyID, const string &VoteTime)
@@ -195,13 +200,13 @@ bool isValidVote(const Vote &vote, const vector<Vote> &existingVotes, string &er
             return false;
         }
     }
-    // Check timestamp format (basic ISO 8601 check)
-    std::regex iso8601(R"(^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2})");
-    if (!std::regex_search(vote.getTimestamp(), iso8601))
-    {
-        errorMsg = "Invalid timestamp format. Use YYYY-MM-DDTHH:MM:SS";
-        return false;
-    }
+    // // Check timestamp format (basic ISO 8601 check)
+    // std::regex iso8601(R"(^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2})");
+    // if (!std::regex_search(vote.getTimestamp(), iso8601))
+    // {
+    //     errorMsg = "Invalid timestamp format. Use YYYY-MM-DDTHH:MM:SS";
+    //     return false;
+    // }
     // All checks passed
     return true;
 }
@@ -213,12 +218,12 @@ bool castVote(const Vote &newVote)
     string errorMsg;
     if (!isValidVote(newVote, votes, errorMsg))
     {
-        cout << "❌ Vote not cast: " << errorMsg << endl;
+        cout << "Vote not cast: " << errorMsg << endl;
         return false;
     }
     votes.push_back(newVote);
     saveAllVotes(votes);
-    cout << "✅ Vote cast successfully.\n";
+    cout << "Vote cast successfully.\n";
     return true;
 }
 
@@ -233,17 +238,17 @@ void listAllVotes()
         string errorMsg;
         if (!isValidVote(v, {}, errorMsg))
         {
-            cout << "⚠️ Invalid vote (VoteID: " << v.getVoteID() << "): " << errorMsg << endl;
+            cout << "Invalid vote (VoteID: " << v.getVoteID() << "): " << errorMsg << endl;
             continue;
         }
         // Check for duplicate VoteID in file
         if (seenVoteIDs.count(v.getVoteID()))
         {
-            cout << "⚠️ Duplicate VoteID detected: " << v.getVoteID() << endl;
+            cout << "Duplicate VoteID detected: " << v.getVoteID() << endl;
             continue;
         }
         seenVoteIDs.insert(v.getVoteID());
-        cout << "🗳️ VoteID: " << v.getVoteID()
+        cout << "VoteID: " << v.getVoteID()
              << " | VoterID: " << v.getVoterID()
              << " | CandidateID: " << v.getCandidateID()
              << " | ElectionID: " << v.getElectionID()
@@ -253,7 +258,7 @@ void listAllVotes()
     }
 }
 
-bool hasAlreadyVoted(int voterID, int electionID) {
+bool voteExists(int voterID, int electionID) {
     vector<Vote> list = loadAllVotes();
     for (const auto& v : list) {
         if (v.getVoterID() == voterID && v.getElectionID() == electionID)
@@ -262,10 +267,29 @@ bool hasAlreadyVoted(int voterID, int electionID) {
     return false;
 }
 
+void manageVoting() {
+    int choice;
+    while (true) {
+        cout << "\n Voting Management\n";
+        cout << "1. View All Votes\n";
+        cout << "0. Back\n";
+        cout << "Enter choice: ";
+        cin >> choice;
+    
+        if (choice == 1) {
+            listAllVotes();
+        } else if (choice == 0) {
+            break;
+        } else {
+            cout << "Invalid option.\n";
+        }
+    }
+}
+
 // int main()
 // {
 //     // Example usage
-//     Vote v1(1, 101, 202, 303, 404, 999, "2023-10-01T12:00:00");
+//     Vote v1(2, 102, 202, 303, 404, 999, std::ctime(&now));
 //     castVote(v1);
 //     listAllVotes();
 //     return 0;

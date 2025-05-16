@@ -149,22 +149,22 @@ void createElection(const Election &e)
 {
     if (!isValidElectionID(e.getElectionID()))
     {
-        cout << "❌ Invalid Election ID.\n";
+        cout << "Invalid Election ID.\n";
         return;
     }
     if (!isValidElectionName(e.getElectionName()))
     {
-        cout << "❌ Invalid Election Name.\n";
+        cout << "Invalid Election Name.\n";
         return;
     }
     if (!isValidElectionType(e.getElectionType()))
     {
-        cout << "❌ Invalid Election Type.\n";
+        cout << "Invalid Election Type.\n";
         return;
     }
     if (!isValidElectionDate(e.getElectionDate()))
     {
-        cout << "❌ Invalid Election Date. Use YYYY-MM-DD.\n";
+        cout << "Invalid Election Date. Use YYYY-MM-DD.\n";
         return;
     }
     vector<Election> list = loadAllElections();
@@ -172,13 +172,13 @@ void createElection(const Election &e)
     {
         if (existing.getElectionID() == e.getElectionID())
         {
-            cout << "❌ Election ID already exists.\n";
+            cout << "Election ID already exists.\n";
             return;
         }
     }
     list.push_back(e);
     saveAllElections(list);
-    cout << "🗳️ Election created.\n";
+    cout << "Election created.\n";
 }
 
 // Admin: Edit election
@@ -186,22 +186,22 @@ void editElection(int electionID, const string &newName, const string &newType, 
 {
     if (!isValidElectionID(electionID))
     {
-        cout << "❌ Invalid Election ID.\n";
+        cout << "Invalid Election ID.\n";
         return;
     }
     if (!isValidElectionName(newName))
     {
-        cout << "❌ Invalid Election Name.\n";
+        cout << "Invalid Election Name.\n";
         return;
     }
     if (!isValidElectionType(newType))
     {
-        cout << "❌ Invalid Election Type.\n";
+        cout << "Invalid Election Type.\n";
         return;
     }
     if (!isValidElectionDate(newDate))
     {
-        cout << "❌ Invalid Election Date. Use YYYY-MM-DD.\n";
+        cout << "Invalid Election Date. Use YYYY-MM-DD.\n";
         return;
     }
     vector<Election> list = loadAllElections();
@@ -219,11 +219,11 @@ void editElection(int electionID, const string &newName, const string &newType, 
     }
     if (!found)
     {
-        cout << "❌ Election ID not found.\n";
+        cout << "Election ID not found.\n";
         return;
     }
     saveAllElections(list);
-    cout << "✏️ Election updated.\n";
+    cout << "Election updated.\n";
 }
 
 // Admin: Delete election
@@ -231,7 +231,7 @@ void deleteElection(int electionID)
 {
     if (!isValidElectionID(electionID))
     {
-        cout << "❌ Invalid Election ID.\n";
+        cout << "Invalid Election ID.\n";
         return;
     }
     vector<Election> list = loadAllElections();
@@ -239,7 +239,7 @@ void deleteElection(int electionID)
                         { return e.getElectionID() == electionID; });
     if (it == list.end())
     {
-        cout << "❌ Election ID not found.\n";
+        cout << "Election ID not found.\n";
         return;
     }
     list.erase(it, list.end());
@@ -258,7 +258,7 @@ void listAllElections()
     }
     for (const auto &e : list)
     {
-        cout << "📆 " << e.getElectionID() << " | " << e.getElectionName()
+        cout << e.getElectionID() << " | " << e.getElectionName()
              << " | " << e.getElectionType() << " | " << e.getElectionDate() << endl;
     }
 }
@@ -269,6 +269,52 @@ bool electionExists(int id) {
         if (e.getElectionID() == id) return true;
     }
     return false;
+}
+
+void manageElections() {
+    int choice;
+    while (true) {
+        cout << "\n Election Management\n";
+        cout << "1. Create Election\n";
+        cout << "2. View All Elections\n";
+        cout << "3. Edit Election\n";
+        cout << "4. Delete Election\n";
+        cout << "0. Back\n";
+        cout << "Enter choice: ";
+        cin >> choice;
+
+        if (choice == 1) {
+            int id;
+            string name, type, date;
+            cout << "Enter Election ID: "; cin >> id;
+            cin.ignore();
+            cout << "Enter Election Name: "; getline(cin, name);
+            cout << "Enter Type (National, Provincial, etc): "; getline(cin, type);
+            cout << "Enter Date (YYYY-MM-DD): "; getline(cin, date);
+            Election e(id, name, type, date);
+            createElection(e);
+        } else if (choice == 2) {
+            listAllElections();
+        } else if (choice == 3) {
+            int id;
+            string name, type, date;
+            cout << "Enter Election ID: "; cin >> id;
+            cin.ignore();
+            cout << "Enter New Name: "; getline(cin, name);
+            cout << "Enter New Type: "; getline(cin, type);
+            cout << "Enter New Date: "; getline(cin, date);
+            editElection(id, name, type, date);
+        } else if (choice == 4) {
+            int id;
+            cout << "Enter Election ID to delete: ";
+            cin >> id;
+            deleteElection(id);
+        } else if (choice == 0) {
+            break;
+        } else {
+            cout << "Invalid option.\n";
+        }
+    }
 }
 
 // int main()

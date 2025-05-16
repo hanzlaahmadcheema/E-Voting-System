@@ -39,9 +39,11 @@ public:
     static void editVoterByID(int voterID, const Voter &updatedVoter);
     static void listAllVoters();
     static void deleteVoterByID(int voterID);
-    static void updateVoterByID(int voterID, const Voter &updatedVoter);
+    static void editVoterByID(int voterID, const Voter &updatedVoter);
     static vector<Voter> loginByCNIC(const string &cnic);
     static void viewProfile(const Voter &v);
+    static bool voterExists(int id);
+    static void manageVoters();
 
 private:
     int VoterID;

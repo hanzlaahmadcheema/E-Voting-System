@@ -108,7 +108,7 @@ vector<PollingStation> loadAllStations()
         }
         catch (...)
         {
-            cerr << "❌ Error: Corrupted polling station data.\n";
+            cerr << "Error: Corrupted polling station data.\n";
         }
     }
     return list;
@@ -120,7 +120,7 @@ void saveAllStations(const vector<PollingStation> &list)
     ofstream file(STATION_FILE);
     if (!file.is_open())
     {
-        cerr << "❌ Error: Cannot open file to save polling stations.\n";
+        cerr << "Error: Cannot open file to save polling stations.\n";
         return;
     }
     json j;
@@ -139,33 +139,33 @@ void addPollingStation(const PollingStation &s)
     // Validation
     if (s.getPollingStationID() <= 0)
     {
-        cout << "❌ Invalid Polling Station ID.\n";
+        cout << "Invalid Polling Station ID.\n";
         return;
     }
     if (!isUniqueStationID(s.getPollingStationID(), list))
     {
-        cout << "❌ Polling Station ID already exists.\n";
+        cout << "Polling Station ID already exists.\n";
         return;
     }
     if (isBlank(s.getPollingStationName()))
     {
-        cout << "❌ Polling Station name cannot be empty.\n";
+        cout << "Polling Station name cannot be empty.\n";
         return;
     }
     if (isBlank(s.getPollingStationAddress()))
     {
-        cout << "❌ Polling Station address cannot be empty.\n";
+        cout << "Polling Station address cannot be empty.\n";
         return;
     }
     if (s.getConstituencyID() <= 0)
     {
-        cout << "❌ Invalid Constituency ID.\n";
+        cout << "Invalid Constituency ID.\n";
         return;
     }
 
     list.push_back(s);
     saveAllStations(list);
-    cout << "✅ Polling station added.\n";
+    cout << "Polling station added.\n";
 }
 
 // Admin: Edit station
@@ -176,17 +176,17 @@ void editPollingStation(int id, const string &newName, const string &newAddress)
 
     if (id <= 0)
     {
-        cout << "❌ Invalid Polling Station ID.\n";
+        cout << "Invalid Polling Station ID.\n";
         return;
     }
     if (isBlank(newName))
     {
-        cout << "❌ New name cannot be empty.\n";
+        cout << "New name cannot be empty.\n";
         return;
     }
     if (isBlank(newAddress))
     {
-        cout << "❌ New address cannot be empty.\n";
+        cout << "New address cannot be empty.\n";
         return;
     }
 
@@ -202,11 +202,11 @@ void editPollingStation(int id, const string &newName, const string &newAddress)
     }
     if (!found)
     {
-        cout << "❌ Polling station not found.\n";
+        cout << "Polling station not found.\n";
         return;
     }
     saveAllStations(list);
-    cout << "✏️ Polling station updated.\n";
+    cout << "Polling station updated.\n";
 }
 
 // Admin: Delete station
@@ -214,7 +214,7 @@ void deletePollingStation(int id)
 {
     if (id <= 0)
     {
-        cout << "❌ Invalid Polling Station ID.\n";
+        cout << "Invalid Polling Station ID.\n";
         return;
     }
     vector<PollingStation> list = loadAllStations();
@@ -222,12 +222,12 @@ void deletePollingStation(int id)
                         { return s.getPollingStationID() == id; });
     if (it == list.end())
     {
-        cout << "❌ Polling station not found.\n";
+        cout << "Polling station not found.\n";
         return;
     }
     list.erase(it, list.end());
     saveAllStations(list);
-    cout << "🗑️ Polling station deleted.\n";
+    cout << "Polling station deleted.\n";
 }
 
 // Admin/User: View all stations by constituency
@@ -235,7 +235,7 @@ void listStationsByConstituency(int constID)
 {
     if (constID <= 0)
     {
-        cout << "❌ Invalid Constituency ID.\n";
+        cout << "Invalid Constituency ID.\n";
         return;
     }
     vector<PollingStation> list = loadAllStations();
@@ -244,14 +244,29 @@ void listStationsByConstituency(int constID)
     {
         if (s.getConstituencyID() == constID)
         {
-            cout << "🏫 " << s.getPollingStationID() << " - " << s.getPollingStationName()
+            cout << s.getPollingStationID() << " - " << s.getPollingStationName()
                  << " (" << s.getPollingStationAddress() << ")" << endl;
             found = true;
         }
     }
     if (!found)
     {
-        cout << "ℹ️ No polling stations found for this constituency.\n";
+        cout << "No polling stations found for this constituency.\n";
+    }
+}
+
+void listAllStations()
+{
+    vector<PollingStation> list = loadAllStations();
+    if (list.empty())
+    {
+        cout << "ℹNo polling stations found.\n";
+        return;
+    }
+    for (const auto &s : list)
+    {
+        cout << s.getPollingStationID() << " - " << s.getPollingStationName()
+             << " (" << s.getPollingStationAddress() << ")" << endl;
     }
 }
 
@@ -263,6 +278,50 @@ bool pollingStationExists(int id) {
     return false;
 }
 
+void managePollingStations() {
+    int choice;
+    while (true) {
+        cout << "\n Polling Station Management\n";
+        cout << "1. Add Polling Station\n";
+        cout << "2. View All Polling Stations\n";
+        cout << "3. Edit Polling Station\n";
+        cout << "4. Delete Polling Station\n";
+        cout << "0. Back\n";
+        cout << "Enter choice: ";
+        cin >> choice;
+
+        if (choice == 1) {
+            int id, constituencyID;
+            string name, address;
+            cout << "Enter Station ID: "; cin >> id;
+            cin.ignore();
+            cout << "Enter Station Name: "; getline(cin, name);
+            cout << "Enter Address: "; getline(cin, address);
+            cout << "Enter Constituency ID: "; cin >> constituencyID;
+            PollingStation ps(id, name, address, constituencyID);
+            addPollingStation(ps);
+        } else if (choice == 2) {
+            listAllStations();
+        } else if (choice == 3) {
+            int id;
+            string name, address;
+            cout << "Enter Station ID: "; cin >> id;
+            cin.ignore();
+            cout << "Enter New Name: "; getline(cin, name);
+            cout << "Enter New Address: "; getline(cin, address);
+            editPollingStation(id, name, address);
+        } else if (choice == 4) {
+            int id;
+            cout << "Enter Station ID to delete: ";
+            cin >> id;
+            deletePollingStation(id);
+        } else if (choice == 0) {
+            break;
+        } else {
+            cout << "Invalid option.\n";
+        }
+    }
+}
 // int main()
 // {
 //     // Example usage

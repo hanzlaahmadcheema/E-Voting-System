@@ -28,8 +28,12 @@ public:
     static vector<Party> loadAllParties();
     static void saveAllParties(const vector<Party> &parties);
     static void addParty(const Party &newParty);
-    static void deletePartyByID(int partyID);
+    static void editParty(int partyID, const string &newName, const string &newSymbol);
+    static void deleteParty(int partyID);
     static void listAllParties();
+    static bool partyExists(int id);
+    static void manageParties();
+
 
 private:
     int PartyID;

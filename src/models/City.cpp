@@ -62,7 +62,7 @@ vector<City> loadAllCities()
             file >> j;
             if (!j.is_array())
             {
-                cerr << "❌ Invalid cities data format.\n";
+                cerr << "Invalid cities data format.\n";
                 return cities;
             }
             for (auto &obj : j)
@@ -73,18 +73,18 @@ vector<City> loadAllCities()
                 }
                 catch (const std::exception &e)
                 {
-                    cerr << "❌ Error parsing city: " << e.what() << endl;
+                    cerr << "Error parsing city: " << e.what() << endl;
                 }
             }
         }
         catch (const std::exception &e)
         {
-            cerr << "❌ Error reading cities file: " << e.what() << endl;
+            cerr << "Error reading cities file: " << e.what() << endl;
         }
     }
     else
     {
-        cerr << "❌ Could not open cities file for reading.\n";
+        cerr << "Could not open cities file for reading.\n";
     }
     return cities;
 }
@@ -95,7 +95,7 @@ void saveAllCities(const vector<City> &cities)
     ofstream file(CITY_FILE);
     if (!file.is_open())
     {
-        cerr << "❌ Could not open cities file for writing.\n";
+        cerr << "Could not open cities file for writing.\n";
         return;
     }
     json j = json::array();
@@ -116,7 +116,7 @@ void addCity(const City &newCity)
     }
     if (newCity.getCityName().empty())
     {
-        cerr << "❌ City name cannot be empty.\n";
+        cerr << "City name cannot be empty.\n";
         return;
     }
     vector<City> cities = loadAllCities();
@@ -124,18 +124,18 @@ void addCity(const City &newCity)
     {
         if (city.getCityID() == newCity.getCityID())
         {
-            cerr << "❌ City ID already exists.\n";
+            cerr << "City ID already exists.\n";
             return;
         }
         if (city.getCityName() == newCity.getCityName())
         {
-            cerr << "❌ City name already exists.\n";
+            cerr << "City name already exists.\n";
             return;
         }
     }
     cities.push_back(newCity);
     saveAllCities(cities);
-    cout << "✅ City added successfully.\n";
+    cout << "City added successfully.\n";
 }
 
 // Admin: Edit city by ID
@@ -143,12 +143,12 @@ void editCity(int cityID, const string &newName)
 {
     if (cityID <= 0)
     {
-        cerr << "❌ Invalid City ID.\n";
+        cerr << "Invalid City ID.\n";
         return;
     }
     if (newName.empty())
     {
-        cerr << "❌ New city name cannot be empty.\n";
+        cerr << "New city name cannot be empty.\n";
         return;
     }
     vector<City> cities = loadAllCities();
@@ -157,7 +157,7 @@ void editCity(int cityID, const string &newName)
     {
         if (city.getCityName() == newName)
         {
-            cerr << "❌ City name already exists.\n";
+            cerr << "City name already exists.\n";
             return;
         }
     }
@@ -172,11 +172,11 @@ void editCity(int cityID, const string &newName)
     }
     if (!found)
     {
-        cerr << "❌ City ID not found.\n";
+        cerr << "City ID not found.\n";
         return;
     }
     saveAllCities(cities);
-    cout << "✏️ City updated.\n";
+    cout << "City updated.\n";
 }
 
 // Admin: Delete city by ID
@@ -184,7 +184,7 @@ void deleteCityByID(int cityID)
 {
     if (cityID <= 0)
     {
-        cerr << "❌ Invalid City ID.\n";
+        cerr << "Invalid City ID.\n";
         return;
     }
     vector<City> cities = loadAllCities();
@@ -192,12 +192,12 @@ void deleteCityByID(int cityID)
                         { return c.getCityID() == cityID; });
     if (it == cities.end())
     {
-        cerr << "❌ City ID not found.\n";
+        cerr << "City ID not found.\n";
         return;
     }
     cities.erase(it, cities.end());
     saveAllCities(cities);
-    cout << "🗑️ City deleted if existed.\n";
+    cout << "City deleted if existed.\n";
 }
 
 // Admin/User: View all cities
@@ -206,12 +206,12 @@ void listAllCities()
     vector<City> cities = loadAllCities();
     if (cities.empty())
     {
-        cout << "ℹ️ No cities found.\n";
+        cout << "No cities found.\n";
         return;
     }
     for (const auto &c : cities)
     {
-        cout << "🏙️ " << c.getCityID() << " - " << c.getCityName() << endl;
+        cout << c.getCityID() << " - " << c.getCityName() << endl;
     }
 }
 
@@ -221,6 +221,52 @@ bool cityExists(int id) {
         if (c.getCityID() == id) return true;
     }
     return false;
+}
+
+void manageCities() {
+    int choice;
+    while (true) {
+        cout << "\n City Management\n";
+        cout << "1. Add City\n";
+        cout << "2. View All Cities\n";
+        cout << "3. Edit City\n";
+        cout << "4. Delete City\n";
+        cout << "0. Back\n";
+        cout << "Enter choice: ";
+        cin >> choice;
+
+        if (choice == 1) {
+            int id;
+            string name;
+            cout << "Enter City ID: ";
+            cin >> id;
+            cin.ignore();
+            cout << "Enter City Name: ";
+            getline(cin, name);
+            City c(id, name);
+            addCity(c);
+        } else if (choice == 2) {
+            listAllCities();
+        } else if (choice == 3) {
+            int id;
+            string name;
+            cout << "Enter City ID: ";
+            cin >> id;
+            cin.ignore();
+            cout << "Enter New Name: ";
+            getline(cin, name);
+            editCity(id, name);
+        } else if (choice == 4) {
+            int id;
+            cout << "Enter City ID to delete: ";
+            cin >> id;
+            deleteCityByID(id);
+        } else if (choice == 0) {
+            break;
+        } else {
+            cout << "Invalid option.\n";
+        }
+    }
 }
 
 // int main()

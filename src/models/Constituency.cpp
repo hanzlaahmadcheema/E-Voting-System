@@ -97,7 +97,7 @@ vector<Constituency> loadAllConstituencies()
         }
         catch (...)
         {
-            cerr << "❌ Error: Invalid JSON format in constituency file.\n";
+            cerr << "Error: Invalid JSON format in constituency file.\n";
         }
     }
     return list;
@@ -109,7 +109,7 @@ void saveAllConstituencies(const vector<Constituency> &list)
     ofstream file(CONSTITUENCY_FILE);
     if (!file.is_open())
     {
-        cerr << "❌ Error: Unable to open file for writing.\n";
+        cerr << "Error: Unable to open file for writing.\n";
         return;
     }
     json j;
@@ -128,33 +128,33 @@ void addConstituency(const Constituency &newConst)
     // Validation: ID positive, unique; Name non-empty, unique; CityID positive
     if (newConst.getConstituencyID() <= 0)
     {
-        cout << "❌ Error: Constituency ID must be positive.\n";
+        cout << "Error: Constituency ID must be positive.\n";
         return;
     }
     if (constituencyIDExists(list, newConst.getConstituencyID()))
     {
-        cout << "❌ Error: Constituency ID already exists.\n";
+        cout << "Error: Constituency ID already exists.\n";
         return;
     }
     if (newConst.getConstituencyName().empty())
     {
-        cout << "❌ Error: Constituency name cannot be empty.\n";
+        cout << "Error: Constituency name cannot be empty.\n";
         return;
     }
     if (constituencyNameExists(list, newConst.getConstituencyName()))
     {
-        cout << "❌ Error: Constituency name already exists.\n";
+        cout << "Error: Constituency name already exists.\n";
         return;
     }
     if (newConst.getCityID() <= 0)
     {
-        cout << "❌ Error: City ID must be positive.\n";
+        cout << "Error: City ID must be positive.\n";
         return;
     }
 
     list.push_back(newConst);
     saveAllConstituencies(list);
-    cout << "✅ Constituency added.\n";
+    cout << "Constituency added.\n";
 }
 
 // Admin: Edit constituency name
@@ -165,17 +165,17 @@ void editConstituency(int id, const string &newName)
 
     if (id <= 0)
     {
-        cout << "❌ Error: Invalid constituency ID.\n";
+        cout << "Error: Invalid constituency ID.\n";
         return;
     }
     if (newName.empty())
     {
-        cout << "❌ Error: New name cannot be empty.\n";
+        cout << "Error: New name cannot be empty.\n";
         return;
     }
     if (constituencyNameExists(list, newName))
     {
-        cout << "❌ Error: Constituency name already exists.\n";
+        cout << "Error: Constituency name already exists.\n";
         return;
     }
 
@@ -190,11 +190,11 @@ void editConstituency(int id, const string &newName)
     }
     if (!found)
     {
-        cout << "❌ Error: Constituency ID not found.\n";
+        cout << "Error: Constituency ID not found.\n";
         return;
     }
     saveAllConstituencies(list);
-    cout << "✏️ Constituency updated.\n";
+    cout << "Constituency updated.\n";
 }
 
 // Admin: Delete constituency by ID
@@ -202,7 +202,7 @@ void deleteConstituency(int id)
 {
     if (id <= 0)
     {
-        cout << "❌ Error: Invalid constituency ID.\n";
+        cout << "Error: Invalid constituency ID.\n";
         return;
     }
     vector<Constituency> list = loadAllConstituencies();
@@ -212,11 +212,26 @@ void deleteConstituency(int id)
     list.erase(it, list.end());
     if (list.size() == before)
     {
-        cout << "❌ Error: Constituency ID not found.\n";
+        cout << "Error: Constituency ID not found.\n";
         return;
     }
     saveAllConstituencies(list);
-    cout << "🗑️ Constituency deleted.\n";
+    cout << "Constituency deleted.\n";
+}
+
+// Admin/User: View all constituencies
+void listAllConstituencies()
+{
+    vector<Constituency> list = loadAllConstituencies();
+    if (list.empty())
+    {
+        cout << "No constituencies found.\n";
+        return;
+    }
+    for (const auto &c : list)
+    {
+        cout << c.getConstituencyID() << " - " << c.getConstituencyName() << endl;
+    }
 }
 
 // Admin/User: List by city
@@ -224,7 +239,7 @@ void listConstituenciesByCity(int cityID)
 {
     if (cityID <= 0)
     {
-        cout << "❌ Error: Invalid city ID.\n";
+        cout << "Error: Invalid city ID.\n";
         return;
     }
     vector<Constituency> list = loadAllConstituencies();
@@ -233,13 +248,13 @@ void listConstituenciesByCity(int cityID)
     {
         if (c.getCityID() == cityID)
         {
-            cout << "📍 " << c.getConstituencyID() << " - " << c.getConstituencyName() << endl;
+            cout << c.getConstituencyID() << " - " << c.getConstituencyName() << endl;
             found = true;
         }
     }
     if (!found)
     {
-        cout << "ℹ️ No constituencies found for this city.\n";
+        cout << "No constituencies found for this city.\n";
     }
 }
 
@@ -249,6 +264,54 @@ bool constituencyExists(int id) {
         if (c.getConstituencyID() == id) return true;
     }
     return false;
+}
+
+void manageConstituencies() {
+    int choice;
+    while (true) {
+        cout << "\n Constituency Management\n";
+        cout << "1. Add Constituency\n";
+        cout << "2. View All Constituencies\n";
+        cout << "3. Edit Constituency\n";
+        cout << "4. Delete Constituency\n";
+        cout << "0. Back\n";
+        cout << "Enter choice: ";
+        cin >> choice;
+
+        if (choice == 1) {
+            int id, cityID;
+            string name;
+            cout << "Enter Constituency ID: ";
+            cin >> id;
+            cin.ignore();
+            cout << "Enter Name (e.g., NA-123): ";
+            getline(cin, name);
+            cout << "Enter City ID: ";
+            cin >> cityID;
+            Constituency c(id, name, cityID);
+            addConstituency(c);
+        } else if (choice == 2) {
+            listAllConstituencies();
+        } else if (choice == 3) {
+            int id;
+            string name;
+            cout << "Enter Constituency ID: ";
+            cin >> id;
+            cin.ignore();
+            cout << "Enter new name: ";
+            getline(cin, name);
+            editConstituency(id, name);
+        } else if (choice == 4) {
+            int id;
+            cout << "Enter Constituency ID to delete: ";
+            cin >> id;
+            deleteConstituency(id);
+        } else if (choice == 0) {
+            break;
+        } else {
+            cout << "Invalid option.\n";
+        }
+    }
 }
 
 // int main()

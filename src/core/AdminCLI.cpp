@@ -1,7 +1,6 @@
 #include <iostream>
 using namespace std;
 
-// External sub-menu function declarations
 void manageElections();
 void manageCities();
 void manageConstituencies();
@@ -15,7 +14,7 @@ void manageResults();
 void adminPanel() {
     int choice;
     while (true) {
-        cout << "\n📋 [ADMIN PANEL]\n";
+        cout << "\n [ADMIN PANEL]\n";
         cout << "1. Elections\n";
         cout << "2. Cities\n";
         cout << "3. Constituencies\n";

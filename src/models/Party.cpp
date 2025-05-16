@@ -129,22 +129,22 @@ void addParty(const Party &p)
     vector<Party> list = loadAllParties();
     if (partyIDExists(p.getPartyID(), list))
     {
-        cout << "❌ Party ID already exists.\n";
+        cout << "Party ID already exists.\n";
         return;
     }
     if (!isValidPartyName(p.getPartyName()))
     {
-        cout << "❌ Invalid party name (empty or too long).\n";
+        cout << "Invalid party name (empty or too long).\n";
         return;
     }
     if (!isValidPartySymbol(p.getPartySymbol()))
     {
-        cout << "❌ Invalid party symbol (empty or too long).\n";
+        cout << "Invalid party symbol (empty or too long).\n";
         return;
     }
     list.push_back(p);
     saveAllParties(list);
-    cout << "✅ Party added.\n";
+    cout << "Party added.\n";
 }
 
 // Admin: Edit party
@@ -154,12 +154,12 @@ void editParty(int id, const string &name, const string &symbol)
     bool found = false;
     if (!isValidPartyName(name))
     {
-        cout << "❌ Invalid party name (empty or too long).\n";
+        cout << "Invalid party name (empty or too long).\n";
         return;
     }
     if (!isValidPartySymbol(symbol))
     {
-        cout << "❌ Invalid party symbol (empty or too long).\n";
+        cout << "Invalid party symbol (empty or too long).\n";
         return;
     }
     for (auto &p : list)
@@ -174,11 +174,11 @@ void editParty(int id, const string &name, const string &symbol)
     }
     if (!found)
     {
-        cout << "❌ Party ID not found.\n";
+        cout << "Party ID not found.\n";
         return;
     }
     saveAllParties(list);
-    cout << "✏️ Party updated.\n";
+    cout << "Party updated.\n";
 }
 
 // Admin: Delete party
@@ -189,12 +189,12 @@ void deleteParty(int id)
                         { return p.getPartyID() == id; });
     if (it == list.end())
     {
-        cout << "❌ Party ID not found.\n";
+        cout << "Party ID not found.\n";
         return;
     }
     list.erase(it, list.end());
     saveAllParties(list);
-    cout << "🗑️ Party deleted.\n";
+    cout << "Party deleted.\n";
 }
 
 // Admin/User: View all parties
@@ -208,7 +208,7 @@ void listAllParties()
     }
     for (const auto &p : list)
     {
-        cout << "🏳️ " << p.getPartyID() << " | " << p.getPartyName() << " | Symbol: " << p.getPartySymbol() << endl;
+        cout << p.getPartyID() << " | " << p.getPartyName() << " | Symbol: " << p.getPartySymbol() << endl;
     }
 }
 
@@ -220,15 +220,65 @@ bool partyExists(int id) {
     return false;
 }
 
-int main()
-{
-    // Example usage
-    Party p1(1, "Party A", "Symbol A");
-    addParty(p1);
-    listAllParties();
-    editParty(1, "Updated Party A", "Updated Symbol A");
-    listAllParties();
-    deleteParty(1);
-    listAllParties();
-    return 0;
+void manageParties() {
+    int choice;
+    while (true) {
+        cout << "\n Party Management\n";
+        cout << "1. Add Party\n";
+        cout << "2. View All Parties\n";
+        cout << "3. Edit Party\n";
+        cout << "4. Delete Party\n";
+        cout << "0. Back\n";
+        cout << "Enter choice: ";
+        cin >> choice;
+
+        if (choice == 1) {
+            int id;
+            string name, symbol;
+            cout << "Enter Party ID: ";
+            cin >> id;
+            cin.ignore();
+            cout << "Enter Party Name: ";
+            getline(cin, name);
+            cout << "Enter Party Symbol: ";
+            getline(cin, symbol);
+            Party p(id, name, symbol);
+            addParty(p);
+        } else if (choice == 2) {
+            listAllParties();
+        } else if (choice == 3) {
+            int id;
+            string name, symbol;
+            cout << "Enter Party ID to edit: ";
+            cin >> id;
+            cin.ignore();
+            cout << "Enter new name: ";
+            getline(cin, name);
+            cout << "Enter new symbol: ";
+            getline(cin, symbol);
+            editParty(id, name, symbol);
+        } else if (choice == 4) {
+            int id;
+            cout << "Enter Party ID to delete: ";
+            cin >> id;
+            deleteParty(id);
+        } else if (choice == 0) {
+            break;
+        } else {
+            cout << "Invalid option.\n";
+        }
+    }
 }
+
+// int main()
+// {
+//     // Example usage
+//     Party p1(1, "Party A", "Symbol A");
+//     addParty(p1);
+//     listAllParties();
+//     editParty(1, "Updated Party A", "Updated Symbol A");
+//     listAllParties();
+//     deleteParty(1);
+//     listAllParties();
+//     return 0;
+// }

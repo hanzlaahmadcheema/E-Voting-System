@@ -264,7 +264,7 @@ void computeConstituencyResult(int electionID, int constituencyID)
     allResults.push_back(result);
     saveAllResults(allResults);
 
-    cout << "✅ Result computed for Constituency " << constituencyID
+    cout << "Result computed for Constituency " << constituencyID
          << " | Winner CandidateID: " << winnerCandidateID
          << " with " << maxVotes << " votes.\n";
 }
@@ -287,12 +287,12 @@ void viewResultByConstituency(int electionID, int constituencyID)
     {
         if (r.getElectionID() == electionID && r.getConstituencyID() == constituencyID)
         {
-            cout << "📊 Constituency " << constituencyID << " | Winner: CandidateID "
+            cout << "Constituency " << constituencyID << " | Winner: CandidateID "
                  << r.getWinnerCandidateID() << " | Total Votes: " << r.getTotalVotes() << endl;
             return;
         }
     }
-    cout << "⚠️ No result found for this constituency.\n";
+    cout << "No result found for this constituency.\n";
 }
 
 // Admin/User: List all results
@@ -306,10 +306,45 @@ void listAllResults()
     }
     for (const auto &r : results)
     {
-        cout << "📌 ElectionID: " << r.getElectionID()
+        cout << "ElectionID: " << r.getElectionID()
              << " | ConstID: " << r.getConstituencyID()
              << " | WinnerID: " << r.getWinnerCandidateID()
              << " | Votes: " << r.getTotalVotes() << endl;
+    }
+}
+
+void manageResults() {
+    int choice;
+    while (true) {
+        cout << "\n Results Management\n";
+        cout << "1. Compute Result by Constituency\n";
+        cout << "2. View Result by Constituency\n";
+        cout << "3. View All Results\n";
+        cout << "0. Back\n";
+        cout << "Enter choice: ";
+        cin >> choice;
+
+        if (choice == 1) {
+            int electionID, constID;
+            cout << "Enter Election ID: ";
+            cin >> electionID;
+            cout << "Enter Constituency ID: ";
+            cin >> constID;
+            computeConstituencyResult(electionID, constID);
+        } else if (choice == 2) {
+            int electionID, constID;
+            cout << "Enter Election ID: ";
+            cin >> electionID;
+            cout << "Enter Constituency ID: ";
+            cin >> constID;
+            viewResultByConstituency(electionID, constID);
+        } else if (choice == 3) {
+            listAllResults();
+        } else if (choice == 0) {
+            break;
+        } else {
+            cout << " Invalid option.\n";
+        }
     }
 }
 

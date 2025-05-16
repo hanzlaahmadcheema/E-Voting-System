@@ -28,6 +28,8 @@ public:
     static void editCity(const City &newCity);
     static void deleteCityByID(int cityID);
     static void listAllCities();
+    static bool cityExists(int id);
+    static void manageCities();
 
 private:
     int CityID;

@@ -120,18 +120,18 @@ vector<Candidate> loadAllCandidates()
                 }
                 else
                 {
-                    cerr << "⚠️ Invalid candidate data found in file, skipping.\n";
+                    cerr << "Invalid candidate data found in file, skipping.\n";
                 }
             }
         }
         catch (const std::exception &e)
         {
-            cerr << "❌ Error reading candidates file: " << e.what() << endl;
+            cerr << "Error reading candidates file: " << e.what() << endl;
         }
     }
     else
     {
-        cerr << "⚠️ Could not open candidate file for reading.\n";
+        cerr << "Could not open candidate file for reading.\n";
     }
     return candidates;
 }
@@ -142,7 +142,7 @@ void saveAllCandidates(const vector<Candidate> &candidates)
     ofstream file(CANDIDATE_FILE);
     if (!file.is_open())
     {
-        cerr << "❌ Could not open candidate file for writing.\n";
+        cerr << "Could not open candidate file for writing.\n";
         return;
     }
     json j;
@@ -154,7 +154,7 @@ void saveAllCandidates(const vector<Candidate> &candidates)
         }
         else
         {
-            cerr << "⚠️ Skipping invalid candidate during save.\n";
+            cerr << "Skipping invalid candidate during save.\n";
         }
     }
     file << j.dump(4);
@@ -165,18 +165,18 @@ void addCandidate(const Candidate &newCandidate)
 {
     if (!isValidCandidate(newCandidate))
     {
-        cerr << "❌ Invalid candidate data. Please check all fields.\n";
+        cerr << "Invalid candidate data. Please check all fields.\n";
         return;
     }
     vector<Candidate> candidates = loadAllCandidates();
     if (candidateIDExists(newCandidate.getCandidateID(), candidates))
     {
-        cerr << "❌ Candidate ID already exists. Use a unique ID.\n";
+        cerr << "Candidate ID already exists. Use a unique ID.\n";
         return;
     }
     candidates.push_back(newCandidate);
     saveAllCandidates(candidates);
-    cout << "✅ Candidate added successfully.\n";
+    cout << "Candidate added successfully.\n";
 }
 
 // Admin: Edit candidate by ID
@@ -184,7 +184,7 @@ void editCandidate(int candidateID, const string &newName, int newPartyID, int n
 {
     if (candidateID <= 0)
     {
-        cerr << "❌ Invalid candidate ID.\n";
+        cerr << "Invalid candidate ID.\n";
         return;
     }
     vector<Candidate> candidates = loadAllCandidates();
@@ -202,18 +202,18 @@ void editCandidate(int candidateID, const string &newName, int newPartyID, int n
     }
     if (!found)
     {
-        cerr << "❌ Candidate ID not found.\n";
+        cerr << "Candidate ID not found.\n";
         return;
     }
     saveAllCandidates(candidates);
-    cout << "✏️ Candidate updated successfully.\n";
+    cout << "Candidate updated successfully.\n";
 }
 // Admin: Delete candidate by ID
 void deleteCandidateByID(int candidateID)
 {
     if (candidateID <= 0)
     {
-        cerr << "❌ Invalid candidate ID.\n";
+        cerr << "Invalid candidate ID.\n";
         return;
     }
     vector<Candidate> candidates = loadAllCandidates();
@@ -223,9 +223,9 @@ void deleteCandidateByID(int candidateID)
     candidates.erase(it, candidates.end());
     saveAllCandidates(candidates);
     if (candidates.size() < before)
-        cout << "🗑️ Candidate deleted.\n";
+        cout << "Candidate deleted.\n";
     else
-        cout << "⚠️ Candidate ID not found.\n";
+        cout << "Candidate ID not found.\n";
 }
 
 // Admin: List all candidates
@@ -248,7 +248,7 @@ void viewCandidatesByConstituency(int constID)
 {
     if (constID <= 0)
     {
-        cerr << "❌ Invalid constituency ID.\n";
+        cerr << "Invalid constituency ID.\n";
         return;
     }
     vector<Candidate> candidates = loadAllCandidates();
@@ -272,7 +272,7 @@ Candidate *getCandidateByID(int candidateID)
 {
     if (candidateID <= 0)
     {
-        cerr << "❌ Invalid candidate ID.\n";
+        cerr << "Invalid candidate ID.\n";
         return nullptr;
     }
     vector<Candidate> candidates = loadAllCandidates();
@@ -292,6 +292,51 @@ bool candidateExists(int id) {
         if (c.getCandidateID() == id) return true;
     }
     return false;
+}
+
+void manageCandidates() {
+    int choice;
+    while (true) {
+        cout << "\n Candidate Management\n";
+        cout << "1. Add Candidate\n";
+        cout << "2. View All Candidates\n";
+        cout << "3. View by Constituency\n";
+        cout << "4. Delete Candidate\n";
+        cout << "0. Back\n";
+        cout << "Enter choice: ";
+        cin >> choice;
+
+        if (choice == 1) {
+            int id, partyID, constID;
+            string name;
+            cout << "Enter Candidate ID: "; cin >> id;
+            cin.ignore();
+            cout << "Enter Name: "; getline(cin, name);
+            cout << "Enter Party ID: "; cin >> partyID;
+            cout << "Enter Constituency ID: "; cin >> constID;
+
+            // TODO: Validate partyID & constID
+
+            Candidate c(id, name, partyID, constID);
+            addCandidate(c);
+        } else if (choice == 2) {
+            listAllCandidates();
+        } else if (choice == 3) {
+            int constID;
+            cout << "Enter Constituency ID: ";
+            cin >> constID;
+            viewCandidatesByConstituency(constID);
+        } else if (choice == 4) {
+            int id;
+            cout << "Enter Candidate ID to delete: ";
+            cin >> id;
+            deleteCandidateByID(id);
+        } else if (choice == 0) {
+            break;
+        } else {
+            cout << "Invalid option.\n";
+        }
+    }
 }
 
 // int main()

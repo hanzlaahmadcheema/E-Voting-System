@@ -27,12 +27,14 @@ public:
     static PollingStation fromJSON(const json &j);
 
     static const string POLLINGSTATION_FILE;
-    static vector<PollingStation> loadAllPollingStations();
-    static void saveAllPollingStations(const vector<PollingStation> &pollingStations);
+    static vector<PollingStation> loadAllStations();
+    static void saveAllStations(const vector<PollingStation> &pollingStations);
     static void addPollingStation(const PollingStation &newPollingStation);
-    static void deletePollingStationByID(int pollingStationID);
-    static void listAllPollingStations();
-    static void listPollingStationsByConstituency(int constituencyID);
+    static void deletePollingStation(int pollingStationID);
+    static void listAllStations();
+    static void listStationsByConstituency(int constituencyID);
+    static bool pollingStationExists(int id);
+    static void managePollingStations();
 
 private:
     int PollingStationID;
