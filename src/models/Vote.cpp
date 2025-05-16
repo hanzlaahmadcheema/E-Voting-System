@@ -4,9 +4,10 @@
 #include <vector>
 #include <string>
 using namespace std;
-//Vote
+// Vote
 Vote::Vote() : VoteID(0), VoterID(0), CandidateID(0), ElectionID(0), PollingStationID(0), VoteTime("") {}
-Vote::Vote(int VoteID, int VoterID, int CandidateID, int ElectionID, int PollingStationID, int ConstituencyID, const string& VoteTime) {
+Vote::Vote(int VoteID, int VoterID, int CandidateID, int ElectionID, int PollingStationID, int ConstituencyID, const string &VoteTime)
+{
     this->VoteID = VoteID;
     this->VoterID = VoterID;
     this->CandidateID = CandidateID;
@@ -15,59 +16,75 @@ Vote::Vote(int VoteID, int VoterID, int CandidateID, int ElectionID, int Polling
     this->ConstituencyID = ConstituencyID;
     this->VoteTime = VoteTime;
 }
-void Vote::setVoteID(int VoteID) {
+void Vote::setVoteID(int VoteID)
+{
     this->VoteID = VoteID;
 }
-void Vote::setVoterID(int VoterID) {
+void Vote::setVoterID(int VoterID)
+{
     this->VoterID = VoterID;
 }
-void Vote::setCandidateID(int CandidateID) {
+void Vote::setCandidateID(int CandidateID)
+{
     this->CandidateID = CandidateID;
 }
-void Vote::setElectionID(int ElectionID) {
+void Vote::setElectionID(int ElectionID)
+{
     this->ElectionID = ElectionID;
 }
-void Vote::setPollingStationID(int PollingStationID) {
+void Vote::setPollingStationID(int PollingStationID)
+{
     this->PollingStationID = PollingStationID;
 }
-void Vote::setConstituencyID(int ConstituencyID) {
+void Vote::setConstituencyID(int ConstituencyID)
+{
     this->ConstituencyID = ConstituencyID;
 }
-void Vote::setTimestamp(const string& VoteTime) {
+void Vote::setTimestamp(const string &VoteTime)
+{
     this->VoteTime = VoteTime;
 }
-int Vote::getVoteID() const {
+int Vote::getVoteID() const
+{
     return VoteID;
 }
-int Vote::getVoterID() const {
+int Vote::getVoterID() const
+{
     return VoterID;
 }
-int Vote::getCandidateID() const {
+int Vote::getCandidateID() const
+{
     return CandidateID;
 }
-int Vote::getElectionID() const {
+int Vote::getElectionID() const
+{
     return ElectionID;
 }
-int Vote::getPollingStationID() const {
+int Vote::getPollingStationID() const
+{
     return PollingStationID;
 }
-int Vote::getConstituencyID() const {
+int Vote::getConstituencyID() const
+{
     return ConstituencyID;
 }
-string Vote::getTimestamp() const {
+string Vote::getTimestamp() const
+{
     return VoteTime;
 }
-void Vote::displayVoteInfo() const {
+void Vote::displayVoteInfo() const
+{
     cout << "Vote ID: " << VoteID << "\n"
-              << "Voter ID: " << VoterID << "\n"
-              << "Candidate ID: " << CandidateID << "\n"
-              << "Election ID: " << ElectionID << "\n"
-              << "Polling Station ID: " << PollingStationID << "\n"
-              << "Constituency ID: " << ConstituencyID << "\n"
-              << "Timestamp: " << VoteTime << endl;
+         << "Voter ID: " << VoterID << "\n"
+         << "Candidate ID: " << CandidateID << "\n"
+         << "Election ID: " << ElectionID << "\n"
+         << "Polling Station ID: " << PollingStationID << "\n"
+         << "Constituency ID: " << ConstituencyID << "\n"
+         << "Timestamp: " << VoteTime << endl;
 }
 
-json Vote::toJSON() const {
+json Vote::toJSON() const
+{
     return json{
         {"VoteID", VoteID},
         {"VoterID", VoterID},
@@ -75,11 +92,11 @@ json Vote::toJSON() const {
         {"ElectionID", ElectionID},
         {"PollingStationID", PollingStationID},
         {"ConstituencyID", ConstituencyID},
-        {"VoteTime", VoteTime}
-    };
+        {"VoteTime", VoteTime}};
 }
 
-Vote Vote::fromJSON(const json& j) {
+Vote Vote::fromJSON(const json &j)
+{
     return Vote(
         j.at("VoteID").get<int>(),
         j.at("VoterID").get<int>(),
@@ -87,8 +104,7 @@ Vote Vote::fromJSON(const json& j) {
         j.at("ElectionID").get<int>(),
         j.at("PollingStationID").get<int>(),
         j.at("ConstituencyID").get<int>(),
-        j.at("VoteTime").get<std::string>()
-    );
+        j.at("VoteTime").get<std::string>());
 }
 
 const string VOTE_FILE = "../../data/votes.json";
@@ -97,17 +113,23 @@ const string VOTE_FILE = "../../data/votes.json";
 #include <set>
 #include <regex>
 
-vector<Vote> loadAllVotes() {
+vector<Vote> loadAllVotes()
+{
     vector<Vote> list;
     ifstream file(VOTE_FILE);
-    if (file.is_open()) {
+    if (file.is_open())
+    {
         json j;
-        try {
+        try
+        {
             file >> j;
-            for (auto& obj : j) {
+            for (auto &obj : j)
+            {
                 list.push_back(Vote::fromJSON(obj));
             }
-        } catch (const std::exception& e) {
+        }
+        catch (const std::exception &e)
+        {
             cerr << "Error loading votes: " << e.what() << endl;
         }
     }
@@ -115,55 +137,68 @@ vector<Vote> loadAllVotes() {
 }
 
 // Save all votes
-void saveAllVotes(const vector<Vote>& list) {
+void saveAllVotes(const vector<Vote> &list)
+{
     ofstream file(VOTE_FILE);
     json j;
-    for (const auto& v : list) {
+    for (const auto &v : list)
+    {
         j.push_back(v.toJSON());
     }
     file << j.dump(4);
 }
 
 // Helper: Validate Vote fields
-bool isValidVote(const Vote& vote, const vector<Vote>& existingVotes, string& errorMsg) {
+bool isValidVote(const Vote &vote, const vector<Vote> &existingVotes, string &errorMsg)
+{
     // Check for positive IDs
-    if (vote.getVoteID() <= 0) {
+    if (vote.getVoteID() <= 0)
+    {
         errorMsg = "VoteID must be positive.";
         return false;
     }
-    if (vote.getVoterID() <= 0) {
+    if (vote.getVoterID() <= 0)
+    {
         errorMsg = "VoterID must be positive.";
         return false;
     }
-    if (vote.getCandidateID() <= 0) {
+    if (vote.getCandidateID() <= 0)
+    {
         errorMsg = "CandidateID must be positive.";
         return false;
     }
-    if (vote.getElectionID() <= 0) {
+    if (vote.getElectionID() <= 0)
+    {
         errorMsg = "ElectionID must be positive.";
         return false;
     }
-    if (vote.getPollingStationID() <= 0) {
+    if (vote.getPollingStationID() <= 0)
+    {
         errorMsg = "PollingStationID must be positive.";
         return false;
     }
     // Check for duplicate VoteID
-    for (const auto& v : existingVotes) {
-        if (v.getVoteID() == vote.getVoteID()) {
+    for (const auto &v : existingVotes)
+    {
+        if (v.getVoteID() == vote.getVoteID())
+        {
             errorMsg = "Duplicate VoteID.";
             return false;
         }
     }
     // Check for duplicate vote by same voter in same election
-    for (const auto& v : existingVotes) {
-        if (v.getVoterID() == vote.getVoterID() && v.getElectionID() == vote.getElectionID()) {
+    for (const auto &v : existingVotes)
+    {
+        if (v.getVoterID() == vote.getVoterID() && v.getElectionID() == vote.getElectionID())
+        {
             errorMsg = "You have already voted in this election.";
             return false;
         }
     }
     // Check timestamp format (basic ISO 8601 check)
     std::regex iso8601(R"(^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2})");
-    if (!std::regex_search(vote.getTimestamp(), iso8601)) {
+    if (!std::regex_search(vote.getTimestamp(), iso8601))
+    {
         errorMsg = "Invalid timestamp format. Use YYYY-MM-DDTHH:MM:SS";
         return false;
     }
@@ -172,10 +207,12 @@ bool isValidVote(const Vote& vote, const vector<Vote>& existingVotes, string& er
 }
 
 // User: Cast vote
-bool castVote(const Vote& newVote) {
+bool castVote(const Vote &newVote)
+{
     vector<Vote> votes = loadAllVotes();
     string errorMsg;
-    if (!isValidVote(newVote, votes, errorMsg)) {
+    if (!isValidVote(newVote, votes, errorMsg))
+    {
         cout << "❌ Vote not cast: " << errorMsg << endl;
         return false;
     }
@@ -186,18 +223,22 @@ bool castVote(const Vote& newVote) {
 }
 
 // Admin: View all votes
-void listAllVotes() {
+void listAllVotes()
+{
     vector<Vote> votes = loadAllVotes();
     set<int> seenVoteIDs;
-    for (const auto& v : votes) {
+    for (const auto &v : votes)
+    {
         // Extra: Validate each vote before displaying
         string errorMsg;
-        if (!isValidVote(v, {}, errorMsg)) {
+        if (!isValidVote(v, {}, errorMsg))
+        {
             cout << "⚠️ Invalid vote (VoteID: " << v.getVoteID() << "): " << errorMsg << endl;
             continue;
         }
         // Check for duplicate VoteID in file
-        if (seenVoteIDs.count(v.getVoteID())) {
+        if (seenVoteIDs.count(v.getVoteID()))
+        {
             cout << "⚠️ Duplicate VoteID detected: " << v.getVoteID() << endl;
             continue;
         }
@@ -211,8 +252,18 @@ void listAllVotes() {
              << " | Time: " << v.getTimestamp() << endl;
     }
 }
- 
-// int main() {
+
+bool hasAlreadyVoted(int voterID, int electionID) {
+    vector<Vote> list = loadAllVotes();
+    for (const auto& v : list) {
+        if (v.getVoterID() == voterID && v.getElectionID() == electionID)
+            return true;
+    }
+    return false;
+}
+
+// int main()
+// {
 //     // Example usage
 //     Vote v1(1, 101, 202, 303, 404, 999, "2023-10-01T12:00:00");
 //     castVote(v1);

@@ -4,83 +4,102 @@
 #include <vector>
 #include <string>
 using namespace std;
-//Party
+// Party
 Party::Party() : PartyID(0), PartyName(""), PartySymbol("") {}
-Party::Party(int PartyID, const string& PartyName, const string& PartySymbol) {
+Party::Party(int PartyID, const string &PartyName, const string &PartySymbol)
+{
     this->PartyID = PartyID;
     this->PartyName = PartyName;
     this->PartySymbol = PartySymbol;
 }
-void Party::setPartyID(int PartyID) {
+void Party::setPartyID(int PartyID)
+{
     this->PartyID = PartyID;
 }
-void Party::setPartyName(const string& PartyName) {
+void Party::setPartyName(const string &PartyName)
+{
     this->PartyName = PartyName;
 }
-void Party::setPartySymbol(const string& PartySymbol) {
+void Party::setPartySymbol(const string &PartySymbol)
+{
     this->PartySymbol = PartySymbol;
 }
-int Party::getPartyID() const {
+int Party::getPartyID() const
+{
     return PartyID;
 }
-string Party::getPartyName() const {
+string Party::getPartyName() const
+{
     return PartyName;
 }
-string Party::getPartySymbol() const {
+string Party::getPartySymbol() const
+{
     return PartySymbol;
 }
-void Party::displayPartyInfo() const {
+void Party::displayPartyInfo() const
+{
     cout << "Party ID: " << PartyID << "\n"
-              << "Name: " << PartyName << "\n"
-              << "Symbol: " << PartySymbol << endl;
+         << "Name: " << PartyName << "\n"
+         << "Symbol: " << PartySymbol << endl;
 }
 
-json Party::toJSON() const {
+json Party::toJSON() const
+{
     return json{
         {"PartyID", PartyID},
         {"PartyName", PartyName},
-        {"PartySymbol", PartySymbol}
-    };
+        {"PartySymbol", PartySymbol}};
 }
 
-Party Party::fromJSON(const json& j) {
+Party Party::fromJSON(const json &j)
+{
     return Party(
         j.at("PartyID").get<int>(),
         j.at("PartyName").get<std::string>(),
-        j.at("PartySymbol").get<std::string>()
-    );
+        j.at("PartySymbol").get<std::string>());
 }
 
 const string PARTY_FILE = "../../data/parties.json";
 
 // Helper: Check if PartyID exists
-bool partyIDExists(int id, const vector<Party>& list) {
-    for (const auto& p : list) {
-        if (p.getPartyID() == id) return true;
+bool partyIDExists(int id, const vector<Party> &list)
+{
+    for (const auto &p : list)
+    {
+        if (p.getPartyID() == id)
+            return true;
     }
     return false;
 }
 
 // Helper: Validate Party Name and Symbol
-bool isValidPartyName(const string& name) {
+bool isValidPartyName(const string &name)
+{
     return !name.empty() && name.length() <= 50;
 }
-bool isValidPartySymbol(const string& symbol) {
+bool isValidPartySymbol(const string &symbol)
+{
     return !symbol.empty() && symbol.length() <= 20;
 }
 
 // Load all parties
-vector<Party> loadAllParties() {
+vector<Party> loadAllParties()
+{
     vector<Party> list;
     ifstream file(PARTY_FILE);
-    if (file.is_open()) {
+    if (file.is_open())
+    {
         json j;
-        try {
+        try
+        {
             file >> j;
-            for (auto& obj : j) {
+            for (auto &obj : j)
+            {
                 list.push_back(Party::fromJSON(obj));
             }
-        } catch (...) {
+        }
+        catch (...)
+        {
             cerr << "Error: Invalid party data format.\n";
         }
     }
@@ -88,31 +107,38 @@ vector<Party> loadAllParties() {
 }
 
 // Save all parties
-void saveAllParties(const vector<Party>& list) {
+void saveAllParties(const vector<Party> &list)
+{
     ofstream file(PARTY_FILE);
-    if (!file.is_open()) {
+    if (!file.is_open())
+    {
         cerr << "Error: Cannot open party file for writing.\n";
         return;
     }
     json j;
-    for (const auto& p : list) {
+    for (const auto &p : list)
+    {
         j.push_back(p.toJSON());
     }
     file << j.dump(4);
 }
 
 // Admin: Add party
-void addParty(const Party& p) {
+void addParty(const Party &p)
+{
     vector<Party> list = loadAllParties();
-    if (partyIDExists(p.getPartyID(), list)) {
+    if (partyIDExists(p.getPartyID(), list))
+    {
         cout << "❌ Party ID already exists.\n";
         return;
     }
-    if (!isValidPartyName(p.getPartyName())) {
+    if (!isValidPartyName(p.getPartyName()))
+    {
         cout << "❌ Invalid party name (empty or too long).\n";
         return;
     }
-    if (!isValidPartySymbol(p.getPartySymbol())) {
+    if (!isValidPartySymbol(p.getPartySymbol()))
+    {
         cout << "❌ Invalid party symbol (empty or too long).\n";
         return;
     }
@@ -122,26 +148,32 @@ void addParty(const Party& p) {
 }
 
 // Admin: Edit party
-void editParty(int id, const string& name, const string& symbol) {
+void editParty(int id, const string &name, const string &symbol)
+{
     vector<Party> list = loadAllParties();
     bool found = false;
-    if (!isValidPartyName(name)) {
+    if (!isValidPartyName(name))
+    {
         cout << "❌ Invalid party name (empty or too long).\n";
         return;
     }
-    if (!isValidPartySymbol(symbol)) {
+    if (!isValidPartySymbol(symbol))
+    {
         cout << "❌ Invalid party symbol (empty or too long).\n";
         return;
     }
-    for (auto& p : list) {
-        if (p.getPartyID() == id) {
+    for (auto &p : list)
+    {
+        if (p.getPartyID() == id)
+        {
             p.setPartyName(name);
             p.setPartySymbol(symbol);
             found = true;
             break;
         }
     }
-    if (!found) {
+    if (!found)
+    {
         cout << "❌ Party ID not found.\n";
         return;
     }
@@ -150,12 +182,13 @@ void editParty(int id, const string& name, const string& symbol) {
 }
 
 // Admin: Delete party
-void deleteParty(int id) {
+void deleteParty(int id)
+{
     vector<Party> list = loadAllParties();
-    auto it = remove_if(list.begin(), list.end(), [id](const Party& p) {
-        return p.getPartyID() == id;
-    });
-    if (it == list.end()) {
+    auto it = remove_if(list.begin(), list.end(), [id](const Party &p)
+                        { return p.getPartyID() == id; });
+    if (it == list.end())
+    {
         cout << "❌ Party ID not found.\n";
         return;
     }
@@ -165,25 +198,37 @@ void deleteParty(int id) {
 }
 
 // Admin/User: View all parties
-void listAllParties() {
+void listAllParties()
+{
     vector<Party> list = loadAllParties();
-    if (list.empty()) {
+    if (list.empty())
+    {
         cout << "No parties found.\n";
         return;
     }
-    for (const auto& p : list) {
+    for (const auto &p : list)
+    {
         cout << "🏳️ " << p.getPartyID() << " | " << p.getPartyName() << " | Symbol: " << p.getPartySymbol() << endl;
     }
 }
 
-// int main() {
-//     // Example usage
-//     Party p1(1, "Party A", "Symbol A");
-//     addParty(p1);
-//     listAllParties();
-//     editParty(1, "Updated Party A", "Updated Symbol A");
-//     listAllParties();
-//     deleteParty(1);
-//     listAllParties();
-//     return 0;
-// }
+bool partyExists(int id) {
+    vector<Party> list = loadAllParties();
+    for (const auto& p : list) {
+        if (p.getPartyID() == id) return true;
+    }
+    return false;
+}
+
+int main()
+{
+    // Example usage
+    Party p1(1, "Party A", "Symbol A");
+    addParty(p1);
+    listAllParties();
+    editParty(1, "Updated Party A", "Updated Symbol A");
+    listAllParties();
+    deleteParty(1);
+    listAllParties();
+    return 0;
+}

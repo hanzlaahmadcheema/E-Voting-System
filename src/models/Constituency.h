@@ -7,26 +7,27 @@
 using namespace std;
 using json = nlohmann::json;
 
-class Constituency {
+class Constituency
+{
 public:
-Constituency();
-    Constituency(int ConstituencyID, const string& ConstituencyName, int CityID);
+    Constituency();
+    Constituency(int ConstituencyID, const string &ConstituencyName, int CityID);
     void setConstituencyID(int ConstituencyID);
-    void setConstituencyName(const string& ConstituencyName);
+    void setConstituencyName(const string &ConstituencyName);
     void setCityID(int CityID);
     int getConstituencyID() const;
     string getConstituencyName() const;
     int getCityID() const;
-    void displayConstituencyInfo() const;    
-    
+    void displayConstituencyInfo() const;
+
     json toJSON() const;
-    static Constituency fromJSON(const json& j);
+    static Constituency fromJSON(const json &j);
 
     static const string CONSTITUENCY_FILE;
     static vector<Constituency> loadAllConstituencies();
-    static void saveAllConstituencies(const vector<Constituency>& constituencies);
-    static void addConstituency(const Constituency& newConstituency);
-    static void editConstituency(const Constituency& newConstituency);
+    static void saveAllConstituencies(const vector<Constituency> &constituencies);
+    static void addConstituency(const Constituency &newConstituency);
+    static void editConstituency(const Constituency &newConstituency);
     static void deleteConstituencyByID(int constituencyID);
     static void listConstituenciesByCity(int cityID);
 

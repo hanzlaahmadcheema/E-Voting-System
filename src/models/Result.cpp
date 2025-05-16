@@ -9,68 +9,82 @@ using namespace std;
 
 vector<Vote> loadAllVotes();
 
-
-//Result
+// Result
 Result::Result() : ResultID(0), PollingStationID(0), ElectionID(0), WinnerCandidateID(0), TotalVotes(0), ConstituencyID(0) {}
-Result::Result(int ResultID, int PollingStationID, int ElectionID, int WinnerCandidateID, int TotalVotes, int ConstituencyID) {
+Result::Result(int ResultID, int PollingStationID, int ElectionID, int WinnerCandidateID, int TotalVotes, int ConstituencyID)
+{
     this->ResultID = ResultID;
     this->PollingStationID = PollingStationID;
     this->ElectionID = ElectionID;
     this->WinnerCandidateID = WinnerCandidateID;
     this->TotalVotes = TotalVotes;
     this->ConstituencyID = ConstituencyID;
-    
 }
-void Result::declareResult() {
+void Result::declareResult()
+{
     cout << "Result declared for Election ID: " << ElectionID << "\n"
-              << "Winner Candidate ID: " << WinnerCandidateID << "\n"
-              << "Total Votes: " << TotalVotes << endl;
+         << "Winner Candidate ID: " << WinnerCandidateID << "\n"
+         << "Total Votes: " << TotalVotes << endl;
 }
-void Result::setResultID(int ResultID) {
+void Result::setResultID(int ResultID)
+{
     this->ResultID = ResultID;
 }
-void Result::setPollingStationID(int PollingStationID) {
+void Result::setPollingStationID(int PollingStationID)
+{
     this->PollingStationID = PollingStationID;
 }
-void Result::setElectionID(int ElectionID) {
+void Result::setElectionID(int ElectionID)
+{
     this->ElectionID = ElectionID;
 }
-void Result::setWinnerCandidateID(int WinnerCandidateID) {
+void Result::setWinnerCandidateID(int WinnerCandidateID)
+{
     this->WinnerCandidateID = WinnerCandidateID;
 }
-void Result::setTotalVotes(int TotalVotes) {
+void Result::setTotalVotes(int TotalVotes)
+{
     this->TotalVotes = TotalVotes;
 }
-void Result::setConstituencyID(int ConstituencyID) {
+void Result::setConstituencyID(int ConstituencyID)
+{
     this->ConstituencyID = ConstituencyID;
 }
-int Result::getConstituencyID() const {
+int Result::getConstituencyID() const
+{
     return ConstituencyID;
 }
-int Result::getResultID() const {
+int Result::getResultID() const
+{
     return ResultID;
 }
-int Result::getPollingStationID() const {
+int Result::getPollingStationID() const
+{
     return PollingStationID;
 }
-int Result::getElectionID() const {
+int Result::getElectionID() const
+{
     return ElectionID;
 }
-int Result::getWinnerCandidateID() const {
+int Result::getWinnerCandidateID() const
+{
     return WinnerCandidateID;
 }
-int Result::getTotalVotes() const {
+int Result::getTotalVotes() const
+{
     return TotalVotes;
 }
-void Result::displayResultInfo() const {
+void Result::displayResultInfo() const
+{
     cout << "Result ID: " << ResultID << "\n"
-              << "Polling Station ID: " << PollingStationID << "\n"
-              << "Election ID: " << ElectionID << "\n"
-              << "Winner Candidate ID: " << WinnerCandidateID << "\n"
-              << "Total Votes: " << TotalVotes << endl;
+         << "Polling Station ID: " << PollingStationID << "\n"
+         << "Election ID: " << ElectionID << "\n"
+         << "Winner Candidate ID: " << WinnerCandidateID << "\n"
+         << "Total Votes: " << TotalVotes << endl;
 }
 
-json Result::toJSON() const {
+json Result::toJSON() const
+{
     return json{
         {"ResultID", ResultID},
         {"PollingStationID", PollingStationID},
@@ -78,11 +92,12 @@ json Result::toJSON() const {
         {"WinnerCandidateID", WinnerCandidateID},
         {"TotalVotes", TotalVotes},
         {"ConstituencyID", ConstituencyID}
-       
+
     };
 }
 
-Result Result::fromJSON(const json& j) {
+Result Result::fromJSON(const json &j)
+{
     return Result(
         j.at("ResultID").get<int>(),
         j.at("PollingStationID").get<int>(),
@@ -90,7 +105,7 @@ Result Result::fromJSON(const json& j) {
         j.at("WinnerCandidateID").get<int>(),
         j.at("TotalVotes").get<int>(),
         j.at("ConstituencyID").get<int>()
-        
+
     );
 }
 
@@ -100,57 +115,77 @@ const string VOTE_FILE = "../../data/votes.json";
 // Load all results
 #include <sys/stat.h>
 
-vector<Result> loadAllResults() {
+vector<Result> loadAllResults()
+{
     vector<Result> results;
     struct stat buffer;
-    if (stat(RESULT_FILE.c_str(), &buffer) != 0) {
+    if (stat(RESULT_FILE.c_str(), &buffer) != 0)
+    {
         // File does not exist, create an empty JSON array file
         ofstream createFile(RESULT_FILE);
-        if (createFile.is_open()) {
+        if (createFile.is_open())
+        {
             createFile << "[]";
             createFile.close();
-        } else {
+        }
+        else
+        {
             cerr << "Error: Could not create results file: " << RESULT_FILE << endl;
             return results;
         }
     }
     ifstream file(RESULT_FILE);
-    if (!file.is_open()) {
+    if (!file.is_open())
+    {
         cerr << "Error: Could not open results file: " << RESULT_FILE << endl;
         return results;
     }
-    try {
+    try
+    {
         json j;
         file >> j;
-        if (!j.is_array()) {
+        if (!j.is_array())
+        {
             cerr << "Error: Results file is not a valid JSON array." << endl;
             return results;
         }
-        for (auto& obj : j) {
-            try {
+        for (auto &obj : j)
+        {
+            try
+            {
                 results.push_back(Result::fromJSON(obj));
-            } catch (const std::exception& e) {
+            }
+            catch (const std::exception &e)
+            {
                 cerr << "Warning: Skipping invalid result entry: " << e.what() << endl;
             }
         }
-    } catch (const std::exception& e) {
+    }
+    catch (const std::exception &e)
+    {
         cerr << "Error: Failed to parse results file: " << e.what() << endl;
     }
     return results;
 }
 
 // Save all results
-void saveAllResults(const vector<Result>& results) {
+void saveAllResults(const vector<Result> &results)
+{
     ofstream file(RESULT_FILE);
-    if (!file.is_open()) {
+    if (!file.is_open())
+    {
         cerr << "Error: Could not open results file for writing: " << RESULT_FILE << endl;
         return;
     }
     json j = json::array();
-    for (const auto& r : results) {
-        try {
+    for (const auto &r : results)
+    {
+        try
+        {
             j.push_back(r.toJSON());
-        } catch (const std::exception& e) {
+        }
+        catch (const std::exception &e)
+        {
             cerr << "Warning: Could not serialize result: " << e.what() << endl;
         }
     }
@@ -158,27 +193,33 @@ void saveAllResults(const vector<Result>& results) {
 }
 
 // Admin: Compute results for a constituency in an election
-void computeConstituencyResult(int electionID, int constituencyID) {
-    if (electionID <= 0 || constituencyID <= 0) {
+void computeConstituencyResult(int electionID, int constituencyID)
+{
+    if (electionID <= 0 || constituencyID <= 0)
+    {
         cerr << "Error: Invalid electionID or constituencyID." << endl;
         return;
     }
     vector<Vote> votes = loadAllVotes();
-    if (votes.empty()) {
+    if (votes.empty())
+    {
         cerr << "Error: No votes found." << endl;
         return;
     }
     unordered_map<int, int> voteCounts; // CandidateID -> Vote count
 
-    for (const auto& vote : votes) {
-        if (vote.getElectionID() == electionID && vote.getConstituencyID() == constituencyID) {
+    for (const auto &vote : votes)
+    {
+        if (vote.getElectionID() == electionID && vote.getConstituencyID() == constituencyID)
+        {
             int candidateID = vote.getCandidateID();
             if (candidateID > 0)
                 voteCounts[candidateID]++;
         }
     }
 
-    if (voteCounts.empty()) {
+    if (voteCounts.empty())
+    {
         cerr << "Error: No votes found for this election and constituency." << endl;
         return;
     }
@@ -187,25 +228,32 @@ void computeConstituencyResult(int electionID, int constituencyID) {
     int maxVotes = 0;
     int winnerCandidateID = -1;
     bool tie = false;
-    for (const auto& pair : voteCounts) {
-        if (pair.second > maxVotes) {
+    for (const auto &pair : voteCounts)
+    {
+        if (pair.second > maxVotes)
+        {
             maxVotes = pair.second;
             winnerCandidateID = pair.first;
             tie = false;
-        } else if (pair.second == maxVotes) {
+        }
+        else if (pair.second == maxVotes)
+        {
             tie = true;
         }
     }
 
-    if (tie) {
+    if (tie)
+    {
         cerr << "Warning: There is a tie between candidates for this constituency." << endl;
         // Optionally, handle tie-break logic here.
     }
 
     // Check for duplicate result
     vector<Result> allResults = loadAllResults();
-    for (const auto& r : allResults) {
-        if (r.getElectionID() == electionID && r.getConstituencyID() == constituencyID) {
+    for (const auto &r : allResults)
+    {
+        if (r.getElectionID() == electionID && r.getConstituencyID() == constituencyID)
+        {
             cerr << "Error: Result for this election and constituency already exists." << endl;
             return;
         }
@@ -222,18 +270,23 @@ void computeConstituencyResult(int electionID, int constituencyID) {
 }
 
 // Admin/User: View result for a constituency
-void viewResultByConstituency(int electionID, int constituencyID) {
-    if (electionID <= 0 || constituencyID <= 0) {
+void viewResultByConstituency(int electionID, int constituencyID)
+{
+    if (electionID <= 0 || constituencyID <= 0)
+    {
         cerr << "Error: Invalid electionID or constituencyID." << endl;
         return;
     }
     vector<Result> results = loadAllResults();
-    if (results.empty()) {
+    if (results.empty())
+    {
         cerr << "Error: No results found." << endl;
         return;
     }
-    for (const auto& r : results) {
-        if (r.getElectionID() == electionID && r.getConstituencyID() == constituencyID) {
+    for (const auto &r : results)
+    {
+        if (r.getElectionID() == electionID && r.getConstituencyID() == constituencyID)
+        {
             cout << "📊 Constituency " << constituencyID << " | Winner: CandidateID "
                  << r.getWinnerCandidateID() << " | Total Votes: " << r.getTotalVotes() << endl;
             return;
@@ -243,13 +296,16 @@ void viewResultByConstituency(int electionID, int constituencyID) {
 }
 
 // Admin/User: List all results
-void listAllResults() {
+void listAllResults()
+{
     vector<Result> results = loadAllResults();
-    if (results.empty()) {
+    if (results.empty())
+    {
         cout << "No results to display." << endl;
         return;
     }
-    for (const auto& r : results) {
+    for (const auto &r : results)
+    {
         cout << "📌 ElectionID: " << r.getElectionID()
              << " | ConstID: " << r.getConstituencyID()
              << " | WinnerID: " << r.getWinnerCandidateID()
@@ -257,7 +313,8 @@ void listAllResults() {
     }
 }
 
-// int main() {
+// int main()
+// {
 //     // Example usage
 //     Result r1(1, 101, 2023, 5, 1000, 1);
 //     r1.declareResult();
