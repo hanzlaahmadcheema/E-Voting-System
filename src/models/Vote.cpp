@@ -7,8 +7,6 @@
 
 using namespace std;
 
-std::time_t now = std::time(nullptr);
-
 // Vote
 Vote::Vote() : VoteID(0), VoterID(0), CandidateID(0), ElectionID(0), PollingStationID(0), VoteTime("") {}
 Vote::Vote(int VoteID, int VoterID, int CandidateID, int ElectionID, int PollingStationID, int ConstituencyID, const string &VoteTime)
@@ -112,7 +110,7 @@ Vote Vote::fromJSON(const json &j)
         j.at("VoteTime").get<std::string>());
 }
 
-const string VOTE_FILE = "../../data/votes.json";
+const string VOTE_FILE = "data/votes.json";
 
 // Load all votes
 #include <set>
@@ -200,13 +198,13 @@ bool isValidVote(const Vote &vote, const vector<Vote> &existingVotes, string &er
             return false;
         }
     }
-    // // Check timestamp format (basic ISO 8601 check)
-    // std::regex iso8601(R"(^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2})");
-    // if (!std::regex_search(vote.getTimestamp(), iso8601))
-    // {
-    //     errorMsg = "Invalid timestamp format. Use YYYY-MM-DDTHH:MM:SS";
-    //     return false;
-    // }
+    // Check timestamp format (basic ISO 8601 check)
+    std::regex iso8601(R"(^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$)");
+    if (!std::regex_search(vote.getTimestamp(), iso8601))
+    {
+        errorMsg = "Invalid timestamp format. Use YYYY-MM-DD HH:MM:SS";
+        return false;
+    }
     // All checks passed
     return true;
 }
@@ -258,10 +256,10 @@ void listAllVotes()
     }
 }
 
-bool voteExists(int voterID, int electionID) {
+bool voteExists(int VoterID, int ElectionID) {
     vector<Vote> list = loadAllVotes();
     for (const auto& v : list) {
-        if (v.getVoterID() == voterID && v.getElectionID() == electionID)
+        if (v.getVoterID() == VoterID && v.getElectionID() == ElectionID)
             return true;
     }
     return false;
@@ -286,10 +284,19 @@ void manageVoting() {
     }
 }
 
+//get timestamp 
+string getCurrentTimestamp() {
+    std::time_t now = std::time(nullptr);
+    std::tm *tm = std::localtime(&now);
+    char buffer[80];
+    std::strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", tm);
+    return std::string(buffer);
+}
+
 // int main()
 // {
 //     // Example usage
-//     Vote v1(2, 102, 202, 303, 404, 999, std::ctime(&now));
+//     Vote v1(3, 103, 202, 303, 404, 999, getCurrentTimestamp());
 //     castVote(v1);
 //     listAllVotes();
 //     return 0;

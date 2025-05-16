@@ -59,7 +59,7 @@ Constituency Constituency::fromJSON(const json &j)
         j.at("CityID").get<int>());
 }
 
-const string CONSTITUENCY_FILE = "../../data/constituencies.json";
+const string CONSTITUENCY_FILE = "data/constituencies.json";
 
 // Helper: Check if constituency ID exists
 bool constituencyIDExists(const vector<Constituency> &list, int id)

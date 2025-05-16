@@ -1,1 +1,7 @@
-null
+[
+    {
+        "CityID": 1,
+        "ConstituencyID": 1,
+        "ConstituencyName": "Updated Karachi East"
+    }
+]

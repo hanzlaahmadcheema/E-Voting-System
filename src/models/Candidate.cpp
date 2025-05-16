@@ -73,14 +73,14 @@ Candidate Candidate::fromJSON(const json &j)
         j.at("ConstituencyID").get<int>());
 }
 
-const string CANDIDATE_FILE = "../../data/candidates.json";
+const string CANDIDATE_FILE = "data/candidates.json";
 
 // Helper: Check if candidate ID already exists
-bool candidateIDExists(int candidateID, const vector<Candidate> &candidates)
+bool candidateIDExists(int CandidateID, const vector<Candidate> &candidates)
 {
     for (const auto &c : candidates)
     {
-        if (c.getCandidateID() == candidateID)
+        if (c.getCandidateID() == CandidateID)
             return true;
     }
     return false;
@@ -180,9 +180,9 @@ void addCandidate(const Candidate &newCandidate)
 }
 
 // Admin: Edit candidate by ID
-void editCandidate(int candidateID, const string &newName, int newPartyID, int newConstituencyID)
+void editCandidate(int CandidateID, const string &newName, int newPartyID, int newConstituencyID)
 {
-    if (candidateID <= 0)
+    if (CandidateID <= 0)
     {
         cerr << "Invalid candidate ID.\n";
         return;
@@ -191,7 +191,7 @@ void editCandidate(int candidateID, const string &newName, int newPartyID, int n
     bool found = false;
     for (auto &c : candidates)
     {
-        if (c.getCandidateID() == candidateID)
+        if (c.getCandidateID() == CandidateID)
         {
             c.setCandidateName(newName);
             c.setPartyID(newPartyID);
@@ -209,17 +209,17 @@ void editCandidate(int candidateID, const string &newName, int newPartyID, int n
     cout << "Candidate updated successfully.\n";
 }
 // Admin: Delete candidate by ID
-void deleteCandidateByID(int candidateID)
+void deleteCandidateByID(int CandidateID)
 {
-    if (candidateID <= 0)
+    if (CandidateID <= 0)
     {
         cerr << "Invalid candidate ID.\n";
         return;
     }
     vector<Candidate> candidates = loadAllCandidates();
     size_t before = candidates.size();
-    auto it = remove_if(candidates.begin(), candidates.end(), [candidateID](const Candidate &c)
-                        { return c.getCandidateID() == candidateID; });
+    auto it = remove_if(candidates.begin(), candidates.end(), [CandidateID](const Candidate &c)
+                        { return c.getCandidateID() == CandidateID; });
     candidates.erase(it, candidates.end());
     saveAllCandidates(candidates);
     if (candidates.size() < before)
@@ -268,9 +268,9 @@ void viewCandidatesByConstituency(int constID)
 }
 
 // User: Get candidate by ID
-Candidate *getCandidateByID(int candidateID)
+Candidate *getCandidateByID(int CandidateID)
 {
-    if (candidateID <= 0)
+    if (CandidateID <= 0)
     {
         cerr << "Invalid candidate ID.\n";
         return nullptr;
@@ -278,7 +278,7 @@ Candidate *getCandidateByID(int candidateID)
     vector<Candidate> candidates = loadAllCandidates();
     for (auto &c : candidates)
     {
-        if (c.getCandidateID() == candidateID)
+        if (c.getCandidateID() == CandidateID)
         {
             return new Candidate(c);
         }

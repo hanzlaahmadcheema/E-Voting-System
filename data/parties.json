@@ -1,1 +1,7 @@
-null
+[
+    {
+        "PartyID": 1,
+        "PartyName": "Updated Party A",
+        "PartySymbol": "UPA"
+    }
+]

@@ -32,7 +32,7 @@ public:
     static void addPollingStation(const PollingStation &newPollingStation);
     static void deletePollingStation(int pollingStationID);
     static void listAllStations();
-    static void listStationsByConstituency(int constituencyID);
+    static void listStationsByConstituency(int ConstituencyID);
     static bool pollingStationExists(int id);
     static void managePollingStations();
 

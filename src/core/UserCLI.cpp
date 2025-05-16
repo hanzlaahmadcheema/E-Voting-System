@@ -1,0 +1,87 @@
+#include <iostream>
+#include <ctime>
+#include "../models/Voter.h"
+#include "../models/Vote.h"
+#include "../models/Candidate.h"
+
+
+extern vector<Voter> loadAllVoters();
+extern vector<Candidate> loadAllCandidates();
+extern bool castVote(const Vote&);
+extern bool voteExists(int VoterID, int ElectionID);
+extern void listAllCandidates();
+extern void viewCandidatesByConstituency(int ConstituencyID);
+extern string getCurrentTimestamp();
+using namespace std;
+
+
+Voter* voterLogin() {
+    string VoterCNIC;
+    cout << "Enter CNIC to log in: ";
+    getline(cin, VoterCNIC);
+
+    vector<Voter> voters = loadAllVoters();
+    if (VoterCNIC.empty()) {
+        cout << "CNIC cannot be empty.\n";
+        return nullptr;
+    }
+    cout << "Searching for voter...\n" << VoterCNIC <<endl;
+            cout << "Loaded " << voters.size() << " voters from file.\n";
+
+    for (auto& v : voters) {
+            cout << "Stored CNIC: " << v.getVoterCNIC() << endl;
+        if (v.getVoterCNIC() == VoterCNIC) {
+            cout << "Login successful. Welcome " << v.getVoterName() << "!\n";
+            return new Voter(v);  // Create a copy
+        }
+    }
+    cout << "Voter not found.\n";
+    return nullptr;
+}
+
+void showUserMenu(Voter* voter) {
+    int choice;
+    while (true) {
+        cout << "\n Voter Menu\n";
+        cout << "1. View Candidates\n";
+        cout << "2. Cast Vote\n";
+        cout << "0. Logout\n";
+        cout << "Enter choice: ";
+        cin >> choice;
+
+        if (choice == 1) {
+            viewCandidatesByConstituency(voter->getConstituencyID());
+        } else if (choice == 2) {
+            int ElectionID, CandidateID, ConstituencyID;
+            cout << "Enter Election ID: ";
+            cin >> ElectionID;
+
+            if (voteExists(voter->getVoterID(), ElectionID)) {
+                cout << "You’ve already voted in this election.\n";
+                continue;
+            }
+            ConstituencyID = voter->getConstituencyID();
+            viewCandidatesByConstituency(ConstituencyID);
+
+            cout << "Enter Candidate ID to vote for: ";
+            cin >> CandidateID;
+
+            Vote vote(0, voter->getVoterID(), CandidateID, ElectionID, voter->getPollingStationID(), ConstituencyID, getCurrentTimestamp());
+            castVote(vote);
+        } else if (choice == 0) {
+            cout << "Logged out.\n";
+            break;
+        } else {
+            cout << "Invalid choice.\n";
+        }
+    }
+}
+
+void userPanel() {
+    cout << "\nWelcome to E-Voting System\n";
+    Voter* voter = voterLogin();
+    if (voter != nullptr) {
+        showUserMenu(voter);
+        delete voter;
+    }
+}

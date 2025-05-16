@@ -36,11 +36,10 @@ public:
     static vector<Voter> loadAllVoters();
     static void saveAllVoters(const vector<Voter> &voters);
     static void registerVoter(const Voter &newVoter);
-    static void editVoterByID(int voterID, const Voter &updatedVoter);
+    static void editVoterByID(int VoterID, const Voter &updatedVoter);
     static void listAllVoters();
-    static void deleteVoterByID(int voterID);
-    static void editVoterByID(int voterID, const Voter &updatedVoter);
-    static vector<Voter> loginByCNIC(const string &cnic);
+    static void deleteVoterByID(int VoterID);
+    static vector<Voter> loginByCNIC(const string &VoterCNIC);
     static void viewProfile(const Voter &v);
     static bool voterExists(int id);
     static void manageVoters();

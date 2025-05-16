@@ -29,11 +29,11 @@ public:
     static vector<Candidate> loadAllCandidates();
     static void saveAllCandidates(const vector<Candidate> &candidates);
     static void addCandidate(const Candidate &newCandidate);
-    static void editCandidate(int candidateID, const string &newName, int newPartyID, int newConstituencyID);
-    static void deleteCandidateByID(int candidateID);
+    static void editCandidate(int CandidateID, const string &newName, int newPartyID, int newConstituencyID);
+    static void deleteCandidateByID(int CandidateID);
     static void listAllCandidates();
     static void viewCandidatesByConstituency(int constID);
-    static Candidate *getCandidateByID(int candidateID);
+    static Candidate *getCandidateByID(int CandidateID);
     static bool candidateExists(int id);
     static void manageCandidates();
 

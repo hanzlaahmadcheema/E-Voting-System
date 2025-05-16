@@ -3,6 +3,7 @@
 #include <vector>
 #include <fstream>
 #include <string>
+
 using namespace std;
 // Voter
 Voter::Voter() : VoterID(0), VoterName(""), VoterCNIC(""), VoterGender(""), VoterAge(0), VoterAddress(""), PollingStationID(0), ConstituencyID(0) {}
@@ -108,14 +109,14 @@ Voter Voter::fromJSON(const json &j)
         j.at("ConstituencyID").get<int>());
 }
 
-const string VOTER_FILE = "../../data/voters.json";
+const string VOTER_FILE = "data/voters.json";
 
 // Helper: Validate CNIC (13 digits, all numbers)
-bool isValidCNIC(const string &cnic)
+bool isValidCNIC(const string &VoterCNIC)
 {
-    if (cnic.length() != 13)
+    if (VoterCNIC.length() != 13)
         return false;
-    for (char ch : cnic)
+    for (char ch : VoterCNIC)
     {
         if (!isdigit(ch))
             return false;
@@ -300,9 +301,9 @@ void listAllVoters()
 }
 
 // Admin: Edit voter by ID (with check)
-void editVoterByID(int voterID, const Voter &updatedVoter)
+void editVoterByID(int VoterID, const Voter &updatedVoter)
 {
-    if (!isValidID(voterID))
+    if (!isValidID(VoterID))
     {
         cout << "Error: Invalid Voter ID.\n";
         return;
@@ -311,7 +312,7 @@ void editVoterByID(int voterID, const Voter &updatedVoter)
     bool found = false;
     for (auto &v : voters)
     {
-        if (v.getVoterID() == voterID)
+        if (v.getVoterID() == VoterID)
         {
             v = updatedVoter; // Update the voter
             found = true;
@@ -320,7 +321,7 @@ void editVoterByID(int voterID, const Voter &updatedVoter)
     }
     if (!found)
     {
-        cout << "Error: Voter with ID " << voterID << " not found.\n";
+        cout << "Error: Voter with ID " << VoterID << " not found.\n";
         return;
     }
     saveAllVoters(voters);
@@ -328,17 +329,17 @@ void editVoterByID(int voterID, const Voter &updatedVoter)
 }
 
 // Admin: Delete voter by ID (with check)
-void deleteVoterByID(int voterID)
+void deleteVoterByID(int VoterID)
 {
-    if (!isValidID(voterID))
+    if (!isValidID(VoterID))
     {
         cout << "Error: Invalid Voter ID.\n";
         return;
     }
     vector<Voter> voters = loadAllVoters();
     size_t before = voters.size();
-    auto it = remove_if(voters.begin(), voters.end(), [voterID](const Voter &v)
-                        { return v.getVoterID() == voterID; });
+    auto it = remove_if(voters.begin(), voters.end(), [VoterID](const Voter &v)
+                        { return v.getVoterID() == VoterID; });
     voters.erase(it, voters.end());
     saveAllVoters(voters);
     size_t after = voters.size();
@@ -348,14 +349,14 @@ void deleteVoterByID(int voterID)
     }
     else
     {
-        cout << "Error: Voter with ID " << voterID << " not found.\n";
+        cout << "Error: Voter with ID " << VoterID << " not found.\n";
     }
 }
 
 // User: Login by CNIC (returns voter object or null, with check)
-Voter *loginByCNIC(const string &cnic)
+Voter *loginByCNIC(const string &VoterCNIC)
 {
-    if (!isValidCNIC(cnic))
+    if (!isValidCNIC(VoterCNIC))
     {
         cout << "Error: Invalid CNIC format.\n";
         return nullptr;
@@ -363,7 +364,7 @@ Voter *loginByCNIC(const string &cnic)
     vector<Voter> voters = loadAllVoters();
     for (auto &v : voters)
     {
-        if (v.getVoterCNIC() == cnic)
+        if (v.getVoterCNIC() == VoterCNIC)
         {
             return new Voter(v);
         }
@@ -408,36 +409,36 @@ void manageVoters() {
 
         if (choice == 1) {
             int id, age, pollingID, constID;
-            string name, cnic, gender, address;
+            string name, VoterCNIC, gender, address;
             cout << "Enter Voter ID: "; cin >> id;
             cin.ignore();
             cout << "Name: "; getline(cin, name);
-            cout << "CNIC: "; getline(cin, cnic);
+            cout << "CNIC: "; getline(cin, VoterCNIC);
             cout << "Age: "; cin >> age;
             cout << "Gender: "; cin >> gender;
             cin.ignore();
             cout << "Address: "; getline(cin, address);
             cout << "Polling Station ID: "; cin >> pollingID;
             cout << "Constituency ID: "; cin >> constID;
-            Voter v(id, name, cnic, gender, age, address, pollingID, constID);
+            Voter v(id, name, VoterCNIC, gender, age, address, pollingID, constID);
             registerVoter(v);
         } else if (choice == 2) {
             listAllVoters();
         } else if (choice == 3) {
             int id, age, pollingID, constID;
-            string name, cnic, gender, address;
+            string name, VoterCNIC, gender, address;
             cout << "Enter Voter ID to edit: ";
             cin >> id;
             cin.ignore();
             cout << "New Name: "; getline(cin, name);
-            cout << "New CNIC: "; getline(cin, cnic);
+            cout << "New CNIC: "; getline(cin, VoterCNIC);
             cout << "New Age: "; cin >> age;
             cout << "New Gender: "; cin >> gender;
             cin.ignore();
             cout << "New Address: "; getline(cin, address);
             cout << "New Polling Station ID: "; cin >> pollingID;
             cout << "New Constituency ID: "; cin >> constID;
-            editVoterByID(id, Voter(id, name, cnic, gender, age, address, pollingID, constID));
+            editVoterByID(id, Voter(id, name, VoterCNIC, gender, age, address, pollingID, constID));
         } else if (choice == 4) {
             int id;
             cout << "Enter Voter ID to delete: ";
@@ -460,7 +461,7 @@ void manageVoters() {
 //     listAllVoters();
 //     editVoterByID(1, Voter(1, "John Doe", "1234567890123", "Male", 31, "123 Main St", 101, 1));
 //     listAllVoters();
-//     deleteVoterByID(1) f;
+//     deleteVoterByID(1);
 //     listAllVoters();
 //     Voter *loggedInVoter = loginByCNIC("1234567890123");
 //     if (loggedInVoter)

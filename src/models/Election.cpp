@@ -70,7 +70,7 @@ Election Election::fromJSON(const json &j)
         j.at("ElectionDate").get<std::string>());
 }
 
-const string ELECTION_FILE = "../../data/elections.json";
+const string ELECTION_FILE = "data/elections.json";
 
 // Load elections
 #include <regex>
@@ -182,9 +182,9 @@ void createElection(const Election &e)
 }
 
 // Admin: Edit election
-void editElection(int electionID, const string &newName, const string &newType, const string &newDate)
+void editElection(int ElectionID, const string &newName, const string &newType, const string &newDate)
 {
-    if (!isValidElectionID(electionID))
+    if (!isValidElectionID(ElectionID))
     {
         cout << "Invalid Election ID.\n";
         return;
@@ -208,7 +208,7 @@ void editElection(int electionID, const string &newName, const string &newType, 
     bool found = false;
     for (auto &e : list)
     {
-        if (e.getElectionID() == electionID)
+        if (e.getElectionID() == ElectionID)
         {
             e.setElectionName(newName);
             e.setElectionType(newType);
@@ -227,16 +227,16 @@ void editElection(int electionID, const string &newName, const string &newType, 
 }
 
 // Admin: Delete election
-void deleteElection(int electionID)
+void deleteElection(int ElectionID)
 {
-    if (!isValidElectionID(electionID))
+    if (!isValidElectionID(ElectionID))
     {
         cout << "Invalid Election ID.\n";
         return;
     }
     vector<Election> list = loadAllElections();
-    auto it = remove_if(list.begin(), list.end(), [electionID](const Election &e)
-                        { return e.getElectionID() == electionID; });
+    auto it = remove_if(list.begin(), list.end(), [ElectionID](const Election &e)
+                        { return e.getElectionID() == ElectionID; });
     if (it == list.end())
     {
         cout << "Election ID not found.\n";

@@ -16,5 +16,14 @@
         "VoteID": 2,
         "VoteTime": "Fri May 16 21:56:29 2025\n",
         "VoterID": 102
+    },
+    {
+        "CandidateID": 202,
+        "ConstituencyID": 999,
+        "ElectionID": 303,
+        "PollingStationID": 404,
+        "VoteID": 4,
+        "VoteTime": "2025-05-17 00:18:36",
+        "VoterID": 106
     }
 ]

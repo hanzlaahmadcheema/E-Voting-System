@@ -47,7 +47,7 @@ City City::fromJSON(const json &j)
         j.at("CityName").get<std::string>());
 }
 
-const string CITY_FILE = "../../data/cities.json";
+const string CITY_FILE = "data/cities.json";
 
 // Load all cities
 vector<City> loadAllCities()

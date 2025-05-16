@@ -1,1 +1,8 @@
-null
+[
+    {
+        "CandidateID": 1,
+        "CandidateName": "Updated Candidate A",
+        "ConstituencyID": 1,
+        "PartyID": 1
+    }
+]

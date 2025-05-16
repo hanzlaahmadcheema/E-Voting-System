@@ -33,8 +33,8 @@ public:
     static const string RESULT_FILE;
     static vector<Result> loadAllResults();
     static void saveAllResults(const vector<Result> &results);
-    static void computeConstituencyResult(int electionID, int constituencyID);
-    static void viewResultByConstituency(int electionID, int constituencyID);
+    static void computeConstituencyResult(int ElectionID, int ConstituencyID);
+    static void viewResultByConstituency(int ElectionID, int ConstituencyID);
     static void listAllResults();
     static void manageResults();
 

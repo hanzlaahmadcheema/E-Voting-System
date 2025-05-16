@@ -71,7 +71,7 @@ PollingStation PollingStation::fromJSON(const json &j)
         j.at("ConstituencyID").get<int>());
 }
 
-const string STATION_FILE = "../../data/polling_stations.json";
+const string STATION_FILE = "data/polling_stations.json";
 
 // Helper: Check if string is empty or whitespace
 bool isBlank(const string &str)
@@ -291,14 +291,14 @@ void managePollingStations() {
         cin >> choice;
 
         if (choice == 1) {
-            int id, constituencyID;
+            int id, ConstituencyID;
             string name, address;
             cout << "Enter Station ID: "; cin >> id;
             cin.ignore();
             cout << "Enter Station Name: "; getline(cin, name);
             cout << "Enter Address: "; getline(cin, address);
-            cout << "Enter Constituency ID: "; cin >> constituencyID;
-            PollingStation ps(id, name, address, constituencyID);
+            cout << "Enter Constituency ID: "; cin >> ConstituencyID;
+            PollingStation ps(id, name, address, ConstituencyID);
             addPollingStation(ps);
         } else if (choice == 2) {
             listAllStations();

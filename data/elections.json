@@ -1,1 +1,8 @@
-null
+[
+    {
+        "ElectionDate": "2023-11-01",
+        "ElectionID": 1,
+        "ElectionName": "Updated Election",
+        "ElectionType": "Updated Type"
+    }
+]

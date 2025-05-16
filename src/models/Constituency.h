@@ -28,7 +28,7 @@ public:
     static void saveAllConstituencies(const vector<Constituency> &constituencies);
     static void addConstituency(const Constituency &newConstituency);
     static void editConstituency(const Constituency &newConstituency);
-    static void deleteConstituency(int constituencyID);
+    static void deleteConstituency(int ConstituencyID);
     static void listConstituenciesByCity(int cityID);
     static bool constituencyExists(int id);
     static void manageConstituencies();

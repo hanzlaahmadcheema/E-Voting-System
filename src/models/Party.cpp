@@ -59,7 +59,7 @@ Party Party::fromJSON(const json &j)
         j.at("PartySymbol").get<std::string>());
 }
 
-const string PARTY_FILE = "../../data/parties.json";
+const string PARTY_FILE = "data/parties.json";
 
 // Helper: Check if PartyID exists
 bool partyIDExists(int id, const vector<Party> &list)

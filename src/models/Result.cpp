@@ -109,8 +109,8 @@ Result Result::fromJSON(const json &j)
     );
 }
 
-const string RESULT_FILE = "../../data/results.json";
-const string VOTE_FILE = "../../data/votes.json";
+const string RESULT_FILE = "data/results.json";
+const string VOTE_FILE = "data/votes.json";
 
 // Load all results
 #include <sys/stat.h>
@@ -193,11 +193,11 @@ void saveAllResults(const vector<Result> &results)
 }
 
 // Admin: Compute results for a constituency in an election
-void computeConstituencyResult(int electionID, int constituencyID)
+void computeConstituencyResult(int ElectionID, int ConstituencyID)
 {
-    if (electionID <= 0 || constituencyID <= 0)
+    if (ElectionID <= 0 || ConstituencyID <= 0)
     {
-        cerr << "Error: Invalid electionID or constituencyID." << endl;
+        cerr << "Error: Invalid ElectionID or ConstituencyID." << endl;
         return;
     }
     vector<Vote> votes = loadAllVotes();
@@ -210,11 +210,11 @@ void computeConstituencyResult(int electionID, int constituencyID)
 
     for (const auto &vote : votes)
     {
-        if (vote.getElectionID() == electionID && vote.getConstituencyID() == constituencyID)
+        if (vote.getElectionID() == ElectionID && vote.getConstituencyID() == ConstituencyID)
         {
-            int candidateID = vote.getCandidateID();
-            if (candidateID > 0)
-                voteCounts[candidateID]++;
+            int CandidateID = vote.getCandidateID();
+            if (CandidateID > 0)
+                voteCounts[CandidateID]++;
         }
     }
 
@@ -252,7 +252,7 @@ void computeConstituencyResult(int electionID, int constituencyID)
     vector<Result> allResults = loadAllResults();
     for (const auto &r : allResults)
     {
-        if (r.getElectionID() == electionID && r.getConstituencyID() == constituencyID)
+        if (r.getElectionID() == ElectionID && r.getConstituencyID() == ConstituencyID)
         {
             cerr << "Error: Result for this election and constituency already exists." << endl;
             return;
@@ -260,21 +260,21 @@ void computeConstituencyResult(int electionID, int constituencyID)
     }
 
     // Save result
-    Result result(0, constituencyID, electionID, winnerCandidateID, maxVotes, constituencyID);
+    Result result(0, ConstituencyID, ElectionID, winnerCandidateID, maxVotes, ConstituencyID);
     allResults.push_back(result);
     saveAllResults(allResults);
 
-    cout << "Result computed for Constituency " << constituencyID
+    cout << "Result computed for Constituency " << ConstituencyID
          << " | Winner CandidateID: " << winnerCandidateID
          << " with " << maxVotes << " votes.\n";
 }
 
 // Admin/User: View result for a constituency
-void viewResultByConstituency(int electionID, int constituencyID)
+void viewResultByConstituency(int ElectionID, int ConstituencyID)
 {
-    if (electionID <= 0 || constituencyID <= 0)
+    if (ElectionID <= 0 || ConstituencyID <= 0)
     {
-        cerr << "Error: Invalid electionID or constituencyID." << endl;
+        cerr << "Error: Invalid ElectionID or ConstituencyID." << endl;
         return;
     }
     vector<Result> results = loadAllResults();
@@ -285,9 +285,9 @@ void viewResultByConstituency(int electionID, int constituencyID)
     }
     for (const auto &r : results)
     {
-        if (r.getElectionID() == electionID && r.getConstituencyID() == constituencyID)
+        if (r.getElectionID() == ElectionID && r.getConstituencyID() == ConstituencyID)
         {
-            cout << "Constituency " << constituencyID << " | Winner: CandidateID "
+            cout << "Constituency " << ConstituencyID << " | Winner: CandidateID "
                  << r.getWinnerCandidateID() << " | Total Votes: " << r.getTotalVotes() << endl;
             return;
         }
@@ -325,19 +325,19 @@ void manageResults() {
         cin >> choice;
 
         if (choice == 1) {
-            int electionID, constID;
+            int ElectionID, constID;
             cout << "Enter Election ID: ";
-            cin >> electionID;
+            cin >> ElectionID;
             cout << "Enter Constituency ID: ";
             cin >> constID;
-            computeConstituencyResult(electionID, constID);
+            computeConstituencyResult(ElectionID, constID);
         } else if (choice == 2) {
-            int electionID, constID;
+            int ElectionID, constID;
             cout << "Enter Election ID: ";
-            cin >> electionID;
+            cin >> ElectionID;
             cout << "Enter Constituency ID: ";
             cin >> constID;
-            viewResultByConstituency(electionID, constID);
+            viewResultByConstituency(ElectionID, constID);
         } else if (choice == 3) {
             listAllResults();
         } else if (choice == 0) {

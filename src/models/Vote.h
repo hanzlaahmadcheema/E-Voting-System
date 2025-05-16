@@ -36,7 +36,7 @@ public:
     static void saveAllVotes(const vector<Vote> &votes);
     static bool castVote(const Vote &newVote);
     static void listAllVotes();
-    static bool voteExists(int voterID, int electionID);
+    static bool voteExists(int VoterID, int ElectionID);
     static void manageVoting();
 
 private:

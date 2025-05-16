@@ -1,12 +1,12 @@
 [
     {
         "ConstituencyID": 1,
-        "PollingStationID": 101,
-        "VoterAddress": "123 Main St",
-        "VoterAge": 30,
+        "PollingStationID": 1,
+        "VoterAddress": "Updated Address A",
+        "VoterAge": 31,
         "VoterCNIC": "1234567890123",
-        "VoterGender": "Male",
+        "VoterGender": "Gender A",
         "VoterID": 1,
-        "VoterName": "John Doe"
+        "VoterName": "Updated Voter A"
     }
 ]
