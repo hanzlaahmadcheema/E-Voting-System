@@ -69,11 +69,14 @@
     //UserCLI
     extern void userPanel();
 
+    //AdminCLI
+    extern void adminPanel();
 using namespace std;    
 
 int main() {
 
-    userPanel();
+    // userPanel();
+    adminPanel();
     // Example usage of the functions
     // //Election
     // Election election1(1, "General Election", "General", "2023-10-01");
