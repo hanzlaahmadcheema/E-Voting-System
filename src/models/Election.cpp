@@ -1,9 +1,14 @@
 #include "Election.h"
+#include "../core/Universal.h"
 #include <iostream>
 #include <fstream>
 #include <vector>
 #include <string>
+
 using namespace std;
+
+extern int getNextID(const string &key);
+
 // Election
 Election::Election() : ElectionID(0), ElectionName(""), ElectionType(""), ElectionDate("") {}
 Election::Election(int ElectionID, const string &ElectionName, const string &ElectionType, const string &ElectionDate)
@@ -284,14 +289,11 @@ void manageElections() {
         cin >> choice;
 
         if (choice == 1) {
-            int id;
             string name, type, date;
-            cout << "Enter Election ID: "; cin >> id;
-            cin.ignore();
             cout << "Enter Election Name: "; getline(cin, name);
             cout << "Enter Type (National, Provincial, etc): "; getline(cin, type);
             cout << "Enter Date (YYYY-MM-DD): "; getline(cin, date);
-            Election e(id, name, type, date);
+            Election e(getNextID("ElectionID"), name, type, date);
             createElection(e);
         } else if (choice == 2) {
             listAllElections();
@@ -320,12 +322,12 @@ void manageElections() {
 // int main()
 // {
 //     // Example usage
-//     Election e1(1, "Presidential Election", "Presidential", "2024-11-05");
+//     Election e1(getNextID("ElectionID"), "Presidential Election", "Presidential", "2024-11-05");
 //     createElection(e1);
 //     listAllElections();
-//     editElection(1, "Updated Presidential Election", "Presidential", "2024-11-06");
+//     editElection(e1.getElectionID(), "Updated Presidential Election", "Presidential", "2024-11-06");
 //     listAllElections();
-//     deleteElection(1);
+//     deleteElection(e1.getElectionID());
 //     listAllElections();
 //     return 0;
 // }

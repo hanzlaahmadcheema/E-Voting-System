@@ -1,9 +1,13 @@
 #include "PollingStation.h"
+#include "../core/Universal.h"
 #include <iostream>
 #include <fstream>
 #include <vector>
 #include <string>
 using namespace std;
+
+extern int getNextID(const string& key);
+
 // PollingStation
 PollingStation::PollingStation() : PollingStationID(0), PollingStationName(""), PollingStationAddress(""), ConstituencyID(0) {}
 PollingStation::PollingStation(int PollingStationID, const string &PollingStationName, const string &PollingStationAddress, int ConstituencyID)
@@ -291,14 +295,12 @@ void managePollingStations() {
         cin >> choice;
 
         if (choice == 1) {
-            int id, ConstituencyID;
+            int ConstituencyID;
             string name, address;
-            cout << "Enter Station ID: "; cin >> id;
-            cin.ignore();
             cout << "Enter Station Name: "; getline(cin, name);
             cout << "Enter Address: "; getline(cin, address);
             cout << "Enter Constituency ID: "; cin >> ConstituencyID;
-            PollingStation ps(id, name, address, ConstituencyID);
+            PollingStation ps(getNextID("PollingStationID"), name, address, ConstituencyID);
             addPollingStation(ps);
         } else if (choice == 2) {
             listAllStations();
@@ -325,12 +327,12 @@ void managePollingStations() {
 // int main()
 // {
 //     // Example usage
-//     PollingStation ps(1, "Main Street Station", "123 Main St", 101);
+//     PollingStation ps(getNextID("PollingStationID"), "Main Street Station", "123 Main St", 101);
 //     addPollingStation(ps);
 //     listStationsByConstituency(101);
-//     editPollingStation(1, "Updated Station", "456 Updated St");
+//     editPollingStation(ps.getPollingStationID(), "Updated Station", "456 Updated St");
 //     listStationsByConstituency(101);
-//     deletePollingStation(1);
+//     deletePollingStation(ps.getPollingStationID());
 //     listStationsByConstituency(101);
 //     return 0;
 // }

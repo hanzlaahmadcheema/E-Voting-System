@@ -2,6 +2,11 @@
     {
         "CityID": 1,
         "ConstituencyID": 1,
-        "ConstituencyName": "Updated Karachi East"
+        "ConstituencyName": "NA-140"
+    },
+    {
+        "CityID": 3,
+        "ConstituencyID": 2,
+        "ConstituencyName": "NA-123"
     }
 ]

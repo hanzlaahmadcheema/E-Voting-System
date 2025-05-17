@@ -1,9 +1,13 @@
 #include "Constituency.h"
+#include "../core/Universal.h"
 #include <iostream>
 #include <fstream>
 #include <vector>
 #include <string>
+
 using namespace std;
+
+extern int getNextID(const string &key);
 
 // Constituency
 Constituency::Constituency() : ConstituencyID(0), ConstituencyName(""), CityID(0) {}
@@ -279,16 +283,14 @@ void manageConstituencies() {
         cin >> choice;
 
         if (choice == 1) {
-            int id, cityID;
+            int cityID;
             string name;
-            cout << "Enter Constituency ID: ";
-            cin >> id;
+            cout << "Enter Constituency Name (e.g., NA-123): ";
             cin.ignore();
-            cout << "Enter Name (e.g., NA-123): ";
             getline(cin, name);
             cout << "Enter City ID: ";
             cin >> cityID;
-            Constituency c(id, name, cityID);
+            Constituency c(getNextID("ConstituencyID"), name, cityID);
             addConstituency(c);
         } else if (choice == 2) {
             listAllConstituencies();
@@ -317,12 +319,12 @@ void manageConstituencies() {
 // int main()
 // {
 //     // Example usage
-//     Constituency c1(1, "Downtown", 101);
+//     Constituency c1(getNextID("ConstituencyID"), "Downtown", 101);
 //     addConstituency(c1);
 //     listConstituenciesByCity(101);
-//     editConstituency(1, "Uptown");
+//     editConstituency(c1.getConstituencyID(), "Uptown");
 //     listConstituenciesByCity(101);
-//     deleteConstituency(1);
+//     deleteConstituency(c1.getConstituencyID());
 //     listConstituenciesByCity(101);
 //     return 0;
 // }

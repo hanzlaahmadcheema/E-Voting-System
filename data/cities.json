@@ -1,6 +1,14 @@
 [
     {
         "CityID": 1,
-        "CityName": "Updated Karachi"
+        "CityName": "Chichawatni"
+    },
+    {
+        "CityID": 2,
+        "CityName": "Lahore"
+    },
+    {
+        "CityID": 3,
+        "CityName": "Karachi"
     }
 ]

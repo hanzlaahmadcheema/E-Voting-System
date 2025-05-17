@@ -1,9 +1,13 @@
 #include "City.h"
+#include "../core/Universal.h"
 #include <iostream>
 #include <fstream>
 #include <vector>
 #include <string>
+
 using namespace std;
+
+extern int getNextID(const string &key);
 
 // City
 City::City() : CityID(0), CityName("") {}
@@ -236,14 +240,11 @@ void manageCities() {
         cin >> choice;
 
         if (choice == 1) {
-            int id;
             string name;
-            cout << "Enter City ID: ";
-            cin >> id;
             cin.ignore();
             cout << "Enter City Name: ";
             getline(cin, name);
-            City c(id, name);
+            City c(getNextID("CityID"), name);
             addCity(c);
         } else if (choice == 2) {
             listAllCities();
@@ -272,12 +273,12 @@ void manageCities() {
 // int main()
 // {
 //     // Example usage
-//     City c1(1, "Karachi");
+//     City c1(getNextID("CityID"), "Karachi");
 //     addCity(c1);
 //     listAllCities();
-//     editCity(1, "Lahore");
+//     editCity(c1.getCityID(), "Lahore");
 //     listAllCities();
-//     deleteCityByID(1);
+//     deleteCityByID(c1.getCityID());
 //     listAllCities();
 //     return 0;
 // }

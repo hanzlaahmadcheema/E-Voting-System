@@ -25,11 +25,7 @@ Voter* voterLogin() {
         cout << "CNIC cannot be empty.\n";
         return nullptr;
     }
-    cout << "Searching for voter...\n" << VoterCNIC <<endl;
-            cout << "Loaded " << voters.size() << " voters from file.\n";
-
     for (auto& v : voters) {
-            cout << "Stored CNIC: " << v.getVoterCNIC() << endl;
         if (v.getVoterCNIC() == VoterCNIC) {
             cout << "Login successful. Welcome " << v.getVoterName() << "!\n";
             return new Voter(v);  // Create a copy
@@ -66,7 +62,7 @@ void showUserMenu(Voter* voter) {
             cout << "Enter Candidate ID to vote for: ";
             cin >> CandidateID;
 
-            Vote vote(0, voter->getVoterID(), CandidateID, ElectionID, voter->getPollingStationID(), ConstituencyID, getCurrentTimestamp());
+            Vote vote(1, voter->getVoterID(), CandidateID, ElectionID, voter->getPollingStationID(), ConstituencyID, getCurrentTimestamp());
             castVote(vote);
         } else if (choice == 0) {
             cout << "Logged out.\n";

@@ -1,9 +1,14 @@
 #include "Party.h"
+#include "../core/Universal.h"
 #include <iostream>
 #include <fstream>
 #include <vector>
 #include <string>
+
 using namespace std;
+
+extern int getNextID(const string &key);
+
 // Party
 Party::Party() : PartyID(0), PartyName(""), PartySymbol("") {}
 Party::Party(int PartyID, const string &PartyName, const string &PartySymbol)
@@ -233,16 +238,13 @@ void manageParties() {
         cin >> choice;
 
         if (choice == 1) {
-            int id;
             string name, symbol;
-            cout << "Enter Party ID: ";
-            cin >> id;
             cin.ignore();
             cout << "Enter Party Name: ";
             getline(cin, name);
             cout << "Enter Party Symbol: ";
             getline(cin, symbol);
-            Party p(id, name, symbol);
+            Party p(getNextID("PartyID"), name, symbol);
             addParty(p);
         } else if (choice == 2) {
             listAllParties();
@@ -273,12 +275,12 @@ void manageParties() {
 // int main()
 // {
 //     // Example usage
-//     Party p1(1, "Party A", "Symbol A");
+//     Party p1(getNextID("PartyID"), "Party A", "Symbol A");
 //     addParty(p1);
 //     listAllParties();
-//     editParty(1, "Updated Party A", "Updated Symbol A");
+//     editParty(p1.getPartyID(), "Updated Party A", "Updated Symbol A");
 //     listAllParties();
-//     deleteParty(1);
+//     deleteParty(p1.getPartyID());
 //     listAllParties();
 //     return 0;
 // }

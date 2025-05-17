@@ -1,9 +1,13 @@
 #include "Candidate.h"
+#include "../core/Universal.h"
 #include <iostream>
 #include <fstream>
 #include <vector>
 #include <string>
+
 using namespace std;
+
+extern int getNextID(const string &key);
 // Candidate
 Candidate::Candidate() : CandidateID(0), CandidateName(""), PartyID(0), ConstituencyID(0) {}
 
@@ -257,7 +261,7 @@ void viewCandidatesByConstituency(int constID)
     {
         if (c.getConstituencyID() == constID)
         {
-            cout << "🗳️ " << c.getCandidateID() << " - " << c.getCandidateName() << " (PartyID: " << c.getPartyID() << ")" << endl;
+            cout << c.getCandidateID() << " - " << c.getCandidateName() << " (PartyID: " << c.getPartyID() << ")" << endl;
             found = true;
         }
     }
@@ -307,17 +311,15 @@ void manageCandidates() {
         cin >> choice;
 
         if (choice == 1) {
-            int id, partyID, constID;
+            int partyID, constID;
             string name;
-            cout << "Enter Candidate ID: "; cin >> id;
-            cin.ignore();
-            cout << "Enter Name: "; getline(cin, name);
+            cout << "Enter Candidate Name: "; cin.ignore(); getline(cin, name);
             cout << "Enter Party ID: "; cin >> partyID;
             cout << "Enter Constituency ID: "; cin >> constID;
 
             // TODO: Validate partyID & constID
 
-            Candidate c(id, name, partyID, constID);
+            Candidate c(getNextID("CandidateID"), name, partyID, constID);
             addCandidate(c);
         } else if (choice == 2) {
             listAllCandidates();
@@ -342,13 +344,13 @@ void manageCandidates() {
 // int main()
 // {
 //     // Example usage
-//     Candidate c1(1, "John Doe", 101, 201);
+//     Candidate c1(getNextID("CandidateID"), "John Doe", 101, 201);
 //     addCandidate(c1);
 //     listAllCandidates();
 //     viewCandidatesByConstituency(201);
-//     editCandidate(1, "Jane Doe", 102, 202);
+//     editCandidate(c1.getCandidateID(), "Jane Doe", 102, 202);
 //     listAllCandidates();
-//     deleteCandidateByID(1);
+//     deleteCandidateByID(c1.getCandidateID());
 //     listAllCandidates();
 //     return 0;
 // }

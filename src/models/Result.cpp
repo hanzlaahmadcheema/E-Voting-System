@@ -1,5 +1,6 @@
 #include "Result.h"
 #include "Vote.h"
+#include "../core/Universal.h"
 #include <iostream>
 #include <fstream>
 #include <vector>
@@ -8,6 +9,7 @@
 using namespace std;
 
 vector<Vote> loadAllVotes();
+extern int getNextID(const string &key);
 
 // Result
 Result::Result() : ResultID(0), PollingStationID(0), ElectionID(0), WinnerCandidateID(0), TotalVotes(0), ConstituencyID(0) {}
@@ -351,11 +353,11 @@ void manageResults() {
 // int main()
 // {
 //     // Example usage
-//     Result r1(1, 101, 2023, 5, 1000, 1);
+//     Result r1(getNextID("ResultID"), 101, 2023, 5, 1000, 1);
 //     r1.declareResult();
 //     r1.displayResultInfo();
-//     computeConstituencyResult(2023, 1);
-//     viewResultByConstituency(2023, 1);
+//     computeConstituencyResult(2023, r1.getConstituencyID());
+//     viewResultByConstituency(2023, r1.getConstituencyID());
 //     listAllResults();
 
 //     return 0;

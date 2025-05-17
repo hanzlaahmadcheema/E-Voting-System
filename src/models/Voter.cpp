@@ -1,10 +1,13 @@
 #include "Voter.h"
+#include "../core/Universal.h"
 #include <iostream>
 #include <vector>
 #include <fstream>
 #include <string>
 
 using namespace std;
+
+extern int getNextID(const string& key);
 // Voter
 Voter::Voter() : VoterID(0), VoterName(""), VoterCNIC(""), VoterGender(""), VoterAge(0), VoterAddress(""), PollingStationID(0), ConstituencyID(0) {}
 Voter::Voter(int VoterID, const string &VoterName, const string &VoterCNIC, const string &VoterGender, int VoterAge, const string &VoterAddress, int PollingStationID, int ConstituencyID)
@@ -408,10 +411,8 @@ void manageVoters() {
         cin >> choice;
 
         if (choice == 1) {
-            int id, age, pollingID, constID;
+            int age, pollingID, constID;
             string name, VoterCNIC, gender, address;
-            cout << "Enter Voter ID: "; cin >> id;
-            cin.ignore();
             cout << "Name: "; getline(cin, name);
             cout << "CNIC: "; getline(cin, VoterCNIC);
             cout << "Age: "; cin >> age;
@@ -420,7 +421,7 @@ void manageVoters() {
             cout << "Address: "; getline(cin, address);
             cout << "Polling Station ID: "; cin >> pollingID;
             cout << "Constituency ID: "; cin >> constID;
-            Voter v(id, name, VoterCNIC, gender, age, address, pollingID, constID);
+            Voter v(getNextID("VoterID"), name, VoterCNIC, gender, age, address, pollingID, constID);
             registerVoter(v);
         } else if (choice == 2) {
             listAllVoters();
@@ -456,12 +457,12 @@ void manageVoters() {
 // int main()
 // {
 //     // Example usage
-//     Voter v1(1, "John Doe", "1234567890123", "Male", 30, "123 Main St", 101, 1);
+//     Voter v1(getNextID("VoterID"), "John Doe", "1234567890123", "Male", 30, "123 Main St", 101, 1);
 //     registerVoter(v1);
 //     listAllVoters();
-//     editVoterByID(1, Voter(1, "John Doe", "1234567890123", "Male", 31, "123 Main St", 101, 1));
+//     editVoterByID(v1.getVoterID(), Voter(v1.getVoterID(), "John Doe", "1234567890123", "Male", 31, "123 Main St", 101, 1));
 //     listAllVoters();
-//     deleteVoterByID(1);
+//     deleteVoterByID(v1.getVoterID());
 //     listAllVoters();
 //     Voter *loggedInVoter = loginByCNIC("1234567890123");
 //     if (loggedInVoter)

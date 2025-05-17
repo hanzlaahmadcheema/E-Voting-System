@@ -17,7 +17,7 @@
     extern void editCandidate(int CandidateID, const string& newName, int newPartyID, int newConstituencyID);
     extern void deleteCandidateByID(int CandidateID);
     extern void listAllCandidates();
-    extern void viewCandidatesByConstituency(int constID);
+    extern void viewCandidatesByConstituency(int constID); 
 
     //City
     extern void addCity(const City& newCity);

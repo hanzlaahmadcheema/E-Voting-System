@@ -1,4 +1,5 @@
 #include "Vote.h"
+#include "../core/Universal.h"
 #include <iostream>
 #include <fstream>
 #include <vector>
@@ -6,6 +7,8 @@
 #include <ctime>
 
 using namespace std;
+
+extern int getNextID(const string &key);
 
 // Vote
 Vote::Vote() : VoteID(0), VoterID(0), CandidateID(0), ElectionID(0), PollingStationID(0), VoteTime("") {}
@@ -296,7 +299,7 @@ string getCurrentTimestamp() {
 // int main()
 // {
 //     // Example usage
-//     Vote v1(3, 103, 202, 303, 404, 999, getCurrentTimestamp());
+//     Vote v1(getNextID("VoteID"), 103, 202, 303, 404, 999, getCurrentTimestamp());
 //     castVote(v1);
 //     listAllVotes();
 //     return 0;
