@@ -4,5 +4,11 @@
         "ElectionID": 1,
         "ElectionName": "Updated Election",
         "ElectionType": "Updated Type"
+    },
+    {
+        "ElectionDate": "2025-02-01",
+        "ElectionID": 30,
+        "ElectionName": "General Election",
+        "ElectionType": "National"
     }
 ]
