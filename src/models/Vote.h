@@ -38,7 +38,7 @@ public:
     static void listAllVotes();
     static bool voteExists(int VoterID, int ElectionID);
     static void manageVoting();
-    string getCurrentTimestamp();
+    static string getCurrentTimestamp();
 
 private:
     int VoteID;

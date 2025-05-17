@@ -9,6 +9,7 @@
 #include "models/Vote.h"
 #include "models/Voter.h"
 #include "core/UserCLI.h"
+#include "core/AdminCLI.h"
 
 // Logic files
     //Candidates
