@@ -290,6 +290,7 @@ void manageElections() {
 
         if (choice == 1) {
             string name, type, date;
+            cin.ignore();
             cout << "Enter Election Name: "; getline(cin, name);
             cout << "Enter Type (National, Provincial, etc): "; getline(cin, type);
             cout << "Enter Date (YYYY-MM-DD): "; getline(cin, date);

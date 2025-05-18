@@ -10,5 +10,13 @@
     {
         "CityID": 3,
         "CityName": "Karachi"
+    },
+    {
+        "CityID": 4,
+        "CityName": "kamalia"
+    },
+    {
+        "CityID": 5,
+        "CityName": "LAHORE"
     }
 ]
