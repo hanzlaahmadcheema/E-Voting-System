@@ -1,4 +1,6 @@
 #include "Candidate.h"
+#include "Party.h"
+#include "Constituency.h"
 #include "../core/Universal.h"
 #include <iostream>
 #include <fstream>
@@ -8,6 +10,11 @@
 using namespace std;
 
 extern int getNextID(const string &key);
+extern void listAllParties();
+extern void listAllConstituencies();
+extern bool partyExists(int id);
+extern bool constituencyExists(int id);
+
 // Candidate
 Candidate::Candidate() : CandidateID(0), CandidateName(""), PartyID(0), ConstituencyID(0) {}
 
@@ -79,17 +86,6 @@ Candidate Candidate::fromJSON(const json &j)
 
 const string CANDIDATE_FILE = "data/candidates.json";
 
-// Helper: Check if candidate ID already exists
-bool candidateIDExists(int CandidateID, const vector<Candidate> &candidates)
-{
-    for (const auto &c : candidates)
-    {
-        if (c.getCandidateID() == CandidateID)
-            return true;
-    }
-    return false;
-}
-
 // Helper: Validate candidate fields
 bool isValidCandidate(const Candidate &c)
 {
@@ -113,15 +109,7 @@ bool isValidCandidateName(const string &name)
 {
     return !name.empty() && name.length() <= 100;
 }
-bool isValidPartyID(int partyID)
-{
-    return partyID > 0;
-}
 
-bool isValidConstituencyID(int constID)
-{
-    return constID > 0;
-}
 // Load all candidates from file
 vector<Candidate> loadAllCandidates()
 {
@@ -191,11 +179,6 @@ void addCandidate(const Candidate &newCandidate)
         return;
     }
     vector<Candidate> candidates = loadAllCandidates();
-    if (candidateIDExists(newCandidate.getCandidateID(), candidates))
-    {
-        cerr << "Candidate ID already exists. Use a unique ID.\n";
-        return;
-    }
     candidates.push_back(newCandidate);
     saveAllCandidates(candidates);
     cout << "Candidate added successfully.\n";
@@ -337,13 +320,17 @@ void manageCandidates() {
                 cout << "Invalid Candidate Name.\n";
                 continue;
             }
+            cout << "List of Parties:\n";
+            listAllParties();
             cout << "Enter Party ID: "; cin >> partyID;
-            if (!isValidPartyID(partyID)) {
+            if (!partyExists(partyID)) {
                 cout << "Invalid Party ID.\n";
                 continue;
             }
+            cout << "List of Constituencies:\n";
+            listAllConstituencies();
             cout << "Enter Constituency ID: "; cin >> constID;
-            if (!isValidConstituencyID(constID)) {
+            if (!constituencyExists(constID)) {
                 cout << "Invalid Constituency ID.\n";
                 continue;
             }
@@ -355,7 +342,7 @@ void manageCandidates() {
             int constID;
             cout << "Enter Constituency ID: ";
             cin >> constID;
-            if (!isValidConstituencyID(constID)) {
+            if (!constituencyExists(constID)) {
                 cout << "Invalid Constituency ID.\n";
                 continue;
             }
@@ -382,13 +369,15 @@ void manageCandidates() {
                 cout << "Invalid Candidate Name.\n";
                 continue;
             }
+            listAllParties();
             cout << "Enter New Party ID: "; cin >> partyID;
-            if (!isValidPartyID(partyID)) {
+            if (!partyExists(partyID)) {
                 cout << "Invalid Party ID.\n";
                 continue;
             }
+            listAllConstituencies();
             cout << "Enter New Constituency ID: "; cin >> constID;
-            if (!isValidConstituencyID(constID)) {
+            if (!constituencyExists(constID)) {
                 cout << "Invalid Constituency ID.\n";
                 continue;
             }
@@ -396,6 +385,7 @@ void manageCandidates() {
             editCandidate(id, name, partyID, constID);
         } else if (choice == 5) {
             int id;
+            listAllCandidates();
             cout << "Enter Candidate ID to delete: ";
             cin >> id;
             if (!isValidCandidateID(id)) {

@@ -7,6 +7,8 @@
 using namespace std;
 
 extern int getNextID(const string& key);
+extern bool constituencyExists(int id);
+extern void listAllConstituencies();
 
 // PollingStation
 PollingStation::PollingStation() : PollingStationID(0), PollingStationName(""), PollingStationAddress(""), ConstituencyID(0) {}
@@ -83,15 +85,16 @@ bool isBlank(const string &str)
     return str.find_first_not_of(" \t\n\r") == string::npos;
 }
 
-// Helper: Check if station ID is unique
-bool isUniqueStationID(int id, const vector<PollingStation> &list)
-{
-    for (const auto &s : list)
-    {
-        if (s.getPollingStationID() == id)
-            return false;
-    }
-    return true;
+bool isValidPollingStationID(int id) {
+    return id > 0;
+}
+
+bool isValidPollingStationName(const string &name) {
+    return !name.empty() && name.length() <= 100;
+}
+
+bool isValidPollingStationAddress(const string &address) {
+    return !address.empty() && address.length() <= 200;
 }
 
 // Load all stations
@@ -144,11 +147,6 @@ void addPollingStation(const PollingStation &s)
     if (s.getPollingStationID() <= 0)
     {
         cout << "Invalid Polling Station ID.\n";
-        return;
-    }
-    if (!isUniqueStationID(s.getPollingStationID(), list))
-    {
-        cout << "Polling Station ID already exists.\n";
         return;
     }
     if (isBlank(s.getPollingStationName()))
@@ -282,22 +280,6 @@ bool pollingStationExists(int id) {
     return false;
 }
 
-bool isValidPollingStationID(int id) {
-    return id > 0;
-}
-
-bool isValidPollingStationName(const string &name) {
-    return !name.empty() && name.length() <= 100;
-}
-
-bool isValidPollingStationAddress(const string &address) {
-    return !address.empty() && address.length() <= 200;
-}
-
-bool isValidConstituencyID(int id) {
-    return id > 0;
-}
-
 void managePollingStations() {
     int choice;
     while (true) {
@@ -324,8 +306,9 @@ void managePollingStations() {
                 cout << "Invalid Polling Station Address.\n";
                 continue;
             }
+            listAllConstituencies();
             cout << "Enter Constituency ID: "; cin >> ConstituencyID;
-            if (!isValidConstituencyID(ConstituencyID)) {
+            if (!constituencyExists(ConstituencyID)) {
                 cout << "Invalid Constituency ID.\n";
                 continue;
             }
@@ -361,6 +344,7 @@ void managePollingStations() {
             editPollingStation(id, name, address);
         } else if (choice == 4) {
             int id;
+            listAllStations();
             cout << "Enter Station ID to delete: ";
             cin >> id;
             if (!isValidPollingStationID(id)) {

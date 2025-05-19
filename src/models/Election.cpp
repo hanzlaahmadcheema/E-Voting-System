@@ -80,7 +80,6 @@ const string ELECTION_FILE = "data/elections.json";
 // Load elections
 #include <regex>
 
-// Helper: Validate election fields
 bool isValidElectionID(int id)
 {
     return id > 0;

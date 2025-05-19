@@ -8,6 +8,8 @@
 using namespace std;
 
 extern int getNextID(const string &key);
+extern string toLower(const string& str);
+
 
 // Party
 Party::Party() : PartyID(0), PartyName(""), PartySymbol("") {}
@@ -66,18 +68,11 @@ Party Party::fromJSON(const json &j)
 
 const string PARTY_FILE = "data/parties.json";
 
-// Helper: Check if PartyID exists
-bool partyIDExists(int id, const vector<Party> &list)
+bool isValidPartyID(int id)
 {
-    for (const auto &p : list)
-    {
-        if (p.getPartyID() == id)
-            return true;
-    }
-    return false;
+    return id > 0;
 }
 
-// Helper: Validate Party Name and Symbol
 bool isValidPartyName(const string &name)
 {
     return !name.empty() && name.length() <= 50;
@@ -86,6 +81,7 @@ bool isValidPartySymbol(const string &symbol)
 {
     return !symbol.empty() && symbol.length() <= 20;
 }
+
 
 // Load all parties
 vector<Party> loadAllParties()
@@ -128,11 +124,39 @@ void saveAllParties(const vector<Party> &list)
     file << j.dump(4);
 }
 
+bool partyNameExists(const vector<Party> &list, const string &name)
+{
+    for (const auto &p : list)
+    {
+        if (toLower(p.getPartyName()) == toLower(name))
+            return true;
+    }
+    return false;
+}
+
+bool partySymbolExists(const vector<Party> &list, const string &symbol)
+{
+    for (const auto &p : list)
+    {
+        if (toLower(p.getPartySymbol()) == toLower(symbol))
+            return true;
+    }
+    return false;
+}
+
+bool partyExists(int id) {
+    vector<Party> list = loadAllParties();
+    for (const auto& p : list) {
+        if (p.getPartyID() == id) return true;
+    }
+    return false;
+}
+
 // Admin: Add party
 void addParty(const Party &p)
 {
     vector<Party> list = loadAllParties();
-    if (partyIDExists(p.getPartyID(), list))
+    if (partyExists(p.getPartyID()))
     {
         cout << "Party ID already exists.\n";
         return;
@@ -217,48 +241,6 @@ void listAllParties()
     }
 }
 
-bool partyExists(int id) {
-    vector<Party> list = loadAllParties();
-    for (const auto& p : list) {
-        if (p.getPartyID() == id) return true;
-    }
-    return false;
-}
-
-bool partyNameExists(const vector<Party> &list, const string &name)
-{
-    for (const auto &p : list)
-    {
-        if (p.getPartyName() == name)
-            return true;
-    }
-    return false;
-}
-
-bool partySymbolExists(const vector<Party> &list, const string &symbol)
-{
-    for (const auto &p : list)
-    {
-        if (p.getPartySymbol() == symbol)
-            return true;
-    }
-    return false;
-}
-
-bool isValidPartyID(int id)
-{
-    return id > 0;
-}
-
-bool isValidPartyName(const string &name)
-{
-    return !name.empty() && name.length() <= 50;
-}
-bool isValidPartySymbol(const string &symbol)
-{
-    return !symbol.empty() && symbol.length() <= 20;
-}
-
 void manageParties() {
     int choice;
     while (true) {
@@ -337,6 +319,7 @@ void manageParties() {
             editParty(id, name, symbol);
         } else if (choice == 4) {
             int id;
+            listAllParties();
             cout << "Enter Party ID to delete: ";
             cin >> id;
             if (!isValidPartyID(id)) {

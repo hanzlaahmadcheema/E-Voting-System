@@ -119,41 +119,6 @@ const string VOTE_FILE = "data/votes.json";
 #include <set>
 #include <regex>
 
-vector<Vote> loadAllVotes()
-{
-    vector<Vote> list;
-    ifstream file(VOTE_FILE);
-    if (file.is_open())
-    {
-        json j;
-        try
-        {
-            file >> j;
-            for (auto &obj : j)
-            {
-                list.push_back(Vote::fromJSON(obj));
-            }
-        }
-        catch (const std::exception &e)
-        {
-            cerr << "Error loading votes: " << e.what() << endl;
-        }
-    }
-    return list;
-}
-
-// Save all votes
-void saveAllVotes(const vector<Vote> &list)
-{
-    ofstream file(VOTE_FILE);
-    json j;
-    for (const auto &v : list)
-    {
-        j.push_back(v.toJSON());
-    }
-    file << j.dump(4);
-}
-
 // Helper: Validate Vote fields
 bool isValidVote(const Vote &vote, const vector<Vote> &existingVotes, string &errorMsg)
 {
@@ -212,6 +177,58 @@ bool isValidVote(const Vote &vote, const vector<Vote> &existingVotes, string &er
     return true;
 }
 
+string getCurrentTimestamp() {
+    std::time_t now = std::time(nullptr);
+    std::tm *tm = std::localtime(&now);
+    char buffer[80];
+    std::strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", tm);
+    return std::string(buffer);
+}
+
+vector<Vote> loadAllVotes()
+{
+    vector<Vote> list;
+    ifstream file(VOTE_FILE);
+    if (file.is_open())
+    {
+        json j;
+        try
+        {
+            file >> j;
+            for (auto &obj : j)
+            {
+                list.push_back(Vote::fromJSON(obj));
+            }
+        }
+        catch (const std::exception &e)
+        {
+            cerr << "Error loading votes: " << e.what() << endl;
+        }
+    }
+    return list;
+}
+
+// Save all votes
+void saveAllVotes(const vector<Vote> &list)
+{
+    ofstream file(VOTE_FILE);
+    json j;
+    for (const auto &v : list)
+    {
+        j.push_back(v.toJSON());
+    }
+    file << j.dump(4);
+}
+
+bool voteExists(int VoterID, int ElectionID) {
+    vector<Vote> list = loadAllVotes();
+    for (const auto& v : list) {
+        if (v.getVoterID() == VoterID && v.getElectionID() == ElectionID)
+            return true;
+    }
+    return false;
+}
+
 // User: Cast vote
 bool castVote(const Vote &newVote)
 {
@@ -259,15 +276,6 @@ void listAllVotes()
     }
 }
 
-bool voteExists(int VoterID, int ElectionID) {
-    vector<Vote> list = loadAllVotes();
-    for (const auto& v : list) {
-        if (v.getVoterID() == VoterID && v.getElectionID() == ElectionID)
-            return true;
-    }
-    return false;
-}
-
 void manageVoting() {
     int choice;
     while (true) {
@@ -286,16 +294,6 @@ void manageVoting() {
         }
     }
 }
-
-//get timestamp 
-string getCurrentTimestamp() {
-    std::time_t now = std::time(nullptr);
-    std::tm *tm = std::localtime(&now);
-    char buffer[80];
-    std::strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", tm);
-    return std::string(buffer);
-}
-
 // int main()
 // {
 //     // Example usage

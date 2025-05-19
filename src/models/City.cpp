@@ -53,6 +53,16 @@ City City::fromJSON(const json &j)
 
 const string CITY_FILE = "data/cities.json";
 
+bool cityNameExists(const vector<City> &list, const string &name)
+{
+    for (const auto &c : list)
+    {
+        if (c.getCityName() == name)
+            return true;
+    }
+    return false;
+}
+
 bool isValidCityName(const string &name)
 {
     return !name.empty() && name.length() <= 50;
@@ -232,16 +242,6 @@ bool cityExists(int id) {
     vector<City> list = loadAllCities();
     for (const auto& c : list) {
         if (c.getCityID() == id) return true;
-    }
-    return false;
-}
-
-bool cityNameExists(const vector<City> &list, const string &name)
-{
-    for (const auto &c : list)
-    {
-        if (c.getCityName() == name)
-            return true;
     }
     return false;
 }

@@ -40,3 +40,11 @@ int getNextID(const string &key)
 
     return nextID;
 }
+
+string toLower(const string& str) {
+    string result = str;
+    for (char& c : result) {
+        c = tolower(static_cast<unsigned char>(c));
+    }
+    return result;
+}

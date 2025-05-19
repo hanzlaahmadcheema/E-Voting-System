@@ -8,6 +8,11 @@
 using namespace std;
 
 extern int getNextID(const string& key);
+extern bool pollingStationExists(int id);
+extern bool constituencyExists(int id);
+extern void listAllStations();
+extern void listAllConstituencies();
+
 // Voter
 Voter::Voter() : VoterID(0), VoterName(""), VoterCNIC(""), VoterGender(""), VoterAge(0), VoterAddress(""), PollingStationID(0), ConstituencyID(0) {}
 Voter::Voter(int VoterID, const string &VoterName, const string &VoterCNIC, const string &VoterGender, int VoterAge, const string &VoterAddress, int PollingStationID, int ConstituencyID)
@@ -114,7 +119,6 @@ Voter Voter::fromJSON(const json &j)
 
 const string VOTER_FILE = "data/voters.json";
 
-// Helper: Validate CNIC (13 digits, all numbers)
 bool isValidCNIC(const string &VoterCNIC)
 {
     if (VoterCNIC.length() != 13)
@@ -404,26 +408,11 @@ void viewProfile(const Voter &v)
     cout << "Polling Station ID: " << v.getPollingStationID() << "\n";
 }
 
+
 bool voterExists(string VoterCNIC) {
     vector<Voter> list = loadAllVoters();
     for (const auto& v : list) {
         if (v.getVoterCNIC() == VoterCNIC) return true;
-    }
-    return false;
-}
-
-bool isValidPollingStationID(int id) {
-    vector<Voter> list = loadAllVoters();
-    for (const auto& v : list) {
-        if (v.getPollingStationID() == id) return true;
-    }
-    return false;
-}
-
-bool isValidConstituencyID(int id) {
-    vector<Voter> list = loadAllVoters();
-    for (const auto& v : list) {
-        if (v.getConstituencyID() == id) return true;
     }
     return false;
 }
@@ -470,13 +459,15 @@ void manageVoters() {
                 cout << "Invalid address. Only letters, numbers, and spaces allowed.\n";
                 continue;
             }
+            listAllStations();
             cout << "Polling Station ID: "; cin >> pollingID;
-            if (!isValidPollingStationID(pollingID)) {
+            if (!pollingStationExists(pollingID)) {
                 cout << "Invalid Polling Station ID.\n";
                 continue;
             }
+            listAllConstituencies();
             cout << "Constituency ID: "; cin >> constID;
-            if (!isValidConstituencyID(constID)) {
+            if (!constituencyExists(constID)) {
                 cout << "Invalid Constituency ID.\n";
                 continue;
             }
@@ -524,13 +515,15 @@ void manageVoters() {
                 cout << "Invalid address. Only letters, numbers, and spaces allowed.\n";
                 continue;
             }
+            listAllStations();
             cout << "New Polling Station ID: "; cin >> pollingID;
-            if (!isValidPollingStationID(pollingID)) {
+            if (!pollingStationExists(pollingID)) {
                 cout << "Invalid Polling Station ID.\n";
                 continue;
             }
+            listAllConstituencies();
             cout << "New Constituency ID: "; cin >> constID;
-            if (!isValidConstituencyID(constID)) {
+            if (!constituencyExists(constID)) {
                 cout << "Invalid Constituency ID.\n";
                 continue;
             }

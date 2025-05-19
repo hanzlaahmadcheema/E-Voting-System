@@ -1,8 +1,20 @@
 [
     {
-        "CandidateID": 3,
-        "CandidateName": "Muhammad",
-        "ConstituencyID": 9,
-        "PartyID": 8
+        "CandidateID": 43,
+        "CandidateName": "Hanzla Ahmad",
+        "ConstituencyID": 2,
+        "PartyID": 2
+    },
+    {
+        "CandidateID": 44,
+        "CandidateName": "dddddd",
+        "ConstituencyID": 1,
+        "PartyID": 1
+    },
+    {
+        "CandidateID": 45,
+        "CandidateName": "W",
+        "ConstituencyID": 1,
+        "PartyID": 1
     }
 ]

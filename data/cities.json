@@ -26,5 +26,13 @@
     {
         "CityID": 10,
         "CityName": "-3"
+    },
+    {
+        "CityID": 11,
+        "CityName": "1"
+    },
+    {
+        "CityID": 12,
+        "CityName": "0"
     }
 ]

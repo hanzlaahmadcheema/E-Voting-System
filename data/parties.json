@@ -3,5 +3,10 @@
         "PartyID": 1,
         "PartyName": "PTI",
         "PartySymbol": "Bat"
+    },
+    {
+        "PartyID": 4,
+        "PartyName": "PMLN",
+        "PartySymbol": "Lion"
     }
 ]
