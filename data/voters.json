@@ -1,0 +1,12 @@
+[
+    {
+        "ConstituencyID": 5,
+        "PollingStationID": 7,
+        "VoterAddress": "Bund Road",
+        "VoterAge": 21,
+        "VoterCNIC": "3520252659085",
+        "VoterGender": "Other",
+        "VoterID": 5,
+        "VoterName": "Tayyab Ali"
+    }
+]

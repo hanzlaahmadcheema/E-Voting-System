@@ -249,7 +249,7 @@ void deleteElection(int ElectionID)
     }
     list.erase(it, list.end());
     saveAllElections(list);
-    cout << "🗑️ Election deleted.\n";
+    cout << "Election deleted.\n";
 }
 
 // Admin/User: List all elections

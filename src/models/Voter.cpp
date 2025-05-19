@@ -413,6 +413,7 @@ void manageVoters() {
         if (choice == 1) {
             int age, pollingID, constID;
             string name, VoterCNIC, gender, address;
+            cin.ignore();
             cout << "Name: "; getline(cin, name);
             cout << "CNIC: "; getline(cin, VoterCNIC);
             cout << "Age: "; cin >> age;
@@ -434,8 +435,8 @@ void manageVoters() {
             cout << "New Name: "; getline(cin, name);
             cout << "New CNIC: "; getline(cin, VoterCNIC);
             cout << "New Age: "; cin >> age;
-            cout << "New Gender: "; cin >> gender;
             cin.ignore();
+            cout << "New Gender: "; getline(cin, gender);
             cout << "New Address: "; getline(cin, address);
             cout << "New Polling Station ID: "; cin >> pollingID;
             cout << "New Constituency ID: "; cin >> constID;

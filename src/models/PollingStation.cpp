@@ -297,6 +297,7 @@ void managePollingStations() {
         if (choice == 1) {
             int ConstituencyID;
             string name, address;
+            cin.ignore();
             cout << "Enter Station Name: "; getline(cin, name);
             cout << "Enter Address: "; getline(cin, address);
             cout << "Enter Constituency ID: "; cin >> ConstituencyID;
