@@ -303,19 +303,19 @@ void listAllVoters()
     }
 }
 
-// Admin: Edit voter by ID (with check)
-void editVoterByID(int VoterID, const Voter &updatedVoter)
+// Admin: Edit voter by CNIC (with check)
+void editVoterByCNIC(const string &VoterCNIC, const Voter &updatedVoter)
 {
-    if (!isValidID(VoterID))
+    if (!isValidCNIC(VoterCNIC))
     {
-        cout << "Error: Invalid Voter ID.\n";
+        cout << "Error: Invalid CNIC format.\n";
         return;
     }
     vector<Voter> voters = loadAllVoters();
     bool found = false;
     for (auto &v : voters)
     {
-        if (v.getVoterID() == VoterID)
+        if (v.getVoterCNIC() == VoterCNIC)
         {
             v = updatedVoter; // Update the voter
             found = true;
@@ -324,25 +324,25 @@ void editVoterByID(int VoterID, const Voter &updatedVoter)
     }
     if (!found)
     {
-        cout << "Error: Voter with ID " << VoterID << " not found.\n";
+        cout << "Error: Voter with CNIC " << VoterCNIC << " not found.\n";
         return;
     }
     saveAllVoters(voters);
     cout << "Voter updated successfully.\n";
 }
 
-// Admin: Delete voter by ID (with check)
-void deleteVoterByID(int VoterID)
+// Admin: Delete voter by CNIC (with check)
+void deleteVoterByCNIC(const string &VoterCNIC)
 {
-    if (!isValidID(VoterID))
+    if (!isValidCNIC(VoterCNIC))
     {
-        cout << "Error: Invalid Voter ID.\n";
+        cout << "Error: Invalid CNIC format.\n";
         return;
     }
     vector<Voter> voters = loadAllVoters();
     size_t before = voters.size();
-    auto it = remove_if(voters.begin(), voters.end(), [VoterID](const Voter &v)
-                        { return v.getVoterID() == VoterID; });
+    auto it = remove_if(voters.begin(), voters.end(), [VoterCNIC](const Voter &v)
+                        { return v.getVoterCNIC() == VoterCNIC; });
     voters.erase(it, voters.end());
     saveAllVoters(voters);
     size_t after = voters.size();
@@ -352,7 +352,7 @@ void deleteVoterByID(int VoterID)
     }
     else
     {
-        cout << "Error: Voter with ID " << VoterID << " not found.\n";
+        cout << "Error: Voter with CNIC " << VoterCNIC << " not found.\n";
     }
 }
 
@@ -376,6 +376,20 @@ Voter *loginByCNIC(const string &VoterCNIC)
     return nullptr;
 }
 
+//function to get ID from Voter CNIC
+int getVoterIDByCNIC(const string &VoterCNIC)
+{
+    vector<Voter> voters = loadAllVoters();
+    for (const auto &v : voters)
+    {
+        if (v.getVoterCNIC() == VoterCNIC)
+        {
+            return v.getVoterID();
+        }
+    }
+    return -1; // Not found
+}
+
 // User: View own profile
 void viewProfile(const Voter &v)
 {
@@ -390,10 +404,26 @@ void viewProfile(const Voter &v)
     cout << "Polling Station ID: " << v.getPollingStationID() << "\n";
 }
 
-bool voterExists(int id) {
+bool voterExists(string VoterCNIC) {
     vector<Voter> list = loadAllVoters();
     for (const auto& v : list) {
-        if (v.getVoterID() == id) return true;
+        if (v.getVoterCNIC() == VoterCNIC) return true;
+    }
+    return false;
+}
+
+bool isValidPollingStationID(int id) {
+    vector<Voter> list = loadAllVoters();
+    for (const auto& v : list) {
+        if (v.getPollingStationID() == id) return true;
+    }
+    return false;
+}
+
+bool isValidConstituencyID(int id) {
+    vector<Voter> list = loadAllVoters();
+    for (const auto& v : list) {
+        if (v.getConstituencyID() == id) return true;
     }
     return false;
 }
@@ -415,37 +445,109 @@ void manageVoters() {
             string name, VoterCNIC, gender, address;
             cin.ignore();
             cout << "Name: "; getline(cin, name);
+            if (!isValidName(name)) {
+                cout << "Invalid name. Only letters and spaces allowed.\n";
+                continue;
+            }
             cout << "CNIC: "; getline(cin, VoterCNIC);
+            if (!isValidCNIC(VoterCNIC)) {
+                cout << "Invalid CNIC format.\n";
+                continue;
+            }
             cout << "Age: "; cin >> age;
+            if (!isValidAge(age)) {
+                cout << "Invalid age. Age must be positive or greater than 18.\n";
+                continue;
+            }
             cout << "Gender: "; cin >> gender;
+            if (!isValidGender(gender)) {
+                cout << "Invalid gender. Please enter Male or Female.\n";
+                continue;
+            }
             cin.ignore();
             cout << "Address: "; getline(cin, address);
+            if (!isValidAddress(address)) {
+                cout << "Invalid address. Only letters, numbers, and spaces allowed.\n";
+                continue;
+            }
             cout << "Polling Station ID: "; cin >> pollingID;
+            if (!isValidPollingStationID(pollingID)) {
+                cout << "Invalid Polling Station ID.\n";
+                continue;
+            }
             cout << "Constituency ID: "; cin >> constID;
+            if (!isValidConstituencyID(constID)) {
+                cout << "Invalid Constituency ID.\n";
+                continue;
+            }
             Voter v(getNextID("VoterID"), name, VoterCNIC, gender, age, address, pollingID, constID);
             registerVoter(v);
         } else if (choice == 2) {
             listAllVoters();
         } else if (choice == 3) {
-            int id, age, pollingID, constID;
+            int age, pollingID, constID;
             string name, VoterCNIC, gender, address;
-            cout << "Enter Voter ID to edit: ";
-            cin >> id;
+            cout << "Enter Voter CNIC to edit: ";
+            cin >> VoterCNIC;
+            if (!voterExists(VoterCNIC)) {
+                cout << "Voter with this CNIC does not exist.\n";
+                continue;
+            }
+            if (!isValidCNIC(VoterCNIC)) {
+                cout << "Invalid CNIC format.\n";
+                continue;
+            }
             cin.ignore();
             cout << "New Name: "; getline(cin, name);
+            if (!isValidName(name)) {
+                cout << "Invalid name. Only letters and spaces allowed.\n";
+                continue;
+            }
             cout << "New CNIC: "; getline(cin, VoterCNIC);
+            if (!isValidCNIC(VoterCNIC)) {
+                cout << "Invalid CNIC format.\n";
+                continue;
+            }
             cout << "New Age: "; cin >> age;
+            if (!isValidAge(age)) {
+                cout << "Invalid age. Age must be positive or greater than 18.\n";
+                continue;
+            }
             cin.ignore();
             cout << "New Gender: "; getline(cin, gender);
+            if (!isValidGender(gender)) {
+                cout << "Invalid gender. Please enter Male or Female.\n";
+                continue;
+            }
             cout << "New Address: "; getline(cin, address);
+            if (!isValidAddress(address)) {
+                cout << "Invalid address. Only letters, numbers, and spaces allowed.\n";
+                continue;
+            }
             cout << "New Polling Station ID: "; cin >> pollingID;
+            if (!isValidPollingStationID(pollingID)) {
+                cout << "Invalid Polling Station ID.\n";
+                continue;
+            }
             cout << "New Constituency ID: "; cin >> constID;
-            editVoterByID(id, Voter(id, name, VoterCNIC, gender, age, address, pollingID, constID));
+            if (!isValidConstituencyID(constID)) {
+                cout << "Invalid Constituency ID.\n";
+                continue;
+            }
+            editVoterByCNIC(VoterCNIC, Voter(getVoterIDByCNIC(VoterCNIC), name, VoterCNIC, gender, age, address, pollingID, constID));
         } else if (choice == 4) {
-            int id;
-            cout << "Enter Voter ID to delete: ";
-            cin >> id;
-            deleteVoterByID(id);
+            string VoterCNIC;
+            cout << "Enter Voter CNIC to delete: ";
+            cin >> VoterCNIC;
+            if (!voterExists(VoterCNIC)) {
+                cout << "Voter with this CNIC does not exist.\n";
+                continue;
+            }
+            if (!isValidCNIC(VoterCNIC)) {
+                cout << "Invalid CNIC format.\n";
+                continue;
+            }
+            deleteVoterByCNIC(VoterCNIC);
         } else if (choice == 0) {
             break;
         } else {
@@ -461,9 +563,9 @@ void manageVoters() {
 //     Voter v1(getNextID("VoterID"), "John Doe", "1234567890123", "Male", 30, "123 Main St", 101, 1);
 //     registerVoter(v1);
 //     listAllVoters();
-//     editVoterByID(v1.getVoterID(), Voter(v1.getVoterID(), "John Doe", "1234567890123", "Male", 31, "123 Main St", 101, 1));
+//     editVoterByCNIC(v1.getVoterID(), Voter(v1.getVoterID(), "John Doe", "1234567890123", "Male", 31, "123 Main St", 101, 1));
 //     listAllVoters();
-//     deleteVoterByID(v1.getVoterID());
+//     deleteVoterByCNIC(v1.getVoterID());
 //     listAllVoters();
 //     Voter *loggedInVoter = loginByCNIC("1234567890123");
 //     if (loggedInVoter)

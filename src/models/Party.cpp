@@ -225,6 +225,40 @@ bool partyExists(int id) {
     return false;
 }
 
+bool partyNameExists(const vector<Party> &list, const string &name)
+{
+    for (const auto &p : list)
+    {
+        if (p.getPartyName() == name)
+            return true;
+    }
+    return false;
+}
+
+bool partySymbolExists(const vector<Party> &list, const string &symbol)
+{
+    for (const auto &p : list)
+    {
+        if (p.getPartySymbol() == symbol)
+            return true;
+    }
+    return false;
+}
+
+bool isValidPartyID(int id)
+{
+    return id > 0;
+}
+
+bool isValidPartyName(const string &name)
+{
+    return !name.empty() && name.length() <= 50;
+}
+bool isValidPartySymbol(const string &symbol)
+{
+    return !symbol.empty() && symbol.length() <= 20;
+}
+
 void manageParties() {
     int choice;
     while (true) {
@@ -242,8 +276,24 @@ void manageParties() {
             cin.ignore();
             cout << "Enter Party Name: ";
             getline(cin, name);
+            if (!isValidPartyName(name)) {
+                cout << "Invalid Party Name.\n";
+                continue;
+            }
+            if (partyNameExists(loadAllParties(), name)) {
+                cout << "Party Name already exists.\n";
+                continue;
+            }
             cout << "Enter Party Symbol: ";
             getline(cin, symbol);
+            if (!isValidPartySymbol(symbol)) {
+                cout << "Invalid Party Symbol.\n";
+                continue;
+            }
+            if (partySymbolExists(loadAllParties(), symbol)) {
+                cout << "Party Symbol already exists.\n";
+                continue;
+            }
             Party p(getNextID("PartyID"), name, symbol);
             addParty(p);
         } else if (choice == 2) {
@@ -251,18 +301,52 @@ void manageParties() {
         } else if (choice == 3) {
             int id;
             string name, symbol;
+            cout << "List of Parties:\n";
+            listAllParties();
             cout << "Enter Party ID to edit: ";
             cin >> id;
+            if (!isValidPartyID(id)) {
+                cout << "Invalid Party ID.\n";
+                continue;
+            }
+            if (!partyExists(id)) {
+                cout << "Party ID not found.\n";
+                continue;
+            }
             cin.ignore();
             cout << "Enter new name: ";
             getline(cin, name);
+            if (!isValidPartyName(name)) {
+                cout << "Invalid Party Name.\n";
+                continue;
+            }
+            if (partyNameExists(loadAllParties(), name)) {
+                cout << "Party Name already exists.\n";
+                continue;
+            }
             cout << "Enter new symbol: ";
             getline(cin, symbol);
+            if (!isValidPartySymbol(symbol)) {
+                cout << "Invalid Party Symbol.\n";
+                continue;
+            }
+            if (partySymbolExists(loadAllParties(), symbol)) {
+                cout << "Party Symbol already exists.\n";
+                continue;
+            }
             editParty(id, name, symbol);
         } else if (choice == 4) {
             int id;
             cout << "Enter Party ID to delete: ";
             cin >> id;
+            if (!isValidPartyID(id)) {
+                cout << "Invalid Party ID.\n";
+                continue;
+            }
+            if (!partyExists(id)) {
+                cout << "Party ID not found.\n";
+                continue;
+            }
             deleteParty(id);
         } else if (choice == 0) {
             break;

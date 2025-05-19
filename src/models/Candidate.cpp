@@ -104,6 +104,24 @@ bool isValidCandidate(const Candidate &c)
     return true;
 }
 
+bool isValidCandidateID(int id)
+{
+    return id > 0;
+}
+
+bool isValidCandidateName(const string &name)
+{
+    return !name.empty() && name.length() <= 100;
+}
+bool isValidPartyID(int partyID)
+{
+    return partyID > 0;
+}
+
+bool isValidConstituencyID(int constID)
+{
+    return constID > 0;
+}
 // Load all candidates from file
 vector<Candidate> loadAllCandidates()
 {
@@ -305,7 +323,8 @@ void manageCandidates() {
         cout << "1. Add Candidate\n";
         cout << "2. View All Candidates\n";
         cout << "3. View by Constituency\n";
-        cout << "4. Delete Candidate\n";
+        cout << "4. Edit Candidate\n";
+        cout << "5. Delete Candidate\n";
         cout << "0. Back\n";
         cout << "Enter choice: ";
         cin >> choice;
@@ -314,11 +333,20 @@ void manageCandidates() {
             int partyID, constID;
             string name;
             cout << "Enter Candidate Name: "; cin.ignore(); getline(cin, name);
+            if (!isValidCandidateName(name)) {
+                cout << "Invalid Candidate Name.\n";
+                continue;
+            }
             cout << "Enter Party ID: "; cin >> partyID;
+            if (!isValidPartyID(partyID)) {
+                cout << "Invalid Party ID.\n";
+                continue;
+            }
             cout << "Enter Constituency ID: "; cin >> constID;
-
-            // TODO: Validate partyID & constID
-
+            if (!isValidConstituencyID(constID)) {
+                cout << "Invalid Constituency ID.\n";
+                continue;
+            }
             Candidate c(getNextID("CandidateID"), name, partyID, constID);
             addCandidate(c);
         } else if (choice == 2) {
@@ -327,11 +355,58 @@ void manageCandidates() {
             int constID;
             cout << "Enter Constituency ID: ";
             cin >> constID;
+            if (!isValidConstituencyID(constID)) {
+                cout << "Invalid Constituency ID.\n";
+                continue;
+            }
+            cout << "Candidates in Constituency ID " << constID << ":\n";
             viewCandidatesByConstituency(constID);
         } else if (choice == 4) {
             int id;
+            string name;
+            int partyID, constID;
+            cout << "List of Candidates:\n";
+            listAllCandidates();
+            cout << "Enter Candidate ID to edit: ";
+            cin >> id;
+            if (!isValidCandidateID(id)) {
+                cout << "Invalid Candidate ID.\n";
+                continue;
+            }
+            if (!candidateExists(id)) {
+                cout << "Candidate ID not found.\n";
+                continue;
+            }
+            cout << "Enter New Name: "; cin.ignore(); getline(cin, name);
+            if (!isValidCandidateName(name)) {
+                cout << "Invalid Candidate Name.\n";
+                continue;
+            }
+            cout << "Enter New Party ID: "; cin >> partyID;
+            if (!isValidPartyID(partyID)) {
+                cout << "Invalid Party ID.\n";
+                continue;
+            }
+            cout << "Enter New Constituency ID: "; cin >> constID;
+            if (!isValidConstituencyID(constID)) {
+                cout << "Invalid Constituency ID.\n";
+                continue;
+            }
+            cout << "Editing Candidate ID " << id << "...\n";
+            editCandidate(id, name, partyID, constID);
+        } else if (choice == 5) {
+            int id;
             cout << "Enter Candidate ID to delete: ";
             cin >> id;
+            if (!isValidCandidateID(id)) {
+                cout << "Invalid Candidate ID.\n";
+                continue;
+            }
+            if (!candidateExists(id)) {
+                cout << "Candidate ID not found.\n";
+                continue;
+            }
+            cout << "Deleting Candidate ID " << id << "...\n";
             deleteCandidateByID(id);
         } else if (choice == 0) {
             break;

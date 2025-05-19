@@ -56,8 +56,8 @@
 
     //Voter
     extern void registerVoter(const Voter& newVoter);
-    extern void editVoterByID(int VoterID, const Voter& updatedVoter);
-    extern void deleteVoterByID(int VoterID);
+    extern void editVoterByCNIC(int VoterID, const Voter& updatedVoter);
+    extern void deleteVoterByCNIC(int VoterID);
     extern void listAllVoters();
     extern void loginByCNIC(const string& VoterCNIC);
     extern void viewProfile(const Voter& v);
@@ -117,7 +117,7 @@ int main() {
     // Voter voter1(1, "Voter A", "1234567890123", "Male", 30, "Address A", 1, 1);
     // registerVoter(voter1);
     // listAllVoters();
-    // editVoterByID(1, Voter(1, "Updated Voter A", "1234567890123", "Gender A", 31, "Updated Address A", 1, 1));
+    // editVoterByCNIC(1, Voter(1, "Updated Voter A", "1234567890123", "Gender A", 31, "Updated Address A", 1, 1));
     // //View Profile
     // viewProfile(voter1);
     // //Result

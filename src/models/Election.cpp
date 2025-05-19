@@ -292,8 +292,20 @@ void manageElections() {
             string name, type, date;
             cin.ignore();
             cout << "Enter Election Name: "; getline(cin, name);
+            if (!isValidElectionName(name)) {
+                cout << "Invalid Election Name.\n";
+                continue;
+            }
             cout << "Enter Type (National, Provincial, etc): "; getline(cin, type);
+            if (!isValidElectionType(type)) {
+                cout << "Invalid Election Type.\n";
+                continue;
+            }
             cout << "Enter Date (YYYY-MM-DD): "; getline(cin, date);
+            if (!isValidElectionDate(date)) {
+                cout << "Invalid Election Date. Use YYYY-MM-DD.\n";
+                continue;
+            }
             Election e(getNextID("ElectionID"), name, type, date);
             createElection(e);
         } else if (choice == 2) {
@@ -301,16 +313,46 @@ void manageElections() {
         } else if (choice == 3) {
             int id;
             string name, type, date;
+            cout << "List of Elections:\n";
+            listAllElections();
             cout << "Enter Election ID: "; cin >> id;
             cin.ignore();
+            if (!isValidElectionID(id)) {
+                cout << "Invalid Election ID.\n";
+                continue;
+            }
+            if (!electionExists(id)) {
+                cout << "Election ID not found.\n";
+                continue;
+            }
             cout << "Enter New Name: "; getline(cin, name);
+            if (!isValidElectionName(name)) {
+                cout << "Invalid Election Name.\n";
+                continue;
+            }
             cout << "Enter New Type: "; getline(cin, type);
-            cout << "Enter New Date: "; getline(cin, date);
+            if (!isValidElectionType(type)) {
+                cout << "Invalid Election Type.\n";
+                continue;
+            }
+            cout << "Enter New Date (YYYY-MM-DD): "; getline(cin, date);
+            if (!isValidElectionDate(date)) {
+                cout << "Invalid Election Date. Use YYYY-MM-DD.\n";
+                continue;
+            }
             editElection(id, name, type, date);
         } else if (choice == 4) {
             int id;
             cout << "Enter Election ID to delete: ";
             cin >> id;
+            if (!isValidElectionID(id)) {
+                cout << "Invalid Election ID.\n";
+                continue;
+            }
+            if (!electionExists(id)) {
+                cout << "Election ID not found.\n";
+                continue;
+            }
             deleteElection(id);
         } else if (choice == 0) {
             break;

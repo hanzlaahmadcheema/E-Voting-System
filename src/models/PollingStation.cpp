@@ -282,6 +282,22 @@ bool pollingStationExists(int id) {
     return false;
 }
 
+bool isValidPollingStationID(int id) {
+    return id > 0;
+}
+
+bool isValidPollingStationName(const string &name) {
+    return !name.empty() && name.length() <= 100;
+}
+
+bool isValidPollingStationAddress(const string &address) {
+    return !address.empty() && address.length() <= 200;
+}
+
+bool isValidConstituencyID(int id) {
+    return id > 0;
+}
+
 void managePollingStations() {
     int choice;
     while (true) {
@@ -299,8 +315,20 @@ void managePollingStations() {
             string name, address;
             cin.ignore();
             cout << "Enter Station Name: "; getline(cin, name);
+            if (!isValidPollingStationName(name)) {
+                cout << "Invalid Polling Station Name.\n";
+                continue;
+            }
             cout << "Enter Address: "; getline(cin, address);
+            if (!isValidPollingStationAddress(address)) {
+                cout << "Invalid Polling Station Address.\n";
+                continue;
+            }
             cout << "Enter Constituency ID: "; cin >> ConstituencyID;
+            if (!isValidConstituencyID(ConstituencyID)) {
+                cout << "Invalid Constituency ID.\n";
+                continue;
+            }
             PollingStation ps(getNextID("PollingStationID"), name, address, ConstituencyID);
             addPollingStation(ps);
         } else if (choice == 2) {
@@ -308,15 +336,41 @@ void managePollingStations() {
         } else if (choice == 3) {
             int id;
             string name, address;
-            cout << "Enter Station ID: "; cin >> id;
+            cout << "List of Polling Stations:\n";
+            listAllStations();
+            cout << "Enter Station ID to edit: "; cin >> id;
+            if (!isValidPollingStationID(id)) {
+                cout << "Invalid Polling Station ID.\n";
+                continue;
+            }
+            if (!pollingStationExists(id)) {
+                cout << "Polling Station ID not found.\n";
+                continue;
+            }
             cin.ignore();
             cout << "Enter New Name: "; getline(cin, name);
+            if (!isValidPollingStationName(name)) {
+                cout << "Invalid Polling Station Name.\n";
+                continue;
+            }
             cout << "Enter New Address: "; getline(cin, address);
+            if (!isValidPollingStationAddress(address)) {
+                cout << "Invalid Polling Station Address.\n";
+                continue;
+            }
             editPollingStation(id, name, address);
         } else if (choice == 4) {
             int id;
             cout << "Enter Station ID to delete: ";
             cin >> id;
+            if (!isValidPollingStationID(id)) {
+                cout << "Invalid Polling Station ID.\n";
+                continue;
+            }
+            if (!pollingStationExists(id)) {
+                cout << "Polling Station ID not found.\n";
+                continue;
+            }
             deletePollingStation(id);
         } else if (choice == 0) {
             break;

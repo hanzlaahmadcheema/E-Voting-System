@@ -53,6 +53,15 @@ City City::fromJSON(const json &j)
 
 const string CITY_FILE = "data/cities.json";
 
+bool isValidCityName(const string &name)
+{
+    return !name.empty() && name.length() <= 50;
+}
+bool isValidCityID(int id)
+{
+    return id > 0;
+}
+
 // Load all cities
 vector<City> loadAllCities()
 {
@@ -115,7 +124,7 @@ void addCity(const City &newCity)
 {
     if (newCity.getCityID() <= 0)
     {
-        cerr << "❌ Invalid City ID. Must be positive.\n";
+        cerr << "Invalid City ID. Must be positive.\n";
         return;
     }
     if (newCity.getCityName().empty())
@@ -227,6 +236,16 @@ bool cityExists(int id) {
     return false;
 }
 
+bool cityNameExists(const vector<City> &list, const string &name)
+{
+    for (const auto &c : list)
+    {
+        if (c.getCityName() == name)
+            return true;
+    }
+    return false;
+}
+
 void manageCities() {
     int choice;
     while (true) {
@@ -244,6 +263,10 @@ void manageCities() {
             cin.ignore();
             cout << "Enter City Name: ";
             getline(cin, name);
+            if (!isValidCityName(name)) {
+                cout << "Invalid City Name.\n";
+                continue;
+            }
             City c(getNextID("CityID"), name);
             addCity(c);
         } else if (choice == 2) {
@@ -251,16 +274,42 @@ void manageCities() {
         } else if (choice == 3) {
             int id;
             string name;
+            cout << "List of Cities:\n";
+            listAllCities();
             cout << "Enter City ID: ";
             cin >> id;
+            if (!isValidCityID(id)) {
+                cout << "Invalid City ID.\n";
+                continue;
+            }
+            if (!cityExists(id)) {
+                cout << "City ID not found.\n";
+                continue;
+            }
             cin.ignore();
             cout << "Enter New Name: ";
             getline(cin, name);
+            if (!isValidCityName(name)) {
+                cout << "Invalid City Name.\n";
+                continue;
+            }
+            if (cityNameExists(loadAllCities(), name)) {
+                cout << "City Name already exists.\n";
+                continue;
+            }
             editCity(id, name);
         } else if (choice == 4) {
             int id;
             cout << "Enter City ID to delete: ";
             cin >> id;
+            if (!isValidCityID(id)) {
+                cout << "Invalid City ID.\n";
+                continue;
+            }
+            if (!cityExists(id)) {
+                cout << "City ID not found.\n";
+                continue;
+            }
             deleteCityByID(id);
         } else if (choice == 0) {
             break;
