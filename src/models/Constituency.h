@@ -11,13 +11,15 @@ class Constituency
 {
 public:
     Constituency();
-    Constituency(int ConstituencyID, const string &ConstituencyName, int CityID);
+    Constituency(int ConstituencyID, const string &ConstituencyName, int CityID, int ElectionID);
     void setConstituencyID(int ConstituencyID);
     void setConstituencyName(const string &ConstituencyName);
     void setCityID(int CityID);
+    void setElectionID(int ElectionID);
     int getConstituencyID() const;
     string getConstituencyName() const;
     int getCityID() const;
+    int getElectionID() const;
     void displayConstituencyInfo() const;
 
     json toJSON() const;
@@ -37,6 +39,7 @@ private:
     int ConstituencyID;
     string ConstituencyName;
     int CityID;
+    int ElectionID;
 };
 
 #endif

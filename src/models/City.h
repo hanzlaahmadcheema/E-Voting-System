@@ -11,11 +11,13 @@ class City
 {
 public:
     City();
-    City(int id, const string &CityName);
+    City(int id, const string &CityName, const string &ProvinceName);
     void setCityID(int id);
     void setCityName(const string &CityName);
+    void setProvinceName(const string &ProvinceName);
     int getCityID() const;
     string getCityName() const;
+    string getProvinceName() const;
     void displayCityInfo() const;
 
     json toJSON() const;
@@ -34,6 +36,7 @@ public:
 private:
     int CityID;
     string CityName;
+    string ProvinceName;
 };
 
 #endif

@@ -134,7 +134,7 @@ bool isValidCNIC(const string &VoterCNIC)
 // Helper: Validate name (non-empty, letters and spaces)
 bool isValidName(const string &name)
 {
-    if (name.empty())
+    if (name.empty() && name.find_first_not_of("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ ") == string::npos)
         return false;
     for (char ch : name)
     {

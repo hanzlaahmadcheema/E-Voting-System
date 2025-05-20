@@ -90,7 +90,10 @@ bool isValidElectionName(const string &name)
 }
 bool isValidElectionType(const string &type)
 {
-    return !type.empty() && type.length() <= 50;
+    //should be one of the predefined types
+    //NA, PP، PS, PK, PB
+    return !type.empty() && type.length() <= 50 &&
+           (type == "NA" || type == "PP" || type == "PS" || type == "PK" || type == "PB");
 }
 bool isValidElectionDate(const string &date)
 {
@@ -252,6 +255,21 @@ void deleteElection(int ElectionID)
 }
 
 // Admin/User: List all elections
+
+//get type by id
+string getElectionTypeByID(int id)
+{
+    vector<Election> list = loadAllElections();
+    for (const auto &e : list)
+    {
+        if (e.getElectionID() == id)
+        {
+            return e.getElectionType();
+        }
+    }
+    return "";
+}
+
 void listAllElections()
 {
     vector<Election> list = loadAllElections();
@@ -295,7 +313,7 @@ void manageElections() {
                 cout << "Invalid Election Name.\n";
                 continue;
             }
-            cout << "Enter Type (National, Provincial, etc): "; getline(cin, type);
+            cout << "Enter Type (NA, PP, PS, PK, PB): "; getline(cin, type);
             if (!isValidElectionType(type)) {
                 cout << "Invalid Election Type.\n";
                 continue;
@@ -329,7 +347,7 @@ void manageElections() {
                 cout << "Invalid Election Name.\n";
                 continue;
             }
-            cout << "Enter New Type: "; getline(cin, type);
+            cout << "Enter New Type (NA, PP, PS, PK, PB): "; getline(cin, type);
             if (!isValidElectionType(type)) {
                 cout << "Invalid Election Type.\n";
                 continue;

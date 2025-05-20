@@ -10,11 +10,12 @@ using namespace std;
 extern int getNextID(const string &key);
 
 // City
-City::City() : CityID(0), CityName("") {}
-City::City(int CityID, const string &CityName)
+City::City() : CityID(0), CityName(""), ProvinceName("") {}
+City::City(int CityID, const string &CityName, const string &ProvinceName)
 {
     this->CityID = CityID;
     this->CityName = CityName;
+    this->ProvinceName = ProvinceName;
 }
 void City::setCityID(int CityID)
 {
@@ -24,6 +25,10 @@ void City::setCityName(const string &CityName)
 {
     this->CityName = CityName;
 }
+void City::setProvinceName(const string &ProvinceName)
+{
+    this->ProvinceName = ProvinceName;
+}
 int City::getCityID() const
 {
     return CityID;
@@ -32,23 +37,30 @@ string City::getCityName() const
 {
     return CityName;
 }
+string City::getProvinceName() const
+{
+    return ProvinceName;
+}
 void City::displayCityInfo() const
 {
     cout << "City ID: " << CityID << "\n"
-         << "Name: " << CityName << endl;
+         << "Name: " << CityName << endl
+         << "Province: " << ProvinceName << endl;
 }
 
 json City::toJSON() const
 {
     return json{
         {"CityID", CityID},
-        {"CityName", CityName}};
+        {"CityName", CityName},
+        {"ProvinceName", ProvinceName}};
 }
 City City::fromJSON(const json &j)
 {
     return City(
         j.at("CityID").get<int>(),
-        j.at("CityName").get<std::string>());
+        j.at("CityName").get<std::string>(),
+        j.at("ProvinceName").get<std::string>());
 }
 
 const string CITY_FILE = "data/cities.json";
@@ -65,7 +77,7 @@ bool cityNameExists(const vector<City> &list, const string &name)
 
 bool isValidCityName(const string &name)
 {
-    return !name.empty() && name.length() <= 50;
+    return !name.empty() && name.length() <= 50 && name.find_first_not_of("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ ") == string::npos;
 }
 bool isValidCityID(int id)
 {
@@ -162,7 +174,7 @@ void addCity(const City &newCity)
 }
 
 // Admin: Edit city by ID
-void editCity(int cityID, const string &newName)
+void editCity(int cityID, const string &newName, const string &newProvinceName)
 {
     if (cityID <= 0)
     {
@@ -224,6 +236,24 @@ void deleteCityByID(int cityID)
 }
 
 // Admin/User: View all cities
+
+void listCitiesByProvince(const string &province)
+{
+    vector<City> cities = loadAllCities();
+    if (cities.empty())
+    {
+        cout << "No cities found.\n";
+        return;
+    }
+    for (const auto &c : cities)
+    {
+        if (c.getProvinceName() == province)
+        {
+            cout << c.getCityID() << " - " << c.getCityName() << endl;
+        }
+    }
+}
+
 void listAllCities()
 {
     vector<City> cities = loadAllCities();
@@ -259,7 +289,7 @@ void manageCities() {
         cin >> choice;
 
         if (choice == 1) {
-            string name;
+            string name, ProvinceName;
             cin.ignore();
             cout << "Enter City Name: ";
             getline(cin, name);
@@ -267,13 +297,24 @@ void manageCities() {
                 cout << "Invalid City Name.\n";
                 continue;
             }
-            City c(getNextID("CityID"), name);
+            cout << "Select Province: ";
+            cout << "1. Punjab\n2. KPK\n3. Sindh\n4. Balochistan\n";
+            int provinceChoice;
+            cin >> provinceChoice;
+            switch (provinceChoice) {
+                case 1: ProvinceName = "Punjab"; break;
+                case 2: ProvinceName = "KPK"; break;
+                case 3: ProvinceName = "Sindh"; break;
+                case 4: ProvinceName = "Balochistan"; break;
+                default: cout << "Invalid choice. City not created.\n"; continue;
+            }
+            City c(getNextID("CityID"), name, ProvinceName);
             addCity(c);
         } else if (choice == 2) {
             listAllCities();
         } else if (choice == 3) {
             int id;
-            string name;
+            string name, ProvinceName;
             cout << "List of Cities:\n";
             listAllCities();
             cout << "Enter City ID: ";
@@ -293,11 +334,18 @@ void manageCities() {
                 cout << "Invalid City Name.\n";
                 continue;
             }
-            if (cityNameExists(loadAllCities(), name)) {
-                cout << "City Name already exists.\n";
-                continue;
+            cout << "Select Province: ";
+            cout << "1. Punjab\n2. KPK\n3. Sindh\n4. Balochistan\n";
+            int provinceChoice;
+            cin >> provinceChoice;
+            switch (provinceChoice) {
+                case 1: ProvinceName = "Punjab"; break;
+                case 2: ProvinceName = "KPK"; break;
+                case 3: ProvinceName = "Sindh"; break;
+                case 4: ProvinceName = "Balochistan"; break;
+                default: cout << "Invalid choice. City not updated.\n"; continue;
             }
-            editCity(id, name);
+            editCity(id, name, ProvinceName);
         } else if (choice == 4) {
             int id;
             cout << "Enter City ID to delete: ";

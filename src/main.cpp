@@ -76,8 +76,21 @@ using namespace std;
 
 int main() {
 
-    // userPanel();
-    adminPanel();
+    cout << "Welcome to the Election Management System!" << endl;
+    cout << "1. Admin" << endl;
+    cout << "2. User" << endl;
+    cout << "Please select your role: ";
+    int role;
+    cin >> role;
+    cin.ignore();
+    if (role == 1) {
+        // Code for the admin panel
+        adminPanel();
+    } else if (role == 2) {
+        // Code for the user panel
+        userPanel();
+    }
+
     // Example usage of the functions
     // //Election
     // Election election1(1, "General Election", "General", "2023-10-01");

@@ -107,7 +107,7 @@ bool isValidCandidateID(int id)
 
 bool isValidCandidateName(const string &name)
 {
-    return !name.empty() && name.length() <= 100;
+    return !name.empty() && name.length() <= 100 && name.find_first_not_of("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ ") == string::npos;
 }
 
 // Load all candidates from file

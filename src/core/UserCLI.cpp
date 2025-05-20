@@ -61,7 +61,7 @@ void showUserMenu(Voter* voter) {
 
             cout << "Enter Candidate ID to vote for: ";
             cin >> CandidateID;
-
+            cout << "Casting vote....\n ";
             Vote vote(1, voter->getVoterID(), CandidateID, ElectionID, voter->getPollingStationID(), ConstituencyID, getCurrentTimestamp());
             castVote(vote);
         } else if (choice == 0) {

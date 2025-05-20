@@ -2,11 +2,55 @@
     {
         "CityID": 1,
         "ConstituencyID": 1,
-        "ConstituencyName": "NA-140"
+        "ConstituencyName": "NA-123",
+        "ElectionID": 1
     },
     {
-        "CityID": 110,
+        "CityID": 1,
+        "ConstituencyID": 2,
+        "ConstituencyName": "NA-124",
+        "ElectionID": 1
+    },
+    {
+        "CityID": 1,
         "ConstituencyID": 3,
-        "ConstituencyName": "NA-127"
+        "ConstituencyName": "NA-122",
+        "ElectionID": 1
+    },
+    {
+        "CityID": 1,
+        "ConstituencyID": 4,
+        "ConstituencyName": "NA-125",
+        "ElectionID": 1
+    },
+    {
+        "CityID": 1,
+        "ConstituencyID": 5,
+        "ConstituencyName": "NA-126",
+        "ElectionID": 1
+    },
+    {
+        "CityID": 1,
+        "ConstituencyID": 6,
+        "ConstituencyName": "NA-127",
+        "ElectionID": 1
+    },
+    {
+        "CityID": 1,
+        "ConstituencyID": 7,
+        "ConstituencyName": "NA-128",
+        "ElectionID": 1
+    },
+    {
+        "CityID": 1,
+        "ConstituencyID": 8,
+        "ConstituencyName": "NA-129",
+        "ElectionID": 1
+    },
+    {
+        "CityID": 1,
+        "ConstituencyID": 9,
+        "ConstituencyName": "PP-12",
+        "ElectionID": 2
     }
 ]

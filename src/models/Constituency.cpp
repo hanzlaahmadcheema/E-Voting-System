@@ -10,15 +10,21 @@ using namespace std;
 
 extern int getNextID(const string &key);
 extern bool cityExists(int id);
+extern bool electionExists(int id);
 extern void listAllCities();
+extern void listAllElections();
+extern void listCitiesByProvince(const string &province);
+extern string getElectionTypeByID(int id);
 extern string toLower(const string& str);
+
 // Constituency
-Constituency::Constituency() : ConstituencyID(0), ConstituencyName(""), CityID(0) {}
-Constituency::Constituency(int ConstituencyID, const string &ConstituencyName, int CityID)
+Constituency::Constituency() : ConstituencyID(0), ConstituencyName(""), CityID(0), ElectionID(0) {}
+Constituency::Constituency(int ConstituencyID, const string &ConstituencyName, int CityID, int ElectionID)
 {
     this->ConstituencyID = ConstituencyID;
     this->ConstituencyName = ConstituencyName;
     this->CityID = CityID;
+    this->ElectionID = ElectionID;
 }
 void Constituency::setConstituencyID(int ConstituencyID)
 {
@@ -32,6 +38,10 @@ void Constituency::setCityID(int CityID)
 {
     this->CityID = CityID;
 }
+void Constituency::setElectionID(int ElectionID)
+{
+    this->ElectionID = ElectionID;
+}
 int Constituency::getConstituencyID() const
 {
     return ConstituencyID;
@@ -44,11 +54,16 @@ int Constituency::getCityID() const
 {
     return CityID;
 }
+int Constituency::getElectionID() const
+{
+    return ElectionID;
+}
 void Constituency::displayConstituencyInfo() const
 {
     cout << "Constituency ID: " << ConstituencyID << "\n"
          << "Name: " << ConstituencyName << "\n"
-         << "City ID: " << CityID << endl;
+         << "City ID: " << CityID << "\n"
+         << "Election ID: " << ElectionID << endl;
 }
 // Add any other methods or member functions as needed
 json Constituency::toJSON() const
@@ -56,14 +71,16 @@ json Constituency::toJSON() const
     return json{
         {"ConstituencyID", ConstituencyID},
         {"ConstituencyName", ConstituencyName},
-        {"CityID", CityID}};
+        {"CityID", CityID},
+        {"ElectionID", ElectionID}};
 }
 Constituency Constituency::fromJSON(const json &j)
 {
     return Constituency(
         j.at("ConstituencyID").get<int>(),
         j.at("ConstituencyName").get<std::string>(),
-        j.at("CityID").get<int>());
+        j.at("CityID").get<int>(),
+        j.at("ElectionID").get<int>());
 }
 
 const string CONSTITUENCY_FILE = "data/constituencies.json";
@@ -162,7 +179,7 @@ void addConstituency(const Constituency &newConst)
 }
 
 // Admin: Edit constituency name
-void editConstituency(int id, const string &newName)
+void editConstituency(int id, const string &newName, int CityID, int ElectionID)
 {
     vector<Constituency> list = loadAllConstituencies();
     bool found = false;
@@ -284,33 +301,52 @@ void manageConstituencies() {
         cin >> choice;
 
         if (choice == 1) {
-            int cityID;
-            string name;
-            cout << "Enter Constituency Name (e.g., NA-123): ";
+            int cityID, ElectionID;
+            string name, type, fullName;
+            listAllElections();
+            cout << "Enter Election ID: ";
+            cin >> ElectionID;
+            if (!electionExists(ElectionID)) {
+                cout << "Invalid Election ID.\n";
+                continue;
+            }
+            type = getElectionTypeByID(ElectionID);
+            cout << "Enter Constituency Name: " << type << "-";
             cin.ignore();
             getline(cin, name);
-            if (!isValidConstituencyName(name)) {
+            fullName = type + "-" + name;
+            if (!isValidConstituencyName(fullName)) {
                 cout << "Invalid Constituency Name.\n";
                 continue;
             }
-            if (constituencyNameExists(list, name)) {
+            if (constituencyNameExists(list, fullName)) {
                 cout << "Constituency Name already exists.\n";
                 continue;
             }
-            listAllCities();
+            if (type == "NA") {
+                listAllCities();
+            } else if (type == "PP") {
+                listCitiesByProvince("Punjab");
+            } else if (type == "PS") {
+                listCitiesByProvince("Sindh");
+            } else if (type == "PK") {
+                listCitiesByProvince("KPK");
+            } else if (type == "PB") {
+                listCitiesByProvince("Balochistan");
+            }
             cout << "Enter City ID: ";
             cin >> cityID;
             if (!cityExists(cityID)) {
                 cout << "Invalid City ID.\n";
                 continue;
             }
-            Constituency c(getNextID("ConstituencyID"), name, cityID);
+            Constituency c(getNextID("ConstituencyID"), fullName, cityID, ElectionID);
             addConstituency(c);
         } else if (choice == 2) {
             listAllConstituencies();
         } else if (choice == 3) {
-            int id;
-            string name;
+            int id, cityID, ElectionID;
+            string name, type, fullName;
             cout << "List of Constituencies:\n";
             listAllConstituencies();
             cout << "Enter Constituency ID: ";
@@ -324,17 +360,34 @@ void manageConstituencies() {
                 continue;
             }
             cin.ignore();
-            cout << "Enter new name: ";
+            listAllElections();
+            cout << "Enter Election ID: ";
+            cin >> ElectionID;
+            if (!electionExists(ElectionID)) {
+                cout << "Invalid Election ID.\n";
+                continue;
+            }
+            type = getElectionTypeByID(ElectionID);
+            cout << "Enter new name: " << type << "-";
             getline(cin, name);
-            if (!isValidConstituencyName(name)) {
+
+            fullName = type + "-" + name;
+            if (!isValidConstituencyName(fullName)) {
                 cout << "Invalid Constituency Name.\n";
                 continue;
             }
-            if (constituencyNameExists(list, name)) {
+            if (constituencyNameExists(list, fullName)) {
                 cout << "Constituency Name already exists.\n";
                 continue;
             }
-            editConstituency(id, name);
+            listAllCities();
+            cout << "Enter City ID: ";
+            cin >> cityID;
+            if (!cityExists(cityID)) {
+                cout << "Invalid City ID.\n";
+                continue;
+            }
+            editConstituency(id, fullName, cityID, ElectionID);
         } else if (choice == 4) {
             int id;
             listAllConstituencies();

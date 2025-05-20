@@ -1,38 +1,7 @@
 [
     {
         "CityID": 1,
-        "CityName": "Chichawatni"
-    },
-    {
-        "CityID": 2,
-        "CityName": "Lahore"
-    },
-    {
-        "CityID": 3,
-        "CityName": "Karachi"
-    },
-    {
-        "CityID": 4,
-        "CityName": "kamalia"
-    },
-    {
-        "CityID": 5,
-        "CityName": "LAHORE"
-    },
-    {
-        "CityID": 9,
-        "CityName": "Lakar"
-    },
-    {
-        "CityID": 10,
-        "CityName": "-3"
-    },
-    {
-        "CityID": 11,
-        "CityName": "1"
-    },
-    {
-        "CityID": 12,
-        "CityName": "0"
+        "CityName": "Lahore",
+        "ProvinceName": "Punjab"
     }
 ]

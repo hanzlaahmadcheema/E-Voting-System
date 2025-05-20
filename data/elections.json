@@ -1,8 +1,14 @@
 [
     {
-        "ElectionDate": "2026-02-08",
-        "ElectionID": 8,
-        "ElectionName": "Provincial",
-        "ElectionType": "Provincial"
+        "ElectionDate": "2025-02-12",
+        "ElectionID": 1,
+        "ElectionName": "National Assembly",
+        "ElectionType": "NA"
+    },
+    {
+        "ElectionDate": "2025-12-42",
+        "ElectionID": 2,
+        "ElectionName": "Provincial Assembly",
+        "ElectionType": "PP"
     }
 ]
