@@ -14,8 +14,8 @@ extern void listAllStations();
 extern void listAllConstituencies();
 
 // Voter
-Voter::Voter() : VoterID(0), VoterName(""), VoterCNIC(""), VoterGender(""), VoterAge(0), VoterAddress(""), PollingStationID(0), ConstituencyID(0) {}
-Voter::Voter(int VoterID, const string &VoterName, const string &VoterCNIC, const string &VoterGender, int VoterAge, const string &VoterAddress, int PollingStationID, int ConstituencyID)
+Voter::Voter() : VoterID(0), VoterName(""), VoterCNIC(""), VoterGender(""), VoterAge(0), VoterAddress(""), PollingStationID(0) {}
+Voter::Voter(int VoterID, const string &VoterName, const string &VoterCNIC, const string &VoterGender, int VoterAge, const string &VoterAddress, int PollingStationID)
 {
     this->VoterID = VoterID;
     this->VoterName = VoterName;
@@ -24,7 +24,6 @@ Voter::Voter(int VoterID, const string &VoterName, const string &VoterCNIC, cons
     this->VoterAge = VoterAge;
     this->VoterAddress = VoterAddress;
     this->PollingStationID = PollingStationID;
-    this->ConstituencyID = ConstituencyID;
 }
 void Voter::setVoterID(int VoterID)
 {
@@ -54,10 +53,6 @@ void Voter::setPollingStationID(int PollingStationID)
 {
     this->PollingStationID = PollingStationID;
 }
-void Voter::setConstituencyID(int ConstituencyID)
-{
-    this->ConstituencyID = ConstituencyID;
-}
 int Voter::getVoterID() const
 {
     return VoterID;
@@ -86,10 +81,6 @@ int Voter::getPollingStationID() const
 {
     return PollingStationID;
 }
-int Voter::getConstituencyID() const
-{
-    return ConstituencyID;
-}
 
 json Voter::toJSON() const
 {
@@ -100,8 +91,7 @@ json Voter::toJSON() const
         {"VoterGender", VoterGender},
         {"VoterAge", VoterAge},
         {"VoterAddress", VoterAddress},
-        {"PollingStationID", PollingStationID},
-        {"ConstituencyID", ConstituencyID}};
+        {"PollingStationID", PollingStationID}};
 }
 
 Voter Voter::fromJSON(const json &j)
@@ -113,8 +103,7 @@ Voter Voter::fromJSON(const json &j)
         j.at("VoterGender").get<std::string>(),
         j.at("VoterAge").get<int>(),
         j.at("VoterAddress").get<std::string>(),
-        j.at("PollingStationID").get<int>(),
-        j.at("ConstituencyID").get<int>());
+        j.at("PollingStationID").get<int>());
 }
 
 const string VOTER_FILE = "data/voters.json";
@@ -246,11 +235,6 @@ void registerVoter(const Voter &newVoter)
         cout << "Error: Invalid Polling Station ID.\n";
         return;
     }
-    if (!isValidID(newVoter.getConstituencyID()))
-    {
-        cout << "Error: Invalid Constituency ID.\n";
-        return;
-    }
 
     vector<Voter> voters = loadAllVoters();
     // Check for duplicate CNIC
@@ -303,7 +287,7 @@ void listAllVoters()
     {
         cout << v.getVoterID() << " | " << v.getVoterName() << " | " << v.getVoterCNIC() << " | "
              << v.getVoterGender() << " | " << v.getVoterAge() << " | " << v.getVoterAddress() << " | "
-             << v.getPollingStationID() << " | " << v.getConstituencyID() << "\n";
+             << v.getPollingStationID() << "\n";
     }
 }
 
@@ -404,7 +388,6 @@ void viewProfile(const Voter &v)
     cout << "Gender: " << v.getVoterGender() << "\n";
     cout << "Age: " << v.getVoterAge() << "\n";
     cout << "Address: " << v.getVoterAddress() << "\n";
-    cout << "Constituency ID: " << v.getConstituencyID() << "\n";
     cout << "Polling Station ID: " << v.getPollingStationID() << "\n";
 }
 
@@ -430,7 +413,7 @@ void manageVoters() {
         cin >> choice;
 
         if (choice == 1) {
-            int age, pollingID, constID;
+            int age, pollingID;
             string name, VoterCNIC, gender, address;
             cin.ignore();
             cout << "Name: "; getline(cin, name);
@@ -465,18 +448,12 @@ void manageVoters() {
                 cout << "Invalid Polling Station ID.\n";
                 continue;
             }
-            listAllConstituencies();
-            cout << "Constituency ID: "; cin >> constID;
-            if (!constituencyExists(constID)) {
-                cout << "Invalid Constituency ID.\n";
-                continue;
-            }
-            Voter v(getNextID("VoterID"), name, VoterCNIC, gender, age, address, pollingID, constID);
+            Voter v(getNextID("VoterID"), name, VoterCNIC, gender, age, address, pollingID);
             registerVoter(v);
         } else if (choice == 2) {
             listAllVoters();
         } else if (choice == 3) {
-            int age, pollingID, constID;
+            int age, pollingID;
             string name, VoterCNIC, gender, address;
             cout << "Enter Voter CNIC to edit: ";
             cin >> VoterCNIC;
@@ -521,13 +498,7 @@ void manageVoters() {
                 cout << "Invalid Polling Station ID.\n";
                 continue;
             }
-            listAllConstituencies();
-            cout << "New Constituency ID: "; cin >> constID;
-            if (!constituencyExists(constID)) {
-                cout << "Invalid Constituency ID.\n";
-                continue;
-            }
-            editVoterByCNIC(VoterCNIC, Voter(getVoterIDByCNIC(VoterCNIC), name, VoterCNIC, gender, age, address, pollingID, constID));
+            editVoterByCNIC(VoterCNIC, Voter(getVoterIDByCNIC(VoterCNIC), name, VoterCNIC, gender, age, address, pollingID));
         } else if (choice == 4) {
             string VoterCNIC;
             cout << "Enter Voter CNIC to delete: ";

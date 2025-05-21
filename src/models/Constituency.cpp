@@ -287,6 +287,20 @@ bool constituencyExists(int id) {
     return false;
 }
 
+string getConstituencyTypeByID(int id) {
+    vector<Constituency> list = loadAllConstituencies();
+    for (const auto& c : list) {
+        if (c.getConstituencyID() == id) {
+                    //the first 2 digits are type
+            string type = c.getConstituencyName().substr(0, 2);
+            return type;
+        }
+
+
+    }
+    return "";
+}
+
 void manageConstituencies() {
     int choice;
     vector<Constituency> list = loadAllConstituencies();

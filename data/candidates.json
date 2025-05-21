@@ -1,0 +1,30 @@
+[
+    {
+        "CandidateID": 4,
+        "CandidateName": "Asim",
+        "ConstituencyID": 1,
+        "ConstituencyType": "NA",
+        "PartyID": 1
+    },
+    {
+        "CandidateID": 5,
+        "CandidateName": "Muneer",
+        "ConstituencyID": 10,
+        "ConstituencyType": "PP",
+        "PartyID": 2
+    },
+    {
+        "CandidateID": 6,
+        "CandidateName": "New",
+        "ConstituencyID": 2,
+        "ConstituencyType": "NA",
+        "PartyID": 2
+    },
+        {
+        "CandidateID": 7,
+        "CandidateName": "Muneer2",
+        "ConstituencyID": 11,
+        "ConstituencyType": "PP",
+        "PartyID": 2
+    }
+]

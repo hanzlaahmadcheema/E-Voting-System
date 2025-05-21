@@ -52,5 +52,11 @@
         "ConstituencyID": 9,
         "ConstituencyName": "PP-12",
         "ElectionID": 2
+    },
+    {
+        "CityID": 1,
+        "ConstituencyID": 10,
+        "ConstituencyName": "PP-123",
+        "ElectionID": 2
     }
 ]

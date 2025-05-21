@@ -10,8 +10,10 @@ extern vector<Candidate> loadAllCandidates();
 extern bool castVote(const Vote&);
 extern bool voteExists(int VoterID, int ElectionID);
 extern void listAllCandidates();
-extern void viewCandidatesByConstituency(int ConstituencyID);
+extern void viewCandidatesByStation(int PollingStationID);
 extern string getCurrentTimestamp();
+extern string getElectionTypeByID(int id);
+extern void viewCandidatesByType(string type);
 using namespace std;
 
 
@@ -46,9 +48,10 @@ void showUserMenu(Voter* voter) {
         cin >> choice;
 
         if (choice == 1) {
-            viewCandidatesByConstituency(voter->getConstituencyID());
+            viewCandidatesByStation(voter->getPollingStationID());
         } else if (choice == 2) {
-            int ElectionID, CandidateID, ConstituencyID;
+            int ElectionID, CandidateID, PollingStationID;
+            string type;
             cout << "Enter Election ID: ";
             cin >> ElectionID;
 
@@ -56,13 +59,14 @@ void showUserMenu(Voter* voter) {
                 cout << "You’ve already voted in this election.\n";
                 continue;
             }
-            ConstituencyID = voter->getConstituencyID();
-            viewCandidatesByConstituency(ConstituencyID);
+            type = getElectionTypeByID(ElectionID);
+
+            viewCandidatesByType(type);
 
             cout << "Enter Candidate ID to vote for: ";
             cin >> CandidateID;
             cout << "Casting vote....\n ";
-            Vote vote(1, voter->getVoterID(), CandidateID, ElectionID, voter->getPollingStationID(), ConstituencyID, getCurrentTimestamp());
+            Vote vote(1, voter->getVoterID(), CandidateID, ElectionID, voter->getPollingStationID(), getCurrentTimestamp());
             castVote(vote);
         } else if (choice == 0) {
             cout << "Logged out.\n";

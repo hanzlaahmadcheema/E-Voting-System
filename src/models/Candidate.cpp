@@ -1,6 +1,7 @@
 #include "Candidate.h"
 #include "Party.h"
 #include "Constituency.h"
+#include "PollingStation.h"
 #include "../core/Universal.h"
 #include <iostream>
 #include <fstream>
@@ -14,16 +15,19 @@ extern void listAllParties();
 extern void listAllConstituencies();
 extern bool partyExists(int id);
 extern bool constituencyExists(int id);
+extern vector<PollingStation> loadAllStations();
+extern int getPollingStationID();
+extern string getConstituencyTypeByID(int id);
 
-// Candidate
-Candidate::Candidate() : CandidateID(0), CandidateName(""), PartyID(0), ConstituencyID(0) {}
+Candidate::Candidate() : CandidateID(0), CandidateName(""), PartyID(0), ConstituencyID(0), ConstituencyType("") {}
 
-Candidate::Candidate(int CandidateID, const string &CandidateName, int PartyID, int ConstituencyID)
+Candidate::Candidate(int CandidateID, const string &CandidateName, int PartyID, int ConstituencyID, const string &ConstituencyType)
 {
     this->CandidateID = CandidateID;
     this->CandidateName = CandidateName;
     this->PartyID = PartyID;
     this->ConstituencyID = ConstituencyID;
+    this->ConstituencyType = ConstituencyType;
 }
 
 void Candidate::setCandidateID(int CandidateID)
@@ -42,6 +46,10 @@ void Candidate::setConstituencyID(int ConstituencyID)
 {
     this->ConstituencyID = ConstituencyID;
 }
+void Candidate::setConstituencyType(const string &ConstituencyType)
+{
+    this->ConstituencyType = ConstituencyType;
+}
 int Candidate::getCandidateID() const
 {
     return CandidateID;
@@ -58,6 +66,10 @@ int Candidate::getConstituencyID() const
 {
     return ConstituencyID;
 }
+string Candidate::getConstituencyType() const
+{
+    return ConstituencyType;
+}
 
 void Candidate::displayCandidateInfo() const
 {
@@ -73,15 +85,17 @@ json Candidate::toJSON() const
         {"CandidateID", CandidateID},
         {"CandidateName", CandidateName},
         {"PartyID", PartyID},
-        {"ConstituencyID", ConstituencyID}};
+        {"ConstituencyID", ConstituencyID},
+        {"ConstituencyType", ConstituencyType}};
 }
 Candidate Candidate::fromJSON(const json &j)
 {
     return Candidate(
         j.at("CandidateID").get<int>(),
-        j.at("CandidateName").get<std::string>(),
+        j.at("CandidateName").get<string>(),
         j.at("PartyID").get<int>(),
-        j.at("ConstituencyID").get<int>());
+        j.at("ConstituencyID").get<int>(),
+        j.at("ConstituencyType").get<string>());
 }
 
 const string CANDIDATE_FILE = "data/candidates.json";
@@ -134,7 +148,7 @@ vector<Candidate> loadAllCandidates()
                 }
             }
         }
-        catch (const std::exception &e)
+        catch (const exception &e)
         {
             cerr << "Error reading candidates file: " << e.what() << endl;
         }
@@ -201,6 +215,7 @@ void editCandidate(int CandidateID, const string &newName, int newPartyID, int n
             c.setCandidateName(newName);
             c.setPartyID(newPartyID);
             c.setConstituencyID(newConstituencyID);
+            c.setConstituencyType(getConstituencyTypeByID(newConstituencyID));
             found = true;
             break;
         }
@@ -272,6 +287,38 @@ void viewCandidatesByConstituency(int constID)
     }
 }
 
+void viewCandidatesByStation(int PollingStationID)
+{
+    int constID;
+    if (PollingStationID <= 0)
+    {
+        cerr << "Invalid Polling Station ID.\n";
+        return;
+    }
+    vector<Candidate> candidates = loadAllCandidates();
+    vector<PollingStation> PollingStations = loadAllStations();
+    bool found = false;
+        for (const auto &p : PollingStations)
+    {
+        if (p.getPollingStationID() == PollingStationID)
+        {
+            constID = p.getConstituencyID();
+        }
+    }
+    for (const auto &c : candidates)
+    {
+        if (c.getConstituencyID() == constID)
+        {
+            cout << c.getCandidateID() << " - " << c.getCandidateName() << " (PartyID: " << c.getPartyID() << ")" << endl;
+            found = true;
+        }
+    }
+    if (!found)
+    {
+        cout << "No candidates found for this Polling Station ID.\n";
+    }
+}
+
 // User: Get candidate by ID
 Candidate *getCandidateByID(int CandidateID)
 {
@@ -289,6 +336,17 @@ Candidate *getCandidateByID(int CandidateID)
         }
     }
     return nullptr;
+}
+
+void viewCandidatesByType(string type){
+    vector<Candidate> candidates = loadAllCandidates();
+    for (const auto &c : candidates)
+    {
+        if (c.getConstituencyType() == type)
+        {
+            cout << c.getCandidateID() << " - " << c.getCandidateName() << " (PartyID: " << c.getPartyID() << ")" << endl;
+        }
+    }
 }
 
 bool candidateExists(int id) {
@@ -334,7 +392,7 @@ void manageCandidates() {
                 cout << "Invalid Constituency ID.\n";
                 continue;
             }
-            Candidate c(getNextID("CandidateID"), name, partyID, constID);
+            Candidate c(getNextID("CandidateID"), name, partyID, constID, getConstituencyTypeByID(constID));
             addCandidate(c);
         } else if (choice == 2) {
             listAllCandidates();

@@ -210,15 +210,15 @@ void computeConstituencyResult(int ElectionID, int ConstituencyID)
     }
     unordered_map<int, int> voteCounts; // CandidateID -> Vote count
 
-    for (const auto &vote : votes)
-    {
-        if (vote.getElectionID() == ElectionID && vote.getConstituencyID() == ConstituencyID)
-        {
-            int CandidateID = vote.getCandidateID();
-            if (CandidateID > 0)
-                voteCounts[CandidateID]++;
-        }
-    }
+    // for (const auto &vote : votes)
+    // {
+    //     if (vote.getElectionID() == ElectionID && vote.getConstituencyID() == ConstituencyID)
+    //     {
+    //         int CandidateID = vote.getCandidateID();
+    //         if (CandidateID > 0)
+    //             voteCounts[CandidateID]++;
+    //     }
+    // }
 
     if (voteCounts.empty())
     {

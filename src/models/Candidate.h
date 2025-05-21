@@ -10,17 +10,19 @@ class Candidate
 {
 public:
     Candidate();
-    Candidate(int CandidateID, const string &CandidateName, int PartyID, int ConstituencyID);
+    Candidate(int CandidateID, const string &CandidateName, int PartyID, int ConstituencyID, const string &ConstituencyType);
     void displayCandidateInfo() const;
     void setCandidateID(int CandidateID);
     void setCandidateName(const string &CandidateName);
     void setPartyID(int PartyID);
     void setConstituencyID(int ConstituencyID);
+    void setConstituencyType(const string &ConstituencyType);
 
     int getCandidateID() const;
     string getCandidateName() const;
     int getPartyID() const;
     int getConstituencyID() const;
+    string getConstituencyType() const;
 
     json toJSON() const;
     static Candidate fromJSON(const json &j);
@@ -42,6 +44,7 @@ private:
     string CandidateName;
     int PartyID;
     int ConstituencyID;
+    string ConstituencyType;
 };
 
 #endif

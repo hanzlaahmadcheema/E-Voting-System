@@ -1,0 +1,20 @@
+[
+    {
+        "ConstituencyID": 1,
+        "PollingStationAddress": "Wapda Town",
+        "PollingStationID": 1,
+        "PollingStationName": "Model School"
+    },
+    {
+        "ConstituencyID": 9,
+        "PollingStationAddress": "Wapda Town",
+        "PollingStationID": 2,
+        "PollingStationName": "Model School"
+    },
+    {
+        "ConstituencyID": 10,
+        "PollingStationAddress": "Lahore",
+        "PollingStationID": 3,
+        "PollingStationName": "Model"
+    }
+]

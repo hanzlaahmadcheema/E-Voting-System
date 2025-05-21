@@ -12,14 +12,13 @@ extern int getNextID(const string &key);
 
 // Vote
 Vote::Vote() : VoteID(0), VoterID(0), CandidateID(0), ElectionID(0), PollingStationID(0), VoteTime("") {}
-Vote::Vote(int VoteID, int VoterID, int CandidateID, int ElectionID, int PollingStationID, int ConstituencyID, const string &VoteTime)
+Vote::Vote(int VoteID, int VoterID, int CandidateID, int ElectionID, int PollingStationID, const string &VoteTime)
 {
     this->VoteID = VoteID;
     this->VoterID = VoterID;
     this->CandidateID = CandidateID;
     this->ElectionID = ElectionID;
     this->PollingStationID = PollingStationID;
-    this->ConstituencyID = ConstituencyID;
     this->VoteTime = VoteTime;
 }
 void Vote::setVoteID(int VoteID)
@@ -41,10 +40,6 @@ void Vote::setElectionID(int ElectionID)
 void Vote::setPollingStationID(int PollingStationID)
 {
     this->PollingStationID = PollingStationID;
-}
-void Vote::setConstituencyID(int ConstituencyID)
-{
-    this->ConstituencyID = ConstituencyID;
 }
 void Vote::setTimestamp(const string &VoteTime)
 {
@@ -70,10 +65,6 @@ int Vote::getPollingStationID() const
 {
     return PollingStationID;
 }
-int Vote::getConstituencyID() const
-{
-    return ConstituencyID;
-}
 string Vote::getTimestamp() const
 {
     return VoteTime;
@@ -85,7 +76,6 @@ void Vote::displayVoteInfo() const
          << "Candidate ID: " << CandidateID << "\n"
          << "Election ID: " << ElectionID << "\n"
          << "Polling Station ID: " << PollingStationID << "\n"
-         << "Constituency ID: " << ConstituencyID << "\n"
          << "Timestamp: " << VoteTime << endl;
 }
 
@@ -97,7 +87,6 @@ json Vote::toJSON() const
         {"CandidateID", CandidateID},
         {"ElectionID", ElectionID},
         {"PollingStationID", PollingStationID},
-        {"ConstituencyID", ConstituencyID},
         {"VoteTime", VoteTime}};
 }
 
@@ -109,7 +98,6 @@ Vote Vote::fromJSON(const json &j)
         j.at("CandidateID").get<int>(),
         j.at("ElectionID").get<int>(),
         j.at("PollingStationID").get<int>(),
-        j.at("ConstituencyID").get<int>(),
         j.at("VoteTime").get<std::string>());
 }
 
@@ -271,7 +259,6 @@ void listAllVotes()
              << " | CandidateID: " << v.getCandidateID()
              << " | ElectionID: " << v.getElectionID()
              << " | PollingStationID:" << v.getPollingStationID()
-             << " | ConstituencyID: " << v.getConstituencyID()
              << " | Time: " << v.getTimestamp() << endl;
     }
 }

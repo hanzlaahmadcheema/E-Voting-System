@@ -11,7 +11,7 @@ class Voter
 {
 public:
     Voter();
-    Voter(int VoterID, const string &VoterName, const string &VoterCNIC, const string &VoterGender, int VoterAge, const string &VoterAddress, int PollingStationID, int ConstituencyID);
+    Voter(int VoterID, const string &VoterName, const string &VoterCNIC, const string &VoterGender, int VoterAge, const string &VoterAddress, int PollingStationID);
     void setVoterID(int VoterID);
     void setVoterName(const string &VoterName);
     void setVoterCNIC(const string &VoterCNIC);
@@ -19,7 +19,6 @@ public:
     void setVoterAge(int VoterAge);
     void setVoterAddress(const string &VoterAddress);
     void setPollingStationID(int PollingStationID);
-    void setConstituencyID(int ConstituencyID);
     int getVoterID() const;
     string getVoterName() const;
     string getVoterCNIC() const;
@@ -27,7 +26,6 @@ public:
     int getVoterAge() const;
     string getVoterAddress() const;
     int getPollingStationID() const;
-    int getConstituencyID() const;
 
     json toJSON() const;
     static Voter fromJSON(const json &j);
@@ -52,7 +50,6 @@ private:
     int VoterAge;
     string VoterAddress;
     int PollingStationID;
-    int ConstituencyID;
 };
 
 #endif
