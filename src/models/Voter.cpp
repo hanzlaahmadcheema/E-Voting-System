@@ -12,6 +12,9 @@ extern bool pollingStationExists(int id);
 extern bool constituencyExists(int id);
 extern void listAllStations();
 extern void listAllConstituencies();
+extern int getVoterIDByCNIC(const string &VoterCNIC);
+extern void deleteVotesByVoterID(int voterID);
+
 
 // Voter
 Voter::Voter() : VoterID(0), VoterName(""), VoterCNIC(""), VoterGender(""), VoterAge(0), VoterAddress(""), PollingStationID(0) {}
@@ -319,7 +322,6 @@ void editVoterByCNIC(const string &VoterCNIC, const Voter &updatedVoter)
     cout << "Voter updated successfully.\n";
 }
 
-// Admin: Delete voter by CNIC (with check)
 void deleteVoterByCNIC(const string &VoterCNIC)
 {
     if (!isValidCNIC(VoterCNIC))
@@ -329,11 +331,21 @@ void deleteVoterByCNIC(const string &VoterCNIC)
     }
     vector<Voter> voters = loadAllVoters();
     size_t before = voters.size();
+    int deletedVoterID = getVoterIDByCNIC(VoterCNIC);
+
+    // Remove the voter from the list
     auto it = remove_if(voters.begin(), voters.end(), [VoterCNIC](const Voter &v)
                         { return v.getVoterCNIC() == VoterCNIC; });
     voters.erase(it, voters.end());
+
+    // Delete votes associated with this voter
+    if (deletedVoterID != -1) {
+        deleteVotesByVoterID(deletedVoterID);
+    }
+
     saveAllVoters(voters);
     size_t after = voters.size();
+
     if (after < before)
     {
         cout << "Voter deleted successfully.\n";

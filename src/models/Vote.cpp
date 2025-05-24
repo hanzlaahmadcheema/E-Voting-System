@@ -10,6 +10,7 @@ using namespace std;
 
 extern int getNextID(const string &key);
 
+
 // Vote
 Vote::Vote() : VoteID(0), VoterID(0), CandidateID(0), ElectionID(0), PollingStationID(0), VoteTime("") {}
 Vote::Vote(int VoteID, int VoterID, int CandidateID, int ElectionID, int PollingStationID, const string &VoteTime)
@@ -231,6 +232,48 @@ bool castVote(const Vote &newVote)
     saveAllVotes(votes);
     cout << "Vote cast successfully.\n";
     return true;
+}
+
+void deleteVotesByVoterID(int VoterID){
+    vector<Vote> votes = loadAllVotes();
+    size_t before = votes.size();
+    auto it = remove_if(votes.begin(), votes.end(), [VoterID](const Vote &v)
+                        { return v.getVoterID() == VoterID; });
+    votes.erase(it, votes.end());
+    saveAllVotes(votes);
+    size_t after = votes.size();
+    if (after < before)
+        cout << "Votes deleted for Voter ID: " << VoterID << endl;
+    else
+        cout << "No votes found for Voter ID: " << VoterID << endl;
+}
+
+void deleteVotesByCandidateID(int CandidateID){
+    vector<Vote> votes = loadAllVotes();
+    size_t before = votes.size();
+    auto it = remove_if(votes.begin(), votes.end(), [CandidateID](const Vote &v)
+                        { return v.getCandidateID() == CandidateID; });
+    votes.erase(it, votes.end());
+    saveAllVotes(votes);
+    size_t after = votes.size();
+    if (after < before)
+        cout << "Votes deleted for Candidate ID: " << CandidateID << endl;
+    else
+        cout << "No votes found for Candidate ID: " << CandidateID << endl;
+}
+
+void deleteVotesByElectionID(int ElectionID){
+    vector<Vote> votes = loadAllVotes();
+    size_t before = votes.size();
+    auto it = remove_if(votes.begin(), votes.end(), [ElectionID](const Vote &v)
+                        { return v.getElectionID() == ElectionID; });
+    votes.erase(it, votes.end());
+    saveAllVotes(votes);
+    size_t after = votes.size();
+    if (after < before)
+        cout << "Votes deleted for Election ID: " << ElectionID << endl;
+    else
+        cout << "No votes found for Election ID: " << ElectionID << endl;
 }
 
 // Admin: View all votes

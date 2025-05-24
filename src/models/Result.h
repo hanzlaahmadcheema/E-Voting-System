@@ -3,6 +3,9 @@
 
 #include <string>
 #include "../../include/json.hpp"
+#include "Voter.h"
+#include "Vote.h"
+#include "Candidate.h"
 
 using namespace std;
 using json = nlohmann::json;
@@ -35,6 +38,7 @@ public:
     static void saveAllResults(const vector<Result> &results);
     static void computeConstituencyResult(int ElectionID, int ConstituencyID);
     static void viewResultByConstituency(int ElectionID, int ConstituencyID);
+    static void CleanOrphanedVotes(const std::vector<Vote>& votes, const std::vector<Voter>& voters, const std::vector<Candidate>& candidates);
     static void listAllResults();
     static void manageResults();
 

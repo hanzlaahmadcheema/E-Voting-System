@@ -18,6 +18,8 @@ extern bool constituencyExists(int id);
 extern vector<PollingStation> loadAllStations();
 extern int getPollingStationID();
 extern string getConstituencyTypeByID(int id);
+extern void deleteVotesByCandidateID(int CandidateID);
+
 
 Candidate::Candidate() : CandidateID(0), CandidateName(""), PartyID(0), ConstituencyID(0), ConstituencyType("") {}
 
@@ -241,6 +243,12 @@ void deleteCandidateByID(int CandidateID)
     auto it = remove_if(candidates.begin(), candidates.end(), [CandidateID](const Candidate &c)
                         { return c.getCandidateID() == CandidateID; });
     candidates.erase(it, candidates.end());
+
+        // Delete votes associated with this candidate
+    if (CandidateID != -1) {
+        deleteVotesByCandidateID(CandidateID);
+    }
+
     saveAllCandidates(candidates);
     if (candidates.size() < before)
         cout << "Candidate deleted.\n";
@@ -289,7 +297,7 @@ void viewCandidatesByConstituency(int constID)
 
 void viewCandidatesByStation(int PollingStationID)
 {
-    int constID;
+    int constID1, constID2;
     if (PollingStationID <= 0)
     {
         cerr << "Invalid Polling Station ID.\n";
@@ -302,16 +310,18 @@ void viewCandidatesByStation(int PollingStationID)
     {
         if (p.getPollingStationID() == PollingStationID)
         {
-            constID = p.getConstituencyID();
+            constID1 = p.getConstituencyIDNA();
+            constID2 = p.getConstituencyIDPA();
         }
     }
     for (const auto &c : candidates)
     {
-        if (c.getConstituencyID() == constID)
+        if (c.getConstituencyID() == constID1 || c.getConstituencyID() == constID2)
         {
             cout << c.getCandidateID() << " - " << c.getCandidateName() << " (PartyID: " << c.getPartyID() << ")" << endl;
             found = true;
         }
+
     }
     if (!found)
     {

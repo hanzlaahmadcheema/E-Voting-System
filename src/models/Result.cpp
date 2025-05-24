@@ -1,11 +1,14 @@
 #include "Result.h"
 #include "Vote.h"
+#include "Voter.h"
+#include "Candidate.h"
 #include "../core/Universal.h"
 #include <iostream>
 #include <fstream>
 #include <vector>
 #include <string>
 #include <unordered_map>
+#include <set>
 using namespace std;
 
 vector<Vote> loadAllVotes();
@@ -157,13 +160,13 @@ vector<Result> loadAllResults()
             {
                 results.push_back(Result::fromJSON(obj));
             }
-            catch (const std::exception &e)
+            catch (const exception &e)
             {
                 cerr << "Warning: Skipping invalid result entry: " << e.what() << endl;
             }
         }
     }
-    catch (const std::exception &e)
+    catch (const exception &e)
     {
         cerr << "Error: Failed to parse results file: " << e.what() << endl;
     }
@@ -186,7 +189,7 @@ void saveAllResults(const vector<Result> &results)
         {
             j.push_back(r.toJSON());
         }
-        catch (const std::exception &e)
+        catch (const exception &e)
         {
             cerr << "Warning: Could not serialize result: " << e.what() << endl;
         }
@@ -295,6 +298,20 @@ void viewResultByConstituency(int ElectionID, int ConstituencyID)
         }
     }
     cout << "No result found for this constituency.\n";
+}
+
+void CleanOrphanedVotes(vector<Vote>& votes, const vector<Voter>& voters, const vector<Candidate>& candidates) {
+    set<int> validVoterIDs, validCandidateIDs;
+    for (const auto& v : voters) validVoterIDs.insert(v.getVoterID());
+    for (const auto& c : candidates) validCandidateIDs.insert(c.getCandidateID());
+
+    for (auto it = votes.begin(); it != votes.end(); ) {
+        if (validVoterIDs.count(it->getVoterID()) == 0 || validCandidateIDs.count(it->getCandidateID()) == 0) {
+            it = votes.erase(it);
+        } else {
+            ++it;
+        }
+    }
 }
 
 // Admin/User: List all results

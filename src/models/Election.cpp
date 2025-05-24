@@ -8,6 +8,7 @@
 using namespace std;
 
 extern int getNextID(const string &key);
+void deleteVotesByElectionID(int ElectionID);
 
 // Election
 Election::Election() : ElectionID(0), ElectionName(""), ElectionType(""), ElectionDate("") {}
@@ -250,6 +251,7 @@ void deleteElection(int ElectionID)
         return;
     }
     list.erase(it, list.end());
+    deleteVotesByElectionID(ElectionID);
     saveAllElections(list);
     cout << "Election deleted.\n";
 }

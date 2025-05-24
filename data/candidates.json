@@ -1,12 +1,5 @@
 [
     {
-        "CandidateID": 4,
-        "CandidateName": "Asim",
-        "ConstituencyID": 1,
-        "ConstituencyType": "NA",
-        "PartyID": 1
-    },
-    {
         "CandidateID": 5,
         "CandidateName": "Muneer",
         "ConstituencyID": 10,

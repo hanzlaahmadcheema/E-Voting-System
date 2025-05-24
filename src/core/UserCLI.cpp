@@ -46,8 +46,8 @@ Voter* voterLogin() {
 void showUserMenu(Voter* voter) {
     int choice;
     PollingStation ps = getPollingStationByID(voter->getPollingStationID());
-    int c1 = ps.getConstituencyID1();
-    int c2 = ps.getConstituencyID2();
+    int c1 = ps.getConstituencyIDNA();
+    int c2 = ps.getConstituencyIDPA();
     while (true) {
         cout << "\n Voter Menu\n";
         cout << "1. View Candidates\n";

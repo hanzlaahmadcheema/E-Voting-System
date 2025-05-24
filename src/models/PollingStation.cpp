@@ -11,14 +11,14 @@ extern bool constituencyExists(int id);
 extern void listAllConstituencies();
 
 // PollingStation
-PollingStation::PollingStation() : PollingStationID(0), PollingStationName(""), PollingStationAddress(""), ConstituencyID1(0), ConstituencyID2(0) {}
-PollingStation::PollingStation(int PollingStationID, const string &PollingStationName, const string &PollingStationAddress, int ConstituencyID1, int ConstituencyID2)
+PollingStation::PollingStation() : PollingStationID(0), PollingStationName(""), PollingStationAddress(""), ConstituencyIDNA(0), ConstituencyIDPA(0) {}
+PollingStation::PollingStation(int PollingStationID, const string &PollingStationName, const string &PollingStationAddress, int ConstituencyIDNA, int ConstituencyIDPA)
 {
     this->PollingStationID = PollingStationID;
     this->PollingStationName = PollingStationName;
     this->PollingStationAddress = PollingStationAddress;
-    this->ConstituencyID1 = ConstituencyID1;
-    this->ConstituencyID2 = ConstituencyID2;
+    this->ConstituencyIDNA = ConstituencyIDNA;
+    this->ConstituencyIDPA = ConstituencyIDPA;
 }
 void PollingStation::setPollingStationID(int PollingStationID)
 {
@@ -32,13 +32,13 @@ void PollingStation::setPollingStationAddress(const string &PollingStationAddres
 {
     this->PollingStationAddress = PollingStationAddress;
 }
-void PollingStation::setConstituencyID1(int ConstituencyID1)
+void PollingStation::setConstituencyIDNA(int ConstituencyIDNA)
 {
-    this->ConstituencyID1 = ConstituencyID1;
+    this->ConstituencyIDNA = ConstituencyIDNA;
 }
-void PollingStation::setConstituencyID2(int ConstituencyID2)
+void PollingStation::setConstituencyIDPA(int ConstituencyIDPA)
 {
-    this->ConstituencyID2 = ConstituencyID2;
+    this->ConstituencyIDPA = ConstituencyIDPA;
 }
 int PollingStation::getPollingStationID() const
 {
@@ -52,21 +52,21 @@ string PollingStation::getPollingStationAddress() const
 {
     return PollingStationAddress;
 }
-int PollingStation::getConstituencyID1() const
+int PollingStation::getConstituencyIDNA() const
 {
-    return ConstituencyID1;
+    return ConstituencyIDNA;
 }
-int PollingStation::getConstituencyID2() const
+int PollingStation::getConstituencyIDPA() const
 {
-    return ConstituencyID2;
+    return ConstituencyIDPA;
 }
 void PollingStation::displayPollingStationInfo() const
 {
     cout << "Polling Station ID: " << PollingStationID << "\n"
          << "Name: " << PollingStationName << "\n"
          << "Address: " << PollingStationAddress << "\n"
-         << "Constituency ID2: " << ConstituencyID1 << "\n"
-         << "Constituency ID1: " << ConstituencyID2 << endl;
+         << "Constituency ID2: " << ConstituencyIDNA << "\n"
+         << "Constituency ID1: " << ConstituencyIDPA << endl;
 }
 
 json PollingStation::toJSON() const
@@ -75,8 +75,8 @@ json PollingStation::toJSON() const
         {"PollingStationID", PollingStationID},
         {"PollingStationName", PollingStationName},
         {"PollingStationAddress", PollingStationAddress},
-        {"ConstituencyID1", ConstituencyID1},
-        {"ConstituencyID2", ConstituencyID2}};
+        {"ConstituencyIDNA", ConstituencyIDNA},
+        {"ConstituencyIDPA", ConstituencyIDPA}};
 }
 
 PollingStation PollingStation::fromJSON(const json &j)
@@ -85,8 +85,8 @@ PollingStation PollingStation::fromJSON(const json &j)
         j.at("PollingStationID").get<int>(),
         j.at("PollingStationName").get<std::string>(),
         j.at("PollingStationAddress").get<std::string>(),
-        j.at("ConstituencyID1").get<int>(),
-        j.at("ConstituencyID2").get<int>());
+        j.at("ConstituencyIDNA").get<int>(),
+        j.at("ConstituencyIDPA").get<int>());
 }
 
 const string STATION_FILE = "data/polling_stations.json";
@@ -171,12 +171,12 @@ void addPollingStation(const PollingStation &s)
         cout << "Polling Station address cannot be empty.\n";
         return;
     }
-    if (s.getConstituencyID1() <= 0)
+    if (s.getConstituencyIDNA() <= 0)
     {
         cout << "Invalid Constituency ID.\n";
         return;
     }
-    if (s.getConstituencyID2() <= 0)
+    if (s.getConstituencyIDPA() <= 0)
     {
         cout << "Invalid Constituency ID.\n";
         return;
@@ -267,13 +267,13 @@ void listStationsByConstituency(int constID)
     bool found = false;
     for (const auto &s : list)
     {
-        if (s.getConstituencyID1() == constID)
+        if (s.getConstituencyIDNA() == constID)
         {
             cout << s.getPollingStationID() << " - " << s.getPollingStationName()
                  << " (" << s.getPollingStationAddress() << ")" << endl;
             found = true;
         }
-                if (s.getConstituencyID2() == constID)
+                if (s.getConstituencyIDPA() == constID)
         {
             cout << s.getPollingStationID() << " - " << s.getPollingStationName()
                  << " (" << s.getPollingStationAddress() << ")" << endl;
@@ -322,7 +322,7 @@ void managePollingStations() {
         cin >> choice;
 
         if (choice == 1) {
-            int ConstituencyID1, ConstituencyID2;
+            int ConstituencyIDNA, ConstituencyIDPA;
             string name, address;
             cin.ignore();
             cout << "Enter Station Name: "; getline(cin, name);
@@ -336,17 +336,17 @@ void managePollingStations() {
                 continue;
             }
             listAllConstituencies();
-            cout << "Enter Constituency ID: "; cin >> ConstituencyID1;
-            if (!constituencyExists(ConstituencyID1)) {
+            cout << "Enter Constituency ID: "; cin >> ConstituencyIDNA;
+            if (!constituencyExists(ConstituencyIDNA)) {
                 cout << "Invalid Constituency ID.\n";
                 continue;
             }
-            cout << "Enter Constituency ID: "; cin >> ConstituencyID2;
-            if (!constituencyExists(ConstituencyID2)) {
+            cout << "Enter Constituency ID: "; cin >> ConstituencyIDPA;
+            if (!constituencyExists(ConstituencyIDPA)) {
                 cout << "Invalid Constituency ID.\n";
                 continue;
             }
-            PollingStation ps(getNextID("PollingStationID"), name, address, ConstituencyID1, ConstituencyID2);
+            PollingStation ps(getNextID("PollingStationID"), name, address, ConstituencyIDNA, ConstituencyIDPA);
             addPollingStation(ps);
         } else if (choice == 2) {
             listAllStations();
