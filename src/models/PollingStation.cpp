@@ -11,13 +11,14 @@ extern bool constituencyExists(int id);
 extern void listAllConstituencies();
 
 // PollingStation
-PollingStation::PollingStation() : PollingStationID(0), PollingStationName(""), PollingStationAddress(""), ConstituencyID(0) {}
-PollingStation::PollingStation(int PollingStationID, const string &PollingStationName, const string &PollingStationAddress, int ConstituencyID)
+PollingStation::PollingStation() : PollingStationID(0), PollingStationName(""), PollingStationAddress(""), ConstituencyID1(0), ConstituencyID2(0) {}
+PollingStation::PollingStation(int PollingStationID, const string &PollingStationName, const string &PollingStationAddress, int ConstituencyID1, int ConstituencyID2)
 {
     this->PollingStationID = PollingStationID;
     this->PollingStationName = PollingStationName;
     this->PollingStationAddress = PollingStationAddress;
-    this->ConstituencyID = ConstituencyID;
+    this->ConstituencyID1 = ConstituencyID1;
+    this->ConstituencyID2 = ConstituencyID2;
 }
 void PollingStation::setPollingStationID(int PollingStationID)
 {
@@ -31,9 +32,13 @@ void PollingStation::setPollingStationAddress(const string &PollingStationAddres
 {
     this->PollingStationAddress = PollingStationAddress;
 }
-void PollingStation::setConstituencyID(int ConstituencyID)
+void PollingStation::setConstituencyID1(int ConstituencyID1)
 {
-    this->ConstituencyID = ConstituencyID;
+    this->ConstituencyID1 = ConstituencyID1;
+}
+void PollingStation::setConstituencyID2(int ConstituencyID2)
+{
+    this->ConstituencyID2 = ConstituencyID2;
 }
 int PollingStation::getPollingStationID() const
 {
@@ -47,16 +52,21 @@ string PollingStation::getPollingStationAddress() const
 {
     return PollingStationAddress;
 }
-int PollingStation::getConstituencyID() const
+int PollingStation::getConstituencyID1() const
 {
-    return ConstituencyID;
+    return ConstituencyID1;
+}
+int PollingStation::getConstituencyID2() const
+{
+    return ConstituencyID2;
 }
 void PollingStation::displayPollingStationInfo() const
 {
     cout << "Polling Station ID: " << PollingStationID << "\n"
          << "Name: " << PollingStationName << "\n"
          << "Address: " << PollingStationAddress << "\n"
-         << "Constituency ID: " << ConstituencyID << endl;
+         << "Constituency ID2: " << ConstituencyID1 << "\n"
+         << "Constituency ID1: " << ConstituencyID2 << endl;
 }
 
 json PollingStation::toJSON() const
@@ -65,7 +75,8 @@ json PollingStation::toJSON() const
         {"PollingStationID", PollingStationID},
         {"PollingStationName", PollingStationName},
         {"PollingStationAddress", PollingStationAddress},
-        {"ConstituencyID", ConstituencyID}};
+        {"ConstituencyID1", ConstituencyID1},
+        {"ConstituencyID2", ConstituencyID2}};
 }
 
 PollingStation PollingStation::fromJSON(const json &j)
@@ -74,7 +85,8 @@ PollingStation PollingStation::fromJSON(const json &j)
         j.at("PollingStationID").get<int>(),
         j.at("PollingStationName").get<std::string>(),
         j.at("PollingStationAddress").get<std::string>(),
-        j.at("ConstituencyID").get<int>());
+        j.at("ConstituencyID1").get<int>(),
+        j.at("ConstituencyID2").get<int>());
 }
 
 const string STATION_FILE = "data/polling_stations.json";
@@ -159,12 +171,16 @@ void addPollingStation(const PollingStation &s)
         cout << "Polling Station address cannot be empty.\n";
         return;
     }
-    if (s.getConstituencyID() <= 0)
+    if (s.getConstituencyID1() <= 0)
     {
         cout << "Invalid Constituency ID.\n";
         return;
     }
-
+    if (s.getConstituencyID2() <= 0)
+    {
+        cout << "Invalid Constituency ID.\n";
+        return;
+    }
     list.push_back(s);
     saveAllStations(list);
     cout << "Polling station added.\n";
@@ -232,6 +248,13 @@ void deletePollingStation(int id)
     cout << "Polling station deleted.\n";
 }
 
+PollingStation getPollingStationByID(int id) {
+    vector<PollingStation> list = loadAllStations();
+    for (const auto& s : list) {
+        if (s.getPollingStationID() == id) return s;
+    }
+    return PollingStation();
+}
 // Admin/User: View all stations by constituency
 void listStationsByConstituency(int constID)
 {
@@ -244,7 +267,13 @@ void listStationsByConstituency(int constID)
     bool found = false;
     for (const auto &s : list)
     {
-        if (s.getConstituencyID() == constID)
+        if (s.getConstituencyID1() == constID)
+        {
+            cout << s.getPollingStationID() << " - " << s.getPollingStationName()
+                 << " (" << s.getPollingStationAddress() << ")" << endl;
+            found = true;
+        }
+                if (s.getConstituencyID2() == constID)
         {
             cout << s.getPollingStationID() << " - " << s.getPollingStationName()
                  << " (" << s.getPollingStationAddress() << ")" << endl;
@@ -293,7 +322,7 @@ void managePollingStations() {
         cin >> choice;
 
         if (choice == 1) {
-            int ConstituencyID;
+            int ConstituencyID1, ConstituencyID2;
             string name, address;
             cin.ignore();
             cout << "Enter Station Name: "; getline(cin, name);
@@ -307,12 +336,17 @@ void managePollingStations() {
                 continue;
             }
             listAllConstituencies();
-            cout << "Enter Constituency ID: "; cin >> ConstituencyID;
-            if (!constituencyExists(ConstituencyID)) {
+            cout << "Enter Constituency ID: "; cin >> ConstituencyID1;
+            if (!constituencyExists(ConstituencyID1)) {
                 cout << "Invalid Constituency ID.\n";
                 continue;
             }
-            PollingStation ps(getNextID("PollingStationID"), name, address, ConstituencyID);
+            cout << "Enter Constituency ID: "; cin >> ConstituencyID2;
+            if (!constituencyExists(ConstituencyID2)) {
+                cout << "Invalid Constituency ID.\n";
+                continue;
+            }
+            PollingStation ps(getNextID("PollingStationID"), name, address, ConstituencyID1, ConstituencyID2);
             addPollingStation(ps);
         } else if (choice == 2) {
             listAllStations();

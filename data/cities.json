@@ -3,5 +3,10 @@
         "CityID": 1,
         "CityName": "Lahore",
         "ProvinceName": "Punjab"
+    },
+    {
+        "CityID": 2,
+        "CityName": "Karaci",
+        "ProvinceName": "Sindh"
     }
 ]

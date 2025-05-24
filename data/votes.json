@@ -6,5 +6,45 @@
         "VoteID": 1,
         "VoteTime": "2025-05-21 23:31:40",
         "VoterID": 1
+    },
+    {
+        "CandidateID": 7,
+        "ElectionID": 2,
+        "PollingStationID": 1,
+        "VoteID": 2,
+        "VoteTime": "2025-05-24 01:21:53",
+        "VoterID": 1
+    },
+    {
+        "CandidateID": 4,
+        "ElectionID": 1,
+        "PollingStationID": 2,
+        "VoteID": 3,
+        "VoteTime": "2025-05-24 01:29:40",
+        "VoterID": 2
+    },
+    {
+        "CandidateID": 7,
+        "ElectionID": 2,
+        "PollingStationID": 2,
+        "VoteID": 4,
+        "VoteTime": "2025-05-24 01:29:48",
+        "VoterID": 2
+    },
+    {
+        "CandidateID": 7,
+        "ElectionID": 3,
+        "PollingStationID": 1,
+        "VoteID": 5,
+        "VoteTime": "2025-05-24 13:18:51",
+        "VoterID": 3
+    },
+    {
+        "CandidateID": 8,
+        "ElectionID": 1,
+        "PollingStationID": 1,
+        "VoteID": 6,
+        "VoteTime": "2025-05-24 13:18:57",
+        "VoterID": 3
     }
 ]

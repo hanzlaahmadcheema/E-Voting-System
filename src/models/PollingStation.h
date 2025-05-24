@@ -11,16 +11,18 @@ class PollingStation
 {
 public:
     PollingStation();
-    PollingStation(int PollingStationID, const string &PollingStationName, const string &PollingStationAddress, int ConstituencyID);
+    PollingStation(int PollingStationID, const string &PollingStationName, const string &PollingStationAddress, int ConstituencyID1, int ConstituencyID12);
 
     void setPollingStationID(int PollingStationID);
     void setPollingStationName(const string &PollingStationName);
     void setPollingStationAddress(const string &PollingStationAddress);
-    void setConstituencyID(int ConstituencyID);
+    void setConstituencyID1(int ConstituencyID1);
+    void setConstituencyID2(int ConstituencyID2);
     int getPollingStationID() const;
     string getPollingStationName() const;
     string getPollingStationAddress() const;
-    int getConstituencyID() const;
+    int getConstituencyID1() const;
+    int getConstituencyID2() const;
     void displayPollingStationInfo() const;
 
     json toJSON() const;
@@ -40,7 +42,8 @@ private:
     int PollingStationID;
     string PollingStationName;
     string PollingStationAddress;
-    int ConstituencyID;
+    int ConstituencyID1;
+    int ConstituencyID2;
 };
 
 #endif

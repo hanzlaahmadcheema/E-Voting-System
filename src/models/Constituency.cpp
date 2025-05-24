@@ -301,6 +301,16 @@ string getConstituencyTypeByID(int id) {
     return "";
 }
 
+int getElectionIDByConstituencyID(int id) {
+    vector<Constituency> list = loadAllConstituencies();
+    for (const auto& c : list) {
+        if (c.getConstituencyID() == id) {
+            return c.getElectionID();
+        }
+    }
+    return -1; // Not found
+}
+
 void manageConstituencies() {
     int choice;
     vector<Constituency> list = loadAllConstituencies();

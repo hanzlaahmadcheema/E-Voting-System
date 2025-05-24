@@ -8,5 +8,10 @@
         "PartyID": 2,
         "PartyName": "PMLN",
         "PartySymbol": "Lion"
+    },
+    {
+        "PartyID": 3,
+        "PartyName": "PPP",
+        "PartySymbol": "Arrow"
     }
 ]

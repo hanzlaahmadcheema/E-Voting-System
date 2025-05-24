@@ -10,5 +10,11 @@
         "ElectionID": 2,
         "ElectionName": "Provincial Assembly",
         "ElectionType": "PP"
+    },
+    {
+        "ElectionDate": "2025-09-33",
+        "ElectionID": 3,
+        "ElectionName": "New",
+        "ElectionType": "PS"
     }
 ]

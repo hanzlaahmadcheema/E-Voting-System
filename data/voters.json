@@ -7,5 +7,32 @@
         "VoterGender": "Male",
         "VoterID": 1,
         "VoterName": "Hanzla Ahmad"
+    },
+    {
+        "PollingStationID": 2,
+        "VoterAddress": "Baqoot",
+        "VoterAge": 19,
+        "VoterCNIC": "1234567890123",
+        "VoterGender": "Male",
+        "VoterID": 2,
+        "VoterName": "Ne"
+    },
+    {
+        "PollingStationID": 1,
+        "VoterAddress": "sindh",
+        "VoterAge": 19,
+        "VoterCNIC": "1111111111111",
+        "VoterGender": "male",
+        "VoterID": 3,
+        "VoterName": "Sindh"
+    },
+    {
+        "PollingStationID": 3,
+        "VoterAddress": "chichawatni",
+        "VoterAge": 29,
+        "VoterCNIC": "1234512345123",
+        "VoterGender": "male",
+        "VoterID": 5,
+        "VoterName": "Wali"
     }
 ]
