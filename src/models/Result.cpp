@@ -2,6 +2,7 @@
 #include "Vote.h"
 #include "Voter.h"
 #include "Candidate.h"
+#include "PollingStation.h"
 #include "../core/Universal.h"
 #include <iostream>
 #include <fstream>
@@ -11,8 +12,10 @@
 #include <set>
 using namespace std;
 
-vector<Vote> loadAllVotes();
+extern vector<Vote> loadAllVotes();
 extern int getNextID(const string &key);
+extern string getConstituencyTypeByID(int id);
+extern vector<PollingStation> loadAllStations();
 
 // Result
 Result::Result() : ResultID(0), PollingStationID(0), ElectionID(0), WinnerCandidateID(0), TotalVotes(0), ConstituencyID(0) {}
@@ -198,33 +201,51 @@ void saveAllResults(const vector<Result> &results)
 }
 
 // Admin: Compute results for a constituency in an election
-void computeConstituencyResult(int ElectionID, int ConstituencyID)
+void computeConstituencyResult(int ElectionID, int ConstituencyID, const string& constituencyCode)
 {
-    if (ElectionID <= 0 || ConstituencyID <= 0)
+    if (ElectionID <= 0 || ConstituencyID <= 0 || constituencyCode.empty())
     {
-        cerr << "Error: Invalid ElectionID or ConstituencyID." << endl;
+        cerr << "Error: Invalid ElectionID, ConstituencyID, or constituencyCode." << endl;
         return;
     }
+
+    // Determine constituency type from code
+    string constituencyType;
+    if (constituencyCode.rfind("NA", 0) == 0) {
+        constituencyType = "NA";
+    } else if (constituencyCode.rfind("P", 0) == 0) {
+        constituencyType = "PA";
+    } else {
+        cerr << "Error: Unknown constituency code format." << endl;
+        return;
+    }
+
+    vector<PollingStation> stations = loadAllStations();
+    set<int> relevantStationIDs;
+    for (const auto& ps : stations) {
+        if ((constituencyType == "NA" && ps.getConstituencyIDNA() == ConstituencyID) ||
+            (constituencyType == "PA" && ps.getConstituencyIDPA() == ConstituencyID)) {
+            relevantStationIDs.insert(ps.getPollingStationID());
+        }
+    }
+    if (relevantStationIDs.empty()) {
+        cerr << "Error: No polling stations found for this constituency." << endl;
+        return;
+    }
+
     vector<Vote> votes = loadAllVotes();
-    if (votes.empty())
-    {
-        cerr << "Error: No votes found." << endl;
-        return;
-    }
     unordered_map<int, int> voteCounts; // CandidateID -> Vote count
 
-    // for (const auto &vote : votes)
-    // {
-    //     if (vote.getElectionID() == ElectionID && vote.getConstituencyID() == ConstituencyID)
-    //     {
-    //         int CandidateID = vote.getCandidateID();
-    //         if (CandidateID > 0)
-    //             voteCounts[CandidateID]++;
-    //     }
-    // }
+    for (const auto& vote : votes) {
+        if (vote.getElectionID() == ElectionID &&
+            relevantStationIDs.count(vote.getPollingStationID()) > 0) {
+            int CandidateID = vote.getCandidateID();
+            if (CandidateID > 0)
+                voteCounts[CandidateID]++;
+        }
+    }
 
-    if (voteCounts.empty())
-    {
+    if (voteCounts.empty()) {
         cerr << "Error: No votes found for this election and constituency." << endl;
         return;
     }
@@ -233,43 +254,36 @@ void computeConstituencyResult(int ElectionID, int ConstituencyID)
     int maxVotes = 0;
     int winnerCandidateID = -1;
     bool tie = false;
-    for (const auto &pair : voteCounts)
-    {
-        if (pair.second > maxVotes)
-        {
+    for (const auto& pair : voteCounts) {
+        if (pair.second > maxVotes) {
             maxVotes = pair.second;
             winnerCandidateID = pair.first;
             tie = false;
-        }
-        else if (pair.second == maxVotes)
-        {
+        } else if (pair.second == maxVotes) {
             tie = true;
         }
     }
 
-    if (tie)
-    {
+    if (tie) {
         cerr << "Warning: There is a tie between candidates for this constituency." << endl;
         // Optionally, handle tie-break logic here.
     }
 
     // Check for duplicate result
     vector<Result> allResults = loadAllResults();
-    for (const auto &r : allResults)
-    {
-        if (r.getElectionID() == ElectionID && r.getConstituencyID() == ConstituencyID)
-        {
+    for (const auto& r : allResults) {
+        if (r.getElectionID() == ElectionID && r.getConstituencyID() == ConstituencyID) {
             cerr << "Error: Result for this election and constituency already exists." << endl;
             return;
         }
     }
 
-    // Save result
-    Result result(0, ConstituencyID, ElectionID, winnerCandidateID, maxVotes, ConstituencyID);
+    // Save result (PollingStationID can be set to 0 or any representative value)
+    Result result(0, 0, ElectionID, winnerCandidateID, maxVotes, ConstituencyID);
     allResults.push_back(result);
     saveAllResults(allResults);
 
-    cout << "Result computed for Constituency " << ConstituencyID
+    cout << "Result computed for " << constituencyType << " Constituency " << ConstituencyID
          << " | Winner CandidateID: " << winnerCandidateID
          << " with " << maxVotes << " votes.\n";
 }
@@ -345,11 +359,12 @@ void manageResults() {
 
         if (choice == 1) {
             int ElectionID, constID;
+            string ConstituencyType;
             cout << "Enter Election ID: ";
             cin >> ElectionID;
             cout << "Enter Constituency ID: ";
             cin >> constID;
-            computeConstituencyResult(ElectionID, constID);
+            computeConstituencyResult(ElectionID, constID, getConstituencyTypeByID(constID));
         } else if (choice == 2) {
             int ElectionID, constID;
             cout << "Enter Election ID: ";

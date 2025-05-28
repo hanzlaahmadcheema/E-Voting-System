@@ -9,6 +9,8 @@ using namespace std;
 extern int getNextID(const string& key);
 extern bool constituencyExists(int id);
 extern void listAllConstituencies();
+extern void listCitiesByProvince(const string &province);
+extern void listConstituenciesByCity(int cityID);
 
 // PollingStation
 PollingStation::PollingStation() : PollingStationID(0), PollingStationName(""), PollingStationAddress(""), ConstituencyIDNA(0), ConstituencyIDPA(0) {}
@@ -322,8 +324,32 @@ void managePollingStations() {
         cin >> choice;
 
         if (choice == 1) {
-            int ConstituencyIDNA, ConstituencyIDPA;
+            int choice, cityChoice, ConstituencyIDNA, ConstituencyIDPA;
             string name, address;
+            cin.ignore();
+
+            cout << "Select Province: " << endl;
+            cout << "1. Punjab\n" 
+                    "2. KPK\n" 
+                    "3. Sindh\n"
+                    "4. Balochistan" << endl;
+            cin >> choice;
+            if (choice < 1 || choice > 4) {
+                cout << "Invalid province choice.\n";
+                continue;
+            }
+            cin.ignore();
+            if (choice == 1) {
+                listCitiesByProvince("Punjab");
+            } else if (choice == 2) {
+                listCitiesByProvince("KPK");
+            } else if (choice == 3) {
+                listCitiesByProvince("Sindh");
+            } else if (choice == 4) {
+                listCitiesByProvince("Balochistan");
+            }
+            cout << "Select City:";
+            cin >> cityChoice;
             cin.ignore();
             cout << "Enter Station Name: "; getline(cin, name);
             if (!isValidPollingStationName(name)) {
@@ -335,13 +361,13 @@ void managePollingStations() {
                 cout << "Invalid Polling Station Address.\n";
                 continue;
             }
-            listAllConstituencies();
-            cout << "Enter Constituency ID: "; cin >> ConstituencyIDNA;
+            listConstituenciesByCity(cityChoice);
+            cout << "Enter Constituency ID for National Assembly: "; cin >> ConstituencyIDNA;
             if (!constituencyExists(ConstituencyIDNA)) {
                 cout << "Invalid Constituency ID.\n";
                 continue;
             }
-            cout << "Enter Constituency ID: "; cin >> ConstituencyIDPA;
+            cout << "Enter Constituency ID for Provincial Assembly: "; cin >> ConstituencyIDPA;
             if (!constituencyExists(ConstituencyIDPA)) {
                 cout << "Invalid Constituency ID.\n";
                 continue;

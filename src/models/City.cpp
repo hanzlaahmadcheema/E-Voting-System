@@ -236,7 +236,6 @@ void deleteCityByID(int cityID)
 }
 
 // Admin/User: View all cities
-
 void listCitiesByProvince(const string &province)
 {
     vector<City> cities = loadAllCities();

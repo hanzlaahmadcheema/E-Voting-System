@@ -1,10 +1,7 @@
 {
-    "CandidateID": 8,
-    "CityID": 2,
-    "ConstituencyID": 11,
-    "ElectionID": 3,
-    "PartyID": 3,
-    "PollingStationID": 4,
-    "VoteID": 6,
-    "VoterID": 5
+    "CityID": 8,
+    "ConstituencyID": 30,
+    "ElectionID": 5,
+    "PartyID": 4,
+    "PollingStationID": 27
 }

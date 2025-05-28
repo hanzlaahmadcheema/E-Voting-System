@@ -1,14 +1,32 @@
 [
     {
-        "ElectionDate": "2025-02-12",
+        "ElectionDate": "2025-06-23",
         "ElectionID": 1,
         "ElectionName": "National Assembly",
         "ElectionType": "NA"
     },
     {
-        "ElectionDate": "2025-09-33",
+        "ElectionDate": "2025-06-23",
+        "ElectionID": 2,
+        "ElectionName": "Punjab Assembly",
+        "ElectionType": "PP"
+    },
+    {
+        "ElectionDate": "2025-06-23",
         "ElectionID": 3,
-        "ElectionName": "New",
+        "ElectionName": "Sindh Assembly",
         "ElectionType": "PS"
+    },
+    {
+        "ElectionDate": "2025-06-23",
+        "ElectionID": 4,
+        "ElectionName": "KPK Assembly",
+        "ElectionType": "PK"
+    },
+    {
+        "ElectionDate": "2025-06-23",
+        "ElectionID": 5,
+        "ElectionName": "Balochistan Assembly",
+        "ElectionType": "PB"
     }
 ]

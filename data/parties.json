@@ -13,5 +13,10 @@
         "PartyID": 3,
         "PartyName": "PPP",
         "PartySymbol": "Arrow"
+    },
+    {
+        "PartyID": 4,
+        "PartyName": "Jamat-e-Islami",
+        "PartySymbol": "Scale"
     }
 ]

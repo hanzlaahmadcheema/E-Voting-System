@@ -1,26 +1,184 @@
 [
     {
-        "ConstituencyID": 1,
-        "PollingStationAddress": "Wapda Town",
-        "PollingStationID": 1,
-        "PollingStationName": "Model School"
-    },
-    {
-        "ConstituencyID": 9,
-        "PollingStationAddress": "Wapda Town",
+        "ConstituencyIDNA": 1,
+        "ConstituencyIDPA": 15,
+        "PollingStationAddress": "Lahore 1",
         "PollingStationID": 2,
-        "PollingStationName": "Model School"
+        "PollingStationName": "Lahore 1"
     },
     {
-        "ConstituencyID": 10,
-        "PollingStationAddress": "Lahore",
+        "ConstituencyIDNA": 1,
+        "ConstituencyIDPA": 15,
+        "PollingStationAddress": "Lahore 2",
         "PollingStationID": 3,
-        "PollingStationName": "Model"
+        "PollingStationName": "Lahore 2"
     },
     {
-        "ConstituencyID": 11,
-        "PollingStationAddress": "sindh",
+        "ConstituencyIDNA": 2,
+        "ConstituencyIDPA": 16,
+        "PollingStationAddress": "Lahore 3",
         "PollingStationID": 4,
-        "PollingStationName": "Sindh"
+        "PollingStationName": "Lahore 3"
+    },
+    {
+        "ConstituencyIDNA": 2,
+        "ConstituencyIDPA": 16,
+        "PollingStationAddress": "Lahore 4",
+        "PollingStationID": 5,
+        "PollingStationName": "Lahore 4"
+    },
+    {
+        "ConstituencyIDNA": 3,
+        "ConstituencyIDPA": 17,
+        "PollingStationAddress": "Chichawatni 1",
+        "PollingStationID": 6,
+        "PollingStationName": "Chichawatni 1"
+    },
+    {
+        "ConstituencyIDNA": 3,
+        "ConstituencyIDPA": 17,
+        "PollingStationAddress": "Chichawatni",
+        "PollingStationID": 7,
+        "PollingStationName": "Chichawatni"
+    },
+    {
+        "ConstituencyIDNA": 10,
+        "ConstituencyIDPA": 24,
+        "PollingStationAddress": "Peshawar 1",
+        "PollingStationID": 8,
+        "PollingStationName": "Peshawar 1"
+    },
+    {
+        "ConstituencyIDNA": 10,
+        "ConstituencyIDPA": 24,
+        "PollingStationAddress": "Peshawar 2",
+        "PollingStationID": 9,
+        "PollingStationName": "Peshawar 2"
+    },
+    {
+        "ConstituencyIDNA": 11,
+        "ConstituencyIDPA": 25,
+        "PollingStationAddress": "Peshawar 3",
+        "PollingStationID": 10,
+        "PollingStationName": "Peshawar 3"
+    },
+    {
+        "ConstituencyIDNA": 11,
+        "ConstituencyIDPA": 25,
+        "PollingStationAddress": "Peshawar 4",
+        "PollingStationID": 11,
+        "PollingStationName": "Peshawar 4"
+    },
+    {
+        "ConstituencyIDNA": 12,
+        "ConstituencyIDPA": 26,
+        "PollingStationAddress": "Mardan 1",
+        "PollingStationID": 12,
+        "PollingStationName": "Mardan 1"
+    },
+    {
+        "ConstituencyIDNA": 12,
+        "ConstituencyIDPA": 27,
+        "PollingStationAddress": "Mardan 2",
+        "PollingStationID": 13,
+        "PollingStationName": "Mardan 2"
+    },
+    {
+        "ConstituencyIDNA": 5,
+        "ConstituencyIDPA": 18,
+        "PollingStationAddress": "Karachi 1",
+        "PollingStationID": 14,
+        "PollingStationName": "Karachi 1"
+    },
+    {
+        "ConstituencyIDNA": 5,
+        "ConstituencyIDPA": 18,
+        "PollingStationAddress": "Karachi 2",
+        "PollingStationID": 15,
+        "PollingStationName": "Karachi 2"
+    },
+    {
+        "ConstituencyIDNA": 6,
+        "ConstituencyIDPA": 19,
+        "PollingStationAddress": "Karachi 3",
+        "PollingStationID": 16,
+        "PollingStationName": "Karachi 3"
+    },
+    {
+        "ConstituencyIDNA": 6,
+        "ConstituencyIDPA": 19,
+        "PollingStationAddress": "Karachi 4",
+        "PollingStationID": 17,
+        "PollingStationName": "Karachi 4"
+    },
+    {
+        "ConstituencyIDNA": 7,
+        "ConstituencyIDPA": 21,
+        "PollingStationAddress": "Karachi 5",
+        "PollingStationID": 18,
+        "PollingStationName": "Karachi 5"
+    },
+    {
+        "ConstituencyIDNA": 7,
+        "ConstituencyIDPA": 21,
+        "PollingStationAddress": "Karachi 6",
+        "PollingStationID": 19,
+        "PollingStationName": "Karachi 6"
+    },
+    {
+        "ConstituencyIDNA": 13,
+        "ConstituencyIDPA": 22,
+        "PollingStationAddress": "Hyderabad 1",
+        "PollingStationID": 20,
+        "PollingStationName": "Hyderabad 1"
+    },
+    {
+        "ConstituencyIDNA": 13,
+        "ConstituencyIDPA": 23,
+        "PollingStationAddress": "Hyderabad 2",
+        "PollingStationID": 21,
+        "PollingStationName": "Hyderabad 2"
+    },
+    {
+        "ConstituencyIDNA": 8,
+        "ConstituencyIDPA": 28,
+        "PollingStationAddress": "Quetta 1",
+        "PollingStationID": 22,
+        "PollingStationName": "Quetta 1"
+    },
+    {
+        "ConstituencyIDNA": 8,
+        "ConstituencyIDPA": 28,
+        "PollingStationAddress": "Quetta 2",
+        "PollingStationID": 23,
+        "PollingStationName": "Quetta 2"
+    },
+    {
+        "ConstituencyIDNA": 9,
+        "ConstituencyIDPA": 29,
+        "PollingStationAddress": "Quetta 3",
+        "PollingStationID": 24,
+        "PollingStationName": "Quetta 3"
+    },
+    {
+        "ConstituencyIDNA": 9,
+        "ConstituencyIDPA": 29,
+        "PollingStationAddress": "Quetta 4",
+        "PollingStationID": 25,
+        "PollingStationName": "Quetta 4"
+    },
+    {
+        "ConstituencyIDNA": 14,
+        "ConstituencyIDPA": 30,
+        "PollingStationAddress": "Gawadar 1",
+        "PollingStationID": 26,
+        "PollingStationName": "Gawadar 1"
+    },
+    {
+        "ConstituencyIDNA": 14,
+        "ConstituencyIDPA": 30,
+        "PollingStationAddress": "Gawadar 2",
+        "PollingStationID": 27,
+        "PollingStationName": "Gawadar 2"
     }
 ]

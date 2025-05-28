@@ -19,6 +19,8 @@ extern vector<PollingStation> loadAllStations();
 extern int getPollingStationID();
 extern string getConstituencyTypeByID(int id);
 extern void deleteVotesByCandidateID(int CandidateID);
+extern void listCitiesByProvince(const string &province);
+extern void listConstituenciesByCity(int cityID);
 
 
 Candidate::Candidate() : CandidateID(0), CandidateName(""), PartyID(0), ConstituencyID(0), ConstituencyType("") {}
@@ -381,7 +383,7 @@ void manageCandidates() {
         cin >> choice;
 
         if (choice == 1) {
-            int partyID, constID;
+            int choice, cityChoice, partyID, constID;
             string name;
             cout << "Enter Candidate Name: "; cin.ignore(); getline(cin, name);
             if (!isValidCandidateName(name)) {
@@ -395,8 +397,30 @@ void manageCandidates() {
                 cout << "Invalid Party ID.\n";
                 continue;
             }
+            cout << "Select Province: " << endl;
+            cout << "1. Punjab\n" 
+                    "2. KPK\n" 
+                    "3. Sindh\n"
+                    "4. Balochistan" << endl;
+            cin >> choice;
+            if (choice < 1 || choice > 4) {
+                cout << "Invalid province choice.\n";
+                continue;
+            }
+            cin.ignore();
+            if (choice == 1) {
+                listCitiesByProvince("Punjab");
+            } else if (choice == 2) {
+                listCitiesByProvince("KPK");
+            } else if (choice == 3) {
+                listCitiesByProvince("Sindh");
+            } else if (choice == 4) {
+                listCitiesByProvince("Balochistan");
+            }
+            cout << "Select City:";
+            cin >> cityChoice;
             cout << "List of Constituencies:\n";
-            listAllConstituencies();
+            listConstituenciesByCity(cityChoice);
             cout << "Enter Constituency ID: "; cin >> constID;
             if (!constituencyExists(constID)) {
                 cout << "Invalid Constituency ID.\n";

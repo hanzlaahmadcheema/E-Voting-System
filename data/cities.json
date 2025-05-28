@@ -6,7 +6,37 @@
     },
     {
         "CityID": 2,
-        "CityName": "Karaci",
+        "CityName": "Chichawatni",
+        "ProvinceName": "Punjab"
+    },
+    {
+        "CityID": 3,
+        "CityName": "Karachi",
         "ProvinceName": "Sindh"
+    },
+    {
+        "CityID": 4,
+        "CityName": "Quetta",
+        "ProvinceName": "Balochistan"
+    },
+    {
+        "CityID": 5,
+        "CityName": "Peshawar",
+        "ProvinceName": "KPK"
+    },
+    {
+        "CityID": 6,
+        "CityName": "Mardan",
+        "ProvinceName": "KPK"
+    },
+    {
+        "CityID": 7,
+        "CityName": "Hyderabad",
+        "ProvinceName": "Sindh"
+    },
+    {
+        "CityID": 8,
+        "CityName": "Gawadar",
+        "ProvinceName": "Balochistan"
     }
 ]

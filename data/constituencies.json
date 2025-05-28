@@ -12,57 +12,159 @@
         "ElectionID": 1
     },
     {
-        "CityID": 1,
+        "CityID": 2,
         "ConstituencyID": 3,
-        "ConstituencyName": "NA-122",
-        "ElectionID": 1
-    },
-    {
-        "CityID": 1,
-        "ConstituencyID": 4,
         "ConstituencyName": "NA-125",
         "ElectionID": 1
     },
     {
-        "CityID": 1,
+        "CityID": 3,
         "ConstituencyID": 5,
         "ConstituencyName": "NA-126",
         "ElectionID": 1
     },
     {
-        "CityID": 1,
+        "CityID": 3,
         "ConstituencyID": 6,
         "ConstituencyName": "NA-127",
         "ElectionID": 1
     },
     {
-        "CityID": 1,
+        "CityID": 3,
         "ConstituencyID": 7,
         "ConstituencyName": "NA-128",
         "ElectionID": 1
     },
     {
-        "CityID": 1,
+        "CityID": 4,
         "ConstituencyID": 8,
         "ConstituencyName": "NA-129",
         "ElectionID": 1
     },
     {
-        "CityID": 1,
+        "CityID": 4,
         "ConstituencyID": 9,
-        "ConstituencyName": "PP-12",
+        "ConstituencyName": "NA-130",
+        "ElectionID": 1
+    },
+    {
+        "CityID": 5,
+        "ConstituencyID": 10,
+        "ConstituencyName": "NA-131",
+        "ElectionID": 1
+    },
+    {
+        "CityID": 5,
+        "ConstituencyID": 11,
+        "ConstituencyName": "NA-132",
+        "ElectionID": 1
+    },
+    {
+        "CityID": 6,
+        "ConstituencyID": 12,
+        "ConstituencyName": "NA-133",
+        "ElectionID": 1
+    },
+    {
+        "CityID": 7,
+        "ConstituencyID": 13,
+        "ConstituencyName": "NA-134",
+        "ElectionID": 1
+    },
+    {
+        "CityID": 8,
+        "ConstituencyID": 14,
+        "ConstituencyName": "NA-135",
+        "ElectionID": 1
+    },
+    {
+        "CityID": 1,
+        "ConstituencyID": 15,
+        "ConstituencyName": "PP-201",
         "ElectionID": 2
     },
     {
         "CityID": 1,
-        "ConstituencyID": 10,
-        "ConstituencyName": "PP-123",
+        "ConstituencyID": 16,
+        "ConstituencyName": "PP-202",
         "ElectionID": 2
     },
     {
         "CityID": 2,
-        "ConstituencyID": 11,
-        "ConstituencyName": "PS-123",
+        "ConstituencyID": 17,
+        "ConstituencyName": "PP-203",
+        "ElectionID": 2
+    },
+    {
+        "CityID": 3,
+        "ConstituencyID": 18,
+        "ConstituencyName": "PS-201",
         "ElectionID": 3
+    },
+    {
+        "CityID": 3,
+        "ConstituencyID": 19,
+        "ConstituencyName": "PS-202",
+        "ElectionID": 3
+    },
+    {
+        "CityID": 3,
+        "ConstituencyID": 21,
+        "ConstituencyName": "PS-203",
+        "ElectionID": 3
+    },
+    {
+        "CityID": 7,
+        "ConstituencyID": 22,
+        "ConstituencyName": "PS-204",
+        "ElectionID": 3
+    },
+    {
+        "CityID": 7,
+        "ConstituencyID": 23,
+        "ConstituencyName": "PS-205",
+        "ElectionID": 3
+    },
+    {
+        "CityID": 5,
+        "ConstituencyID": 24,
+        "ConstituencyName": "PK-201",
+        "ElectionID": 4
+    },
+    {
+        "CityID": 5,
+        "ConstituencyID": 25,
+        "ConstituencyName": "PK-202",
+        "ElectionID": 4
+    },
+    {
+        "CityID": 6,
+        "ConstituencyID": 26,
+        "ConstituencyName": "PK-203",
+        "ElectionID": 4
+    },
+    {
+        "CityID": 6,
+        "ConstituencyID": 27,
+        "ConstituencyName": "PK-204",
+        "ElectionID": 4
+    },
+    {
+        "CityID": 4,
+        "ConstituencyID": 28,
+        "ConstituencyName": "PB-201",
+        "ElectionID": 5
+    },
+    {
+        "CityID": 4,
+        "ConstituencyID": 29,
+        "ConstituencyName": "PB-202",
+        "ElectionID": 5
+    },
+    {
+        "CityID": 8,
+        "ConstituencyID": 30,
+        "ConstituencyName": "PB-203",
+        "ElectionID": 5
     }
 ]
