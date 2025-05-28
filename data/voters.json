@@ -1,0 +1,20 @@
+[
+    {
+        "PollingStationID": 6,
+        "VoterAddress": "Chichawatni",
+        "VoterAge": 18,
+        "VoterCNIC": "3520206696709",
+        "VoterGender": "Male",
+        "VoterID": 1,
+        "VoterName": "Hanzla Ahmad"
+    },
+    {
+        "PollingStationID": 4,
+        "VoterAddress": "Town",
+        "VoterAge": 18,
+        "VoterCNIC": "3520209690796",
+        "VoterGender": "Male",
+        "VoterID": 3,
+        "VoterName": "Wali Ahmad"
+    }
+]

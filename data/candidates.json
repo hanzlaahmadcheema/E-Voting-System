@@ -1,0 +1,86 @@
+[
+    {
+        "CandidateID": 1,
+        "CandidateName": "Ahmad Raza",
+        "ConstituencyID": 1,
+        "ConstituencyType": "NA",
+        "PartyID": 1
+    },
+    {
+        "CandidateID": 2,
+        "CandidateName": "Ahmad Raza",
+        "ConstituencyID": 15,
+        "ConstituencyType": "PP",
+        "PartyID": 1
+    },
+    {
+        "CandidateID": 3,
+        "CandidateName": "Imran",
+        "ConstituencyID": 1,
+        "ConstituencyType": "NA",
+        "PartyID": 2
+    },
+    {
+        "CandidateID": 4,
+        "CandidateName": "Muhammad",
+        "ConstituencyID": 15,
+        "ConstituencyType": "PP",
+        "PartyID": 2
+    },
+    {
+        "CandidateID": 5,
+        "CandidateName": "Ali",
+        "ConstituencyID": 2,
+        "ConstituencyType": "NA",
+        "PartyID": 1
+    },
+    {
+        "CandidateID": 6,
+        "CandidateName": "Ali",
+        "ConstituencyID": 16,
+        "ConstituencyType": "PP",
+        "PartyID": 1
+    },
+    {
+        "CandidateID": 7,
+        "CandidateName": "Raza",
+        "ConstituencyID": 2,
+        "ConstituencyType": "NA",
+        "PartyID": 2
+    },
+    {
+        "CandidateID": 8,
+        "CandidateName": "Raza",
+        "ConstituencyID": 16,
+        "ConstituencyType": "PP",
+        "PartyID": 2
+    },
+    {
+        "CandidateID": 9,
+        "CandidateName": "Hassan",
+        "ConstituencyID": 3,
+        "ConstituencyType": "NA",
+        "PartyID": 1
+    },
+    {
+        "CandidateID": 10,
+        "CandidateName": "Tufail",
+        "ConstituencyID": 3,
+        "ConstituencyType": "NA",
+        "PartyID": 2
+    },
+    {
+        "CandidateID": 11,
+        "CandidateName": "Iqbal",
+        "ConstituencyID": 17,
+        "ConstituencyType": "PP",
+        "PartyID": 1
+    },
+    {
+        "CandidateID": 12,
+        "CandidateName": "Hanif",
+        "ConstituencyID": 17,
+        "ConstituencyType": "PP",
+        "PartyID": 2
+    }
+]

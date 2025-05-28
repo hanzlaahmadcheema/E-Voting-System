@@ -14,6 +14,10 @@ extern void listAllStations();
 extern void listAllConstituencies();
 extern int getVoterIDByCNIC(const string &VoterCNIC);
 extern void deleteVotesByVoterID(int voterID);
+extern void listCitiesByProvince(const string &province);
+extern void listConstituenciesByCity(int cityID);
+extern void listStationsByConstituency(int constChoice);
+extern void listStationsByCity(int cityID);
 
 
 // Voter
@@ -413,7 +417,7 @@ bool voterExists(string VoterCNIC) {
 }
 
 void manageVoters() {
-    int choice;
+    int choice, provChoice, cityChoice;
     while (true) {
         cout << "\n Voter Management\n";
         cout << "1. Register Voter\n";
@@ -449,12 +453,35 @@ void manageVoters() {
                 continue;
             }
             cin.ignore();
+                        cout << "Select Province: " << endl;
+            cout << "1. Punjab\n" 
+                    "2. KPK\n" 
+                    "3. Sindh\n"
+                    "4. Balochistan" << endl;
+            cin >> provChoice;
+            if (provChoice < 1 || provChoice > 4) {
+                cout << "Invalid province choice.\n";
+                continue;
+            }
+            cin.ignore();
+            if (provChoice == 1) {
+                listCitiesByProvince("Punjab");
+            } else if (provChoice == 2) {
+                listCitiesByProvince("KPK");
+            } else if (provChoice == 3) {
+                listCitiesByProvince("Sindh");
+            } else if (provChoice == 4) {
+                listCitiesByProvince("Balochistan");
+            }
+            cout << "Select City:";
+            cin >> cityChoice;
+            cin.ignore();
             cout << "Address: "; getline(cin, address);
             if (!isValidAddress(address)) {
                 cout << "Invalid address. Only letters, numbers, and spaces allowed.\n";
                 continue;
             }
-            listAllStations();
+            listStationsByCity(cityChoice);
             cout << "Polling Station ID: "; cin >> pollingID;
             if (!pollingStationExists(pollingID)) {
                 cout << "Invalid Polling Station ID.\n";

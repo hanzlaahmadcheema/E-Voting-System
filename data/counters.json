@@ -1,7 +1,11 @@
 {
+    "CandidateID": 12,
     "CityID": 8,
     "ConstituencyID": 30,
     "ElectionID": 5,
     "PartyID": 4,
-    "PollingStationID": 27
+    "PollingStationID": 27,
+    "VoteID": 5,
+    "VoterID": 3,
+    "ResultID": 1
 }

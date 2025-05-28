@@ -1,0 +1,34 @@
+[
+    {
+        "CandidateID": 9,
+        "ElectionID": 1,
+        "PollingStationID": 6,
+        "VoteID": 2,
+        "VoteTime": "2025-05-28 18:29:56",
+        "VoterID": 1
+    },
+    {
+        "CandidateID": 11,
+        "ElectionID": 2,
+        "PollingStationID": 6,
+        "VoteID": 3,
+        "VoteTime": "2025-05-28 18:30:06",
+        "VoterID": 1
+    },
+    {
+        "CandidateID": 5,
+        "ElectionID": 1,
+        "PollingStationID": 4,
+        "VoteID": 4,
+        "VoteTime": "2025-05-28 18:32:21",
+        "VoterID": 3
+    },
+    {
+        "CandidateID": 8,
+        "ElectionID": 2,
+        "PollingStationID": 4,
+        "VoteID": 5,
+        "VoteTime": "2025-05-28 18:32:31",
+        "VoterID": 3
+    }
+]

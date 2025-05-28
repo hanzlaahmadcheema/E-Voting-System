@@ -1,0 +1,10 @@
+[
+    {
+        "ConstituencyID": 3,
+        "ElectionID": 1,
+        "PollingStationID": 0,
+        "ResultID": 1,
+        "TotalVotes": 1,
+        "WinnerCandidateID": 9
+    }
+]

@@ -279,7 +279,7 @@ void computeConstituencyResult(int ElectionID, int ConstituencyID, const string&
     }
 
     // Save result (PollingStationID can be set to 0 or any representative value)
-    Result result(0, 0, ElectionID, winnerCandidateID, maxVotes, ConstituencyID);
+    Result result(getNextID("ResultID"), 0, ElectionID, winnerCandidateID, maxVotes, ConstituencyID);
     allResults.push_back(result);
     saveAllResults(allResults);
 
