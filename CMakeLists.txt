@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.16)
 project(E-Voting-System)
 
 # Set C++ version
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)  # FTXUI requires C++20
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Set output directory for the executable
@@ -12,6 +12,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 include_directories(
     ${PROJECT_SOURCE_DIR}/src
     ${PROJECT_SOURCE_DIR}/include
+    "D:/FTXUI/include"
 )
 
 # Automatically detect all .cpp files in src/
@@ -19,13 +20,19 @@ file(GLOB_RECURSE SRC_FILES
     "${PROJECT_SOURCE_DIR}/src/*.cpp"
 )
 
+# Add FTXUI from sibling directory
+add_subdirectory(${CMAKE_SOURCE_DIR}/../ftxui ${CMAKE_BINARY_DIR}/ftxui-build)
+
 # Add executable
 add_executable(E-Voting-System ${SRC_FILES})
 
-# If using json.hpp (nlohmann/json single-header library), no linking needed
-# But if linking sqlite3 statically/dynamically, you may need:
-# find_package(SQLite3 REQUIRED)
-# target_link_libraries(E-Voting-System PRIVATE SQLite::SQLite3)
+# Link FTXUI components
+target_link_libraries(E-Voting-System
+    PRIVATE
+    ftxui::screen
+    ftxui::dom
+    ftxui::component
+)
 
 # Optional: Group source files in IDE (like VS)
 source_group(TREE ${PROJECT_SOURCE_DIR}/src PREFIX "Source Files" FILES ${SRC_FILES})

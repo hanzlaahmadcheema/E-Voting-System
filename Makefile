@@ -1,6 +1,16 @@
+# FTXUI paths
+FTXUI_DIR = ../FTXUI
+FTXUI_INC = -I$(FTXUI_DIR)/include
+FTXUI_LIB = \
+	$(FTXUI_DIR)/build/ftxui-component.lib \
+	$(FTXUI_DIR)/build/ftxui-dom.lib \
+	$(FTXUI_DIR)/build/ftxui-screen.lib \
+	-pthread
+
+
 # Compiler and flags
 CXX = g++
-CXXFLAGS = -std=c++17 -Wall -I./include
+CXXFLAGS = -std=c++17 -Wall -I./include $(FTXUI_INC)
 
 # Directories
 SRC_DIR = src
@@ -20,7 +30,7 @@ all: $(TARGET)
 # Linking
 $(TARGET): $(OBJS)
 	@mkdir -p $(BIN_DIR)
-	$(CXX) $(CXXFLAGS) -o $@ $^
+	$(CXX) $(CXXFLAGS) -o $@ $^ $(FTXUI_LIB)
 
 # Compiling
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
