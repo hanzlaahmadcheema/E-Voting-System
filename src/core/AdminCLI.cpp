@@ -70,19 +70,49 @@ bool loginAdmin(const std::vector<Admin>& adminList) {
 void adminPanel() {
     int choice;
     while (true) {
-        cout << "\n [ADMIN PANEL]\n";
-        cout << "1. Elections\n";
-        cout << "2. Cities\n";
-        cout << "3. Constituencies\n";
-        cout << "4. Polling Stations\n";
-        cout << "5. Political Parties\n";
-        cout << "6. Candidates\n";
-        cout << "7. Voters\n";
-        cout << "8. Voting Process\n";
-        cout << "9. Results\n";
-        cout << "0. Exit Admin Panel\n";
-        cout << "Choose option: ";
-        cin >> choice;
+        extern void adminPanel();
+        extern void userPanel();
+        extern int ShowMenu(ScreenInteractive & screen, 
+             const std::string& heading, 
+             const std::vector<std::string>& options);
+
+        auto screen = ScreenInteractive::TerminalOutput();
+
+    std::vector<std::string> adminPanel = {
+        "Elections",
+        "Cities",
+        "Constituencies",
+        "Polling Stations",
+        " Political Parties",
+        "Candidates",
+        "Voters",
+        "Voting Process",
+        "Results",
+        "Exit Admin Panel",
+        "Choose option:"
+    };
+
+    int choice = ShowMenu(screen, "adminPanel", adminPanel);
+
+    switch (choice) {
+        
+        case 0: manageElections(); break;
+        case 1: manageCities(); break;
+        case 2: manageConstituencies(); break;
+        case 3: managePollingStations(); break;
+        case 4: manageParties(); break;
+        case 5: manageCandidates(); break;
+        case 6: manageVoters(); break;
+        case 7: manageVoting(); break;
+        case 8: manageResults(); break;
+        case 9: return; // Exit Admin Panel
+        default: std::cout << "❌ Invalid choice. Try again.\n"; break;
+
+    }
+
+   
+}
+
 
         switch (choice) {
             case 1: manageElections(); break;
