@@ -8,18 +8,21 @@
 
 using json = nlohmann::json;
 using namespace std;
+using namespace ftxui;
+
 const std::string ADMIN_FILE = "data/admins.json";
-
-
-void manageElections();
-void manageCities();
-void manageConstituencies();
-void managePollingStations();
-void manageParties();
-void manageCandidates();
-void manageVoters();
-void manageVoting();
-void manageResults();
+        extern void manageElections();
+        extern void manageCities();
+        extern void manageConstituencies();
+        extern void managePollingStations();
+        extern void manageParties();
+        extern void manageCandidates();
+        extern void manageVoters();
+        extern void manageVoting();
+        extern void manageResults();
+        extern int ShowMenu(ScreenInteractive & screen, 
+             const std::string& heading, 
+             const std::vector<std::string>& options);
 
 bool loadAdmins(std::vector<Admin>& adminList) {
     std::ifstream file(ADMIN_FILE);
@@ -71,20 +74,7 @@ bool loginAdmin(const std::vector<Admin>& adminList) {
 }
 
 void adminPanel() {
-    int choice;
     while (true) {
-        extern void manageElections();
-        extern void manageCities();
-        extern void manageConstituencies();
-        extern void managePollingStations();
-        extern void manageParties();
-        extern void manageCandidates();
-        extern void manageVoters();
-        extern void manageVoting();
-        extern void manageResults();
-        extern int ShowMenu(ScreenInteractive & screen, 
-             const std::string& heading, 
-             const std::vector<std::string>& options);
 
         auto screen = ScreenInteractive::TerminalOutput();
 
@@ -119,23 +109,5 @@ void adminPanel() {
         default: std::cout << "❌ Invalid choice. Try again.\n"; break;
 
     }
-
-   
 }
-
-
-        switch (choice) {
-            case 1: manageElections(); break;
-            case 2: manageCities(); break;
-            case 3: manageConstituencies(); break;
-            case 4: managePollingStations(); break;
-            case 5: manageParties(); break;
-            case 6: manageCandidates(); break;
-            case 7: manageVoters(); break;
-            case 8: manageVoting(); break;
-            case 9: manageResults(); break;
-            case 0: return;
-            default: cout << "❌ Invalid choice. Try again.\n";
-        }
-    }
 }
