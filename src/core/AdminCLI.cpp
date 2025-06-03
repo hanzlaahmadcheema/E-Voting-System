@@ -2,6 +2,9 @@
 #include <fstream>
 #include <iostream>
 #include <limits>
+#include <ftxui/component/screen_interactive.hpp>
+#include <ftxui/component/component.hpp>
+#include <ftxui/dom/elements.hpp>
 
 using json = nlohmann::json;
 using namespace std;
@@ -70,8 +73,15 @@ bool loginAdmin(const std::vector<Admin>& adminList) {
 void adminPanel() {
     int choice;
     while (true) {
-        extern void adminPanel();
-        extern void userPanel();
+        extern void manageElections();
+        extern void manageCities();
+        extern void manageConstituencies();
+        extern void managePollingStations();
+        extern void manageParties();
+        extern void manageCandidates();
+        extern void manageVoters();
+        extern void manageVoting();
+        extern void manageResults();
         extern int ShowMenu(ScreenInteractive & screen, 
              const std::string& heading, 
              const std::vector<std::string>& options);
@@ -83,7 +93,7 @@ void adminPanel() {
         "Cities",
         "Constituencies",
         "Polling Stations",
-        " Political Parties",
+        "Political Parties",
         "Candidates",
         "Voters",
         "Voting Process",
