@@ -5,6 +5,8 @@
 #include <ftxui/component/screen_interactive.hpp>
 #include <ftxui/component/component.hpp>
 #include <ftxui/dom/elements.hpp>
+#include <ftxui/screen/screen.hpp>
+#include <ftxui/screen/color.hpp>
 
 using json = nlohmann::json;
 using namespace std;
