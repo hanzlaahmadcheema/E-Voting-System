@@ -4,6 +4,7 @@
 #include <fstream>
 #include <vector>
 #include <string>
+#include <iomanip>
 #include <ftxui/component/screen_interactive.hpp>
 #include <ftxui/component/component.hpp>
 #include <ftxui/dom/elements.hpp>
@@ -282,20 +283,50 @@ string getElectionTypeByID(int id)
     return "";
 }
 
-void listAllElections()
-{
+void printLine(int idW, int nameW, int typeW, int dateW) {
+    cout << "+" << string(idW + 2, '-') 
+         << "+" << string(nameW + 2, '-') 
+         << "+" << string(typeW + 2, '-') 
+         << "+" << string(dateW + 2, '-') << "+" << endl;
+}
+
+void listAllElections() {
     vector<Election> list = loadAllElections();
-    if (list.empty())
-    {
+    if (list.empty()) {
         cout << "No elections found.\n";
         return;
     }
-    for (const auto &e : list)
-    {
-        cout << e.getElectionID() << " | " << e.getElectionName()
-             << " | " << e.getElectionType() << " | " << e.getElectionDate() << endl;
+
+    // Fixed column widths (tweak if needed)
+    const int colID = 12;
+    const int colName = 30;
+    const int colType = 20;
+    const int colDate = 15;
+
+    // Print header border
+    printLine(colID, colName, colType, colDate);
+
+    // Print header row
+    cout << "| " << left << setw(colID) << "Election ID"
+         << " | " << left << setw(colName) << "Election Name"
+         << " | " << left << setw(colType) << "Election Type"
+         << " | " << left << setw(colDate) << "Election Date" << " |" << endl;
+
+    // Print header bottom border
+    printLine(colID, colName, colType, colDate);
+
+    // Print data rows
+    for (const auto &e : list) {
+        cout << "| " << left << setw(colID) << e.getElectionID()
+             << " | " << left << setw(colName) << e.getElectionName()
+             << " | " << left << setw(colType) << e.getElectionType()
+             << " | " << left << setw(colDate) << e.getElectionDate() << " |" << endl;
     }
+
+    // Final bottom border
+    printLine(colID, colName, colType, colDate);
 }
+
 
 bool electionExists(int id) {
     vector<Election> list = loadAllElections();
