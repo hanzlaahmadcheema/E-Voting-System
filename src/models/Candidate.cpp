@@ -7,8 +7,12 @@
 #include <fstream>
 #include <vector>
 #include <string>
+#include <ftxui/component/screen_interactive.hpp>
+#include <ftxui/component/component.hpp>
+#include <ftxui/dom/elements.hpp>
 
 using namespace std;
+using namespace ftxui;
 
 extern int getNextID(const string &key);
 extern void listAllParties();
@@ -21,7 +25,9 @@ extern string getConstituencyTypeByID(int id);
 extern void deleteVotesByCandidateID(int CandidateID);
 extern void listCitiesByProvince(const string &province);
 extern void listConstituenciesByCity(int cityID);
-
+extern int ShowMenu(ScreenInteractive & screen, 
+     const std::string& heading, 
+     const std::vector<std::string>& options);
 
 Candidate::Candidate() : CandidateID(0), CandidateName(""), PartyID(0), ConstituencyID(0), ConstituencyType("") {}
 
@@ -372,18 +378,20 @@ bool candidateExists(int id) {
 void manageCandidates() {
     int choice;
     while (true) {
-        cout << "\n Candidate Management\n";
-        cout << "1. Add Candidate\n";
-        cout << "2. View All Candidates\n";
-        cout << "3. View by Constituency\n";
-        cout << "4. Edit Candidate\n";
-        cout << "5. Delete Candidate\n";
-        cout << "0. Back\n";
-        cout << "Enter choice: ";
-        cin >> choice;
+           auto screen = ScreenInteractive::TerminalOutput();
 
-        if (choice == 1) {
-            int choice, cityChoice, partyID, constID;
+    std::vector<std::string> candidateManagement = {
+        "Add Candidate",
+        "View All Candidates",
+        "View by Constituency",
+        "Edit Candidate",
+        "Delete Candidate",
+        "Back"
+    };
+
+    int choice = ShowMenu(screen, "Candidate Management", candidateManagement);
+        if (choice == 0) {
+            int choice2, cityChoice, partyID, constID;
             string name;
             cout << "Enter Candidate Name: "; cin.ignore(); getline(cin, name);
             if (!isValidCandidateName(name)) {
@@ -402,19 +410,19 @@ void manageCandidates() {
                     "2. KPK\n" 
                     "3. Sindh\n"
                     "4. Balochistan" << endl;
-            cin >> choice;
-            if (choice < 1 || choice > 4) {
+            cin >> choice2;
+            if (choice2 < 1 || choice2 > 4) {
                 cout << "Invalid province choice.\n";
                 continue;
             }
             cin.ignore();
-            if (choice == 1) {
+            if (choice2 == 1) {
                 listCitiesByProvince("Punjab");
-            } else if (choice == 2) {
+            } else if (choice2 == 2) {
                 listCitiesByProvince("KPK");
-            } else if (choice == 3) {
+            } else if (choice2 == 3) {
                 listCitiesByProvince("Sindh");
-            } else if (choice == 4) {
+            } else if (choice2 == 4) {
                 listCitiesByProvince("Balochistan");
             }
             cout << "Select City:";
@@ -428,9 +436,9 @@ void manageCandidates() {
             }
             Candidate c(getNextID("CandidateID"), name, partyID, constID, getConstituencyTypeByID(constID));
             addCandidate(c);
-        } else if (choice == 2) {
+        } else if (choice == 1) {
             listAllCandidates();
-        } else if (choice == 3) {
+        } else if (choice == 2) {
             int constID;
             cout << "Enter Constituency ID: ";
             cin >> constID;
@@ -440,7 +448,7 @@ void manageCandidates() {
             }
             cout << "Candidates in Constituency ID " << constID << ":\n";
             viewCandidatesByConstituency(constID);
-        } else if (choice == 4) {
+        } else if (choice == 3) {
             int id;
             string name;
             int partyID, constID;
@@ -475,7 +483,7 @@ void manageCandidates() {
             }
             cout << "Editing Candidate ID " << id << "...\n";
             editCandidate(id, name, partyID, constID);
-        } else if (choice == 5) {
+        } else if (choice == 4) {
             int id;
             listAllCandidates();
             cout << "Enter Candidate ID to delete: ";
@@ -490,7 +498,7 @@ void manageCandidates() {
             }
             cout << "Deleting Candidate ID " << id << "...\n";
             deleteCandidateByID(id);
-        } else if (choice == 0) {
+        } else if (choice == 5) {
             break;
         } else {
             cout << "Invalid option.\n";

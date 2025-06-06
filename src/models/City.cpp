@@ -4,10 +4,17 @@
 #include <fstream>
 #include <vector>
 #include <string>
+#include <ftxui/component/screen_interactive.hpp>
+#include <ftxui/component/component.hpp>
+#include <ftxui/dom/elements.hpp>
 
 using namespace std;
+using namespace ftxui;
 
 extern int getNextID(const string &key);
+extern int ShowMenu(ScreenInteractive & screen, 
+     const std::string& heading, 
+     const std::vector<std::string>& options);
 
 // City
 City::City() : CityID(0), CityName(""), ProvinceName("") {}
@@ -278,16 +285,19 @@ bool cityExists(int id) {
 void manageCities() {
     int choice;
     while (true) {
-        cout << "\n City Management\n";
-        cout << "1. Add City\n";
-        cout << "2. View All Cities\n";
-        cout << "3. Edit City\n";
-        cout << "4. Delete City\n";
-        cout << "0. Back\n";
-        cout << "Enter choice: ";
-        cin >> choice;
+           auto screen = ScreenInteractive::TerminalOutput();
 
-        if (choice == 1) {
+    std::vector<std::string> cityManagement = {
+        "Add City",
+        "View All Cities",
+        "Edit City",
+        "Delete City",
+        "Back"
+    };
+
+    int choice = ShowMenu(screen, "City Management", cityManagement);
+
+        if (choice == 0) {
             string name, ProvinceName;
             cin.ignore();
             cout << "Enter City Name: ";
@@ -309,9 +319,9 @@ void manageCities() {
             }
             City c(getNextID("CityID"), name, ProvinceName);
             addCity(c);
-        } else if (choice == 2) {
+        } else if (choice == 1) {
             listAllCities();
-        } else if (choice == 3) {
+        } else if (choice == 2) {
             int id;
             string name, ProvinceName;
             cout << "List of Cities:\n";
@@ -345,7 +355,7 @@ void manageCities() {
                 default: cout << "Invalid choice. City not updated.\n"; continue;
             }
             editCity(id, name, ProvinceName);
-        } else if (choice == 4) {
+        } else if (choice == 3) {
             int id;
             cout << "Enter City ID to delete: ";
             cin >> id;
@@ -358,7 +368,7 @@ void manageCities() {
                 continue;
             }
             deleteCityByID(id);
-        } else if (choice == 0) {
+        } else if (choice == 4) {
             break;
         } else {
             cout << "Invalid option.\n";

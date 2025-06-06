@@ -89,10 +89,9 @@ void adminPanel() {
         "Voting Process",
         "Results",
         "Exit Admin Panel",
-        "Choose option:"
     };
 
-    int choice = ShowMenu(screen, "adminPanel", adminPanel);
+    int choice = ShowMenu(screen, "Admin Panel", adminPanel);
 
     switch (choice) {
         

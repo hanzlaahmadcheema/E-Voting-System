@@ -4,7 +4,12 @@
 #include "../models/Vote.h"
 #include "../models/Candidate.h"
 #include "../models/PollingStation.h"
+#include <ftxui/component/screen_interactive.hpp>
+#include <ftxui/component/component.hpp>
+#include <ftxui/dom/elements.hpp>
 
+using namespace std;
+using namespace ftxui;
 
 extern vector<Voter> loadAllVoters();
 extern vector<Candidate> loadAllCandidates();
@@ -19,9 +24,9 @@ extern string getElectionTypeByID(int id);
 extern void viewCandidatesByType(string type);
 extern int getNextID(const string &key);
 int getElectionIDByConstituencyID(int id);
-
-using namespace std;
-
+extern int ShowMenu(ScreenInteractive & screen, 
+     const std::string& heading, 
+     const std::vector<std::string>& options);
 
 Voter* voterLogin() {
     string VoterCNIC;
@@ -44,24 +49,25 @@ Voter* voterLogin() {
 }
 
 void showUserMenu(Voter* voter) {
-    int choice;
     PollingStation ps = getPollingStationByID(voter->getPollingStationID());
     int c1 = ps.getConstituencyIDNA();
     int c2 = ps.getConstituencyIDPA();
     while (true) {
-        cout << "\n Voter Menu\n";
-        cout << "1. View Candidates\n";
-        cout << "2. Cast Vote\n";
-        cout << "0. Logout\n";
-        cout << "Enter choice: ";
-        cin >> choice;
+   auto screen = ScreenInteractive::TerminalOutput();
 
-        if (choice == 1) {
+    std::vector<std::string> voterMenu = {
+        "View Candidates",
+        "Cast Vote",
+        "Logout"
+    };
+
+    int choice = ShowMenu(screen, "Voter Menu", voterMenu);
+        if (choice == 0) {
             cout << "Candidates in Constituency " << c1 << ":\n";
             viewCandidatesByConstituency(c1);
             cout << "Candidates in Constituency " << c2 << ":\n";
             viewCandidatesByConstituency(c2);
-        } else if (choice == 2) {
+        } else if (choice == 1) {
             int ElectionID, CandidateID, chosenConst;
             cout << "You can vote in Constituency " << c1 << " or " << c2 << ".\n";
             cout << "Enter Constituency ID to vote in: ";
@@ -84,7 +90,7 @@ void showUserMenu(Voter* voter) {
             cin >> CandidateID;
             Vote vote(getNextID("VoteID"), voter->getVoterID(), CandidateID, ElectionID, voter->getPollingStationID(), getCurrentTimestamp());
             castVote(vote);
-        } else if (choice == 0) {
+        } else if (choice == 2) {
             cout << "Logged out.\n";
             break;
         } else {

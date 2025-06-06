@@ -5,11 +5,17 @@
 #include <vector>
 #include <string>
 #include <ctime>
+#include <ftxui/component/screen_interactive.hpp>
+#include <ftxui/component/component.hpp>
+#include <ftxui/dom/elements.hpp>
 
 using namespace std;
+using namespace ftxui;
 
 extern int getNextID(const string &key);
-
+extern int ShowMenu(ScreenInteractive & screen, 
+     const std::string& heading, 
+     const std::vector<std::string>& options);
 
 // Vote
 Vote::Vote() : VoteID(0), VoterID(0), CandidateID(0), ElectionID(0), PollingStationID(0), VoteTime("") {}
@@ -309,15 +315,18 @@ void listAllVotes()
 void manageVoting() {
     int choice;
     while (true) {
-        cout << "\n Voting Management\n";
-        cout << "1. View All Votes\n";
-        cout << "0. Back\n";
-        cout << "Enter choice: ";
-        cin >> choice;
     
-        if (choice == 1) {
+    auto screen = ScreenInteractive::TerminalOutput();
+
+    std::vector<std::string> votingManagement = {
+        "View All Votes",
+        "Back"
+    };
+
+    int choice = ShowMenu(screen, "Voting Management", votingManagement);
+        if (choice == 0) {
             listAllVotes();
-        } else if (choice == 0) {
+        } else if (choice == 1) {
             break;
         } else {
             cout << "Invalid option.\n";

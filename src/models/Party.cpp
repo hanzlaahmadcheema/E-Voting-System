@@ -4,12 +4,18 @@
 #include <fstream>
 #include <vector>
 #include <string>
+#include <ftxui/component/screen_interactive.hpp>
+#include <ftxui/component/component.hpp>
+#include <ftxui/dom/elements.hpp>
 
 using namespace std;
+using namespace ftxui;
 
 extern int getNextID(const string &key);
 extern string toLower(const string& str);
-
+extern int ShowMenu(ScreenInteractive & screen, 
+     const std::string& heading, 
+     const std::vector<std::string>& options);
 
 // Party
 Party::Party() : PartyID(0), PartyName(""), PartySymbol("") {}
@@ -244,16 +250,18 @@ void listAllParties()
 void manageParties() {
     int choice;
     while (true) {
-        cout << "\n Party Management\n";
-        cout << "1. Add Party\n";
-        cout << "2. View All Parties\n";
-        cout << "3. Edit Party\n";
-        cout << "4. Delete Party\n";
-        cout << "0. Back\n";
-        cout << "Enter choice: ";
-        cin >> choice;
+           auto screen = ScreenInteractive::TerminalOutput();
 
-        if (choice == 1) {
+    std::vector<std::string> partyMenu = {
+        "Add Party",
+        "View All Parties",
+        "Edit Party",
+        "Delete Party",
+        "Back"
+    };
+
+    int choice = ShowMenu(screen, "Party Menu", partyMenu);
+        if (choice == 0) {
             string name, symbol;
             cin.ignore();
             cout << "Enter Party Name: ";
@@ -278,9 +286,9 @@ void manageParties() {
             }
             Party p(getNextID("PartyID"), name, symbol);
             addParty(p);
-        } else if (choice == 2) {
+        } else if (choice == 1) {
             listAllParties();
-        } else if (choice == 3) {
+        } else if (choice == 2) {
             int id;
             string name, symbol;
             cout << "List of Parties:\n";
@@ -317,7 +325,7 @@ void manageParties() {
                 continue;
             }
             editParty(id, name, symbol);
-        } else if (choice == 4) {
+        } else if (choice == 3) {
             int id;
             listAllParties();
             cout << "Enter Party ID to delete: ";
@@ -331,7 +339,7 @@ void manageParties() {
                 continue;
             }
             deleteParty(id);
-        } else if (choice == 0) {
+        } else if (choice == 4) {
             break;
         } else {
             cout << "Invalid option.\n";

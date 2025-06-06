@@ -5,8 +5,12 @@
 #include <fstream>
 #include <vector>
 #include <string>
+#include <ftxui/component/screen_interactive.hpp>
+#include <ftxui/component/component.hpp>
+#include <ftxui/dom/elements.hpp>
 
 using namespace std;
+using namespace ftxui;
 
 extern int getNextID(const string &key);
 extern bool cityExists(int id);
@@ -16,6 +20,9 @@ extern void listAllElections();
 extern void listCitiesByProvince(const string &province);
 extern string getElectionTypeByID(int id);
 extern string toLower(const string& str);
+extern int ShowMenu(ScreenInteractive & screen, 
+     const std::string& heading, 
+     const std::vector<std::string>& options);
 
 // Constituency
 Constituency::Constituency() : ConstituencyID(0), ConstituencyName(""), CityID(0), ElectionID(0) {}
@@ -315,16 +322,18 @@ void manageConstituencies() {
     int choice;
     vector<Constituency> list = loadAllConstituencies();
     while (true) {
-        cout << "\n Constituency Management\n";
-        cout << "1. Add Constituency\n";
-        cout << "2. View All Constituencies\n";
-        cout << "3. Edit Constituency\n";
-        cout << "4. Delete Constituency\n";
-        cout << "0. Back\n";
-        cout << "Enter choice: ";
-        cin >> choice;
+           auto screen = ScreenInteractive::TerminalOutput();
 
-        if (choice == 1) {
+    std::vector<std::string> constituencyMenu = {
+        "Add Constituency",
+        "View All Constituencies",
+        "Edit Constituency",
+        "Delete Constituency",
+        "Back"
+    };
+
+    int choice = ShowMenu(screen, "Constituency Management", constituencyMenu);
+        if (choice == 0) {
             int cityID, ElectionID;
             string name, type, fullName;
             listAllElections();
@@ -366,9 +375,9 @@ void manageConstituencies() {
             }
             Constituency c(getNextID("ConstituencyID"), fullName, cityID, ElectionID);
             addConstituency(c);
-        } else if (choice == 2) {
+        } else if (choice == 1) {
             listAllConstituencies();
-        } else if (choice == 3) {
+        } else if (choice == 2) {
             int id, cityID, ElectionID;
             string name, type, fullName;
             cout << "List of Constituencies:\n";
@@ -412,7 +421,7 @@ void manageConstituencies() {
                 continue;
             }
             editConstituency(id, fullName, cityID, ElectionID);
-        } else if (choice == 4) {
+        } else if (choice == 3) {
             int id;
             listAllConstituencies();
             cout << "Enter Constituency ID to delete: ";
@@ -426,7 +435,7 @@ void manageConstituencies() {
                 continue;
             }
             deleteConstituency(id);
-        } else if (choice == 0) {
+        } else if (choice == 4) {
             break;
         } else {
             cout << "Invalid option.\n";

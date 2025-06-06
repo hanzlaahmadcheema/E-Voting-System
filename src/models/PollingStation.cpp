@@ -4,13 +4,20 @@
 #include <fstream>
 #include <vector>
 #include <string>
-using namespace std;
+#include <ftxui/component/screen_interactive.hpp>
+#include <ftxui/component/component.hpp>
+#include <ftxui/dom/elements.hpp>
 
+using namespace std;
+using namespace ftxui;
 extern int getNextID(const string& key);
 extern bool constituencyExists(int id);
 extern void listAllConstituencies();
 extern void listCitiesByProvince(const string &province);
 extern void listConstituenciesByCity(int cityID);
+extern int ShowMenu(ScreenInteractive & screen, 
+     const std::string& heading, 
+     const std::vector<std::string>& options);
 
 // PollingStation
 PollingStation::PollingStation() : PollingStationID(0), PollingStationName(""), PollingStationAddress(""), CityID(0), ConstituencyIDNA(0), ConstituencyIDPA(0) {}
@@ -349,16 +356,18 @@ bool pollingStationExists(int id) {
 void managePollingStations() {
     int choice;
     while (true) {
-        cout << "\n Polling Station Management\n";
-        cout << "1. Add Polling Station\n";
-        cout << "2. View All Polling Stations\n";
-        cout << "3. Edit Polling Station\n";
-        cout << "4. Delete Polling Station\n";
-        cout << "0. Back\n";
-        cout << "Enter choice: ";
-        cin >> choice;
+           auto screen = ScreenInteractive::TerminalOutput();
 
-        if (choice == 1) {
+    std::vector<std::string> pollingStationMenu = {
+        "Add Polling Station",
+        "View All Polling Stations",
+        "Edit Polling Station",
+        "Delete Polling Station",
+        "Back"
+    };
+
+    int choice = ShowMenu(screen, "Polling Station Management", pollingStationMenu);
+        if (choice == 0) {
             int choice, cityChoice, ConstituencyIDNA, ConstituencyIDPA;
             string name, address;
             cin.ignore();
@@ -410,9 +419,9 @@ void managePollingStations() {
             }
             PollingStation ps(getNextID("PollingStationID"), name, address, cityChoice, ConstituencyIDNA, ConstituencyIDPA);
             addPollingStation(ps);
-        } else if (choice == 2) {
+        } else if (choice == 1) {
             listAllStations();
-        } else if (choice == 3) {
+        } else if (choice == 2) {
             int id;
             string name, address;
             cout << "List of Polling Stations:\n";
@@ -438,7 +447,7 @@ void managePollingStations() {
                 continue;
             }
             editPollingStation(id, name, address);
-        } else if (choice == 4) {
+        } else if (choice == 3) {
             int id;
             listAllStations();
             cout << "Enter Station ID to delete: ";
@@ -452,7 +461,7 @@ void managePollingStations() {
                 continue;
             }
             deletePollingStation(id);
-        } else if (choice == 0) {
+        } else if (choice == 4) {
             break;
         } else {
             cout << "Invalid option.\n";

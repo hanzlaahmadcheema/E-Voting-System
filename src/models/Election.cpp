@@ -4,11 +4,18 @@
 #include <fstream>
 #include <vector>
 #include <string>
+#include <ftxui/component/screen_interactive.hpp>
+#include <ftxui/component/component.hpp>
+#include <ftxui/dom/elements.hpp>
 
 using namespace std;
+using namespace ftxui;
 
 extern int getNextID(const string &key);
 void deleteVotesByElectionID(int ElectionID);
+extern int ShowMenu(ScreenInteractive & screen, 
+     const std::string& heading, 
+     const std::vector<std::string>& options);
 
 // Election
 Election::Election() : ElectionID(0), ElectionName(""), ElectionType(""), ElectionDate("") {}
@@ -296,18 +303,21 @@ bool electionExists(int id) {
 }
 
 void manageElections() {
-    int choice;
     while (true) {
-        cout << "\n Election Management\n";
-        cout << "1. Create Election\n";
-        cout << "2. View All Elections\n";
-        cout << "3. Edit Election\n";
-        cout << "4. Delete Election\n";
-        cout << "0. Back\n";
-        cout << "Enter choice: ";
-        cin >> choice;
 
-        if (choice == 1) {
+        auto screen = ScreenInteractive::TerminalOutput();
+
+    std::vector<std::string> electionManagement = {
+        "Create Election",
+        "View All Elections",
+        "Edit Election",
+        "Delete Election",
+        "Back"
+    };
+
+    int choice = ShowMenu(screen, "Election Management", electionManagement);
+
+        if (choice == 0) {
             string name, type, date;
             cin.ignore();
             cout << "Enter Election Name: "; getline(cin, name);
@@ -327,9 +337,9 @@ void manageElections() {
             }
             Election e(getNextID("ElectionID"), name, type, date);
             createElection(e);
-        } else if (choice == 2) {
+        } else if (choice == 1) {
             listAllElections();
-        } else if (choice == 3) {
+        } else if (choice == 2) {
             int id;
             string name, type, date;
             cout << "List of Elections:\n";
@@ -360,7 +370,7 @@ void manageElections() {
                 continue;
             }
             editElection(id, name, type, date);
-        } else if (choice == 4) {
+        } else if (choice == 3) {
             int id;
             cout << "Enter Election ID to delete: ";
             cin >> id;
@@ -373,7 +383,7 @@ void manageElections() {
                 continue;
             }
             deleteElection(id);
-        } else if (choice == 0) {
+        } else if (choice == 4) {
             break;
         } else {
             cout << "Invalid option.\n";

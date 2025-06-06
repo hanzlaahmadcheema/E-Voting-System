@@ -4,8 +4,12 @@
 #include <vector>
 #include <fstream>
 #include <string>
+#include <ftxui/component/screen_interactive.hpp>
+#include <ftxui/component/component.hpp>
+#include <ftxui/dom/elements.hpp>
 
 using namespace std;
+using namespace ftxui;
 
 extern int getNextID(const string& key);
 extern bool pollingStationExists(int id);
@@ -18,6 +22,9 @@ extern void listCitiesByProvince(const string &province);
 extern void listConstituenciesByCity(int cityID);
 extern void listStationsByConstituency(int constChoice);
 extern void listStationsByCity(int cityID);
+extern int ShowMenu(ScreenInteractive & screen, 
+     const std::string& heading, 
+     const std::vector<std::string>& options);
 
 
 // Voter
@@ -417,18 +424,21 @@ bool voterExists(string VoterCNIC) {
 }
 
 void manageVoters() {
-    int choice, provChoice, cityChoice;
+    int provChoice, cityChoice;
     while (true) {
-        cout << "\n Voter Management\n";
-        cout << "1. Register Voter\n";
-        cout << "2. View All Voters\n";
-        cout << "3. Edit Voter\n";
-        cout << "4. Delete Voter\n";
-        cout << "0. Back\n";
-        cout << "Enter choice: ";
-        cin >> choice;
+        auto screen = ScreenInteractive::TerminalOutput();
 
-        if (choice == 1) {
+    std::vector<std::string> voterManagement = {
+        "Register Voter",
+        "View All Voters",
+        "Edit Voter",
+        "Delete Voter",
+        "Back"
+    };
+
+    int choice = ShowMenu(screen, "Voter Management", voterManagement);
+
+        if (choice == 0) {
             int age, pollingID;
             string name, VoterCNIC, gender, address;
             cin.ignore();
@@ -489,9 +499,9 @@ void manageVoters() {
             }
             Voter v(getNextID("VoterID"), name, VoterCNIC, gender, age, address, pollingID);
             registerVoter(v);
-        } else if (choice == 2) {
+        } else if (choice == 1) {
             listAllVoters();
-        } else if (choice == 3) {
+        } else if (choice == 2) {
             int age, pollingID;
             string name, VoterCNIC, gender, address;
             cout << "Enter Voter CNIC to edit: ";
@@ -538,7 +548,7 @@ void manageVoters() {
                 continue;
             }
             editVoterByCNIC(VoterCNIC, Voter(getVoterIDByCNIC(VoterCNIC), name, VoterCNIC, gender, age, address, pollingID));
-        } else if (choice == 4) {
+        } else if (choice == 3) {
             string VoterCNIC;
             cout << "Enter Voter CNIC to delete: ";
             cin >> VoterCNIC;
@@ -551,7 +561,7 @@ void manageVoters() {
                 continue;
             }
             deleteVoterByCNIC(VoterCNIC);
-        } else if (choice == 0) {
+        } else if (choice == 4) {
             break;
         } else {
             cout << "Invalid option.\n";

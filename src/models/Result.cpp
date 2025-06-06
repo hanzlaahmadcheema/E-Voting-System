@@ -10,12 +10,21 @@
 #include <string>
 #include <unordered_map>
 #include <set>
+#include <ftxui/component/screen_interactive.hpp>
+#include <ftxui/component/component.hpp>
+#include <ftxui/dom/elements.hpp>
+
 using namespace std;
+using namespace ftxui;
 
 extern vector<Vote> loadAllVotes();
 extern int getNextID(const string &key);
 extern string getConstituencyTypeByID(int id);
 extern vector<PollingStation> loadAllStations();
+extern int ShowMenu(ScreenInteractive & screen, 
+     const std::string& heading, 
+     const std::vector<std::string>& options);
+
 
 // Result
 Result::Result() : ResultID(0), PollingStationID(0), ElectionID(0), WinnerCandidateID(0), TotalVotes(0), ConstituencyID(0) {}
@@ -349,15 +358,17 @@ void listAllResults()
 void manageResults() {
     int choice;
     while (true) {
-        cout << "\n Results Management\n";
-        cout << "1. Compute Result by Constituency\n";
-        cout << "2. View Result by Constituency\n";
-        cout << "3. View All Results\n";
-        cout << "0. Back\n";
-        cout << "Enter choice: ";
-        cin >> choice;
+           auto screen = ScreenInteractive::TerminalOutput();
 
-        if (choice == 1) {
+    std::vector<std::string> resultsManagement = {
+        "Compute Result by Constituency",
+        "View Result by Constituency",
+        "View All Results",
+        "Back"
+    };
+
+    int choice = ShowMenu(screen, "Results Management", resultsManagement);
+        if (choice == 0) {
             int ElectionID, constID;
             string ConstituencyType;
             cout << "Enter Election ID: ";
@@ -365,16 +376,16 @@ void manageResults() {
             cout << "Enter Constituency ID: ";
             cin >> constID;
             computeConstituencyResult(ElectionID, constID, getConstituencyTypeByID(constID));
-        } else if (choice == 2) {
+        } else if (choice == 1) {
             int ElectionID, constID;
             cout << "Enter Election ID: ";
             cin >> ElectionID;
             cout << "Enter Constituency ID: ";
             cin >> constID;
             viewResultByConstituency(ElectionID, constID);
-        } else if (choice == 3) {
+        } else if (choice == 2) {
             listAllResults();
-        } else if (choice == 0) {
+        } else if (choice == 3) {
             break;
         } else {
             cout << " Invalid option.\n";
