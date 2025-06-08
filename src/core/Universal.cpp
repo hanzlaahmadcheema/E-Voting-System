@@ -1,12 +1,6 @@
-#include "Universal.h"
-#include <fstream>
-#include <unordered_map>
-#include "../../include/json.hpp"
-#include <iostream>
 
-using namespace std;
-using json = nlohmann::json;
 
+#include <custom/config.h>
 const string COUNTER_FILE = "data/counters.json";
 
 int getNextID(const string &key)

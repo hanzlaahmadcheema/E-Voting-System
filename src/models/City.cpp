@@ -1,22 +1,15 @@
-#include "City.h"
-#include "../core/Universal.h"
-#include <iostream>
-#include <fstream>
-#include <vector>
-#include <string>
-#include <ftxui/component/screen_interactive.hpp>
-#include <ftxui/component/component.hpp>
-#include <ftxui/dom/elements.hpp>
-#include <ftxui/screen/screen.hpp>
-#include <ftxui/screen/color.hpp>
+#include <custom/config.h>
 
-using namespace std;
-using namespace ftxui;
+
 
 extern int getNextID(const string &key);
 extern int ShowMenu(ScreenInteractive & screen, 
-     const std::string& heading, 
-     const std::vector<std::string>& options);
+     const string& heading, 
+     const vector<string>& options);
+void ShowTableFTXUI(const string& heading, 
+                    const vector<string>& headers, 
+                    const vector<vector<string>>& rows);
+bool ShowForm(ScreenInteractive& screen, const string& title, vector<InputField>& fields);
 
 // City
 City::City() : CityID(0), CityName(""), ProvinceName("") {}
@@ -68,8 +61,8 @@ City City::fromJSON(const json &j)
 {
     return City(
         j.at("CityID").get<int>(),
-        j.at("CityName").get<std::string>(),
-        j.at("ProvinceName").get<std::string>());
+        j.at("CityName").get<string>(),
+        j.at("ProvinceName").get<string>());
 }
 
 const string CITY_FILE = "data/cities.json";
@@ -115,13 +108,13 @@ vector<City> loadAllCities()
                 {
                     cities.push_back(City::fromJSON(obj));
                 }
-                catch (const std::exception &e)
+                catch (const exception &e)
                 {
                     cerr << "Error parsing city: " << e.what() << endl;
                 }
             }
         }
-        catch (const std::exception &e)
+        catch (const exception &e)
         {
             cerr << "Error reading cities file: " << e.what() << endl;
         }
@@ -253,13 +246,17 @@ void listCitiesByProvince(const string &province)
         cout << "No cities found.\n";
         return;
     }
+    auto screen = ScreenInteractive::TerminalOutput();
+    vector<string> headers = {"City ID", "City Name", "Province Name"};
+    vector<vector<string>> data;
     for (const auto &c : cities)
     {
         if (c.getProvinceName() == province)
         {
-            cout << c.getCityID() << " - " << c.getCityName() << endl;
+            data.push_back({to_string(c.getCityID()), c.getCityName(), c.getProvinceName()});
         }
     }
+    ShowTableFTXUI("Cities in " + province, headers, data);
 }
 
 void listAllCities()
@@ -270,10 +267,14 @@ void listAllCities()
         cout << "No cities found.\n";
         return;
     }
+    auto screen = ScreenInteractive::TerminalOutput();
+    vector<string> headers = {"City ID", "City Name", "Province Name"};
+    vector<vector<string>> data;
     for (const auto &c : cities)
     {
-        cout << c.getCityID() << " - " << c.getCityName() << endl;
+        data.push_back({to_string(c.getCityID()), c.getCityName(), c.getProvinceName()});
     }
+    ShowTableFTXUI("All Cities", headers, data);
 }
 
 bool cityExists(int id) {
@@ -289,7 +290,7 @@ void manageCities() {
     while (true) {
            auto screen = ScreenInteractive::TerminalOutput();
 
-    std::vector<std::string> cityManagement = {
+    vector<string> cityManagement = {
         "Add City",
         "View All Cities",
         "Edit City",
@@ -297,39 +298,36 @@ void manageCities() {
         "Back"
     };
 
-    int choice = ShowMenu(screen, "City Management", cityManagement);
+    choice = ShowMenu(screen, "City Management", cityManagement);
 
         if (choice == 0) {
             string name, ProvinceName;
-            cin.ignore();
-            cout << "Enter City Name: ";
-            getline(cin, name);
-            if (!isValidCityName(name)) {
-                cout << "Invalid City Name.\n";
+            auto screen = ScreenInteractive::TerminalOutput();
+            vector<InputField> form = {
+                {"City Name", &name, InputField::TEXT},
+                {"Select Province", &ProvinceName, InputField::DROPDOWN, {"Punjab", "KPK", "Sindh", "Balochistan"}}
+            };
+            bool success = ShowForm(screen, "Add City", form);
+            if (!success) {
+                cout << "\n[ERROR] City creation cancelled.\n";
                 continue;
             }
-            cout << "Select Province: ";
-            cout << "1. Punjab\n2. KPK\n3. Sindh\n4. Balochistan\n";
-            int provinceChoice;
-            cin >> provinceChoice;
-            switch (provinceChoice) {
-                case 1: ProvinceName = "Punjab"; break;
-                case 2: ProvinceName = "KPK"; break;
-                case 3: ProvinceName = "Sindh"; break;
-                case 4: ProvinceName = "Balochistan"; break;
-                default: cout << "Invalid choice. City not created.\n"; continue;
-            }
-            City c(getNextID("CityID"), name, ProvinceName);
-            addCity(c);
         } else if (choice == 1) {
             listAllCities();
         } else if (choice == 2) {
-            int id;
-            string name, ProvinceName;
-            cout << "List of Cities:\n";
+            string id_str, name, ProvinceName;
             listAllCities();
-            cout << "Enter City ID: ";
-            cin >> id;
+            auto screen = ScreenInteractive::TerminalOutput();
+            vector<InputField> form = {
+                {"City ID", &id_str, InputField::NUMBER},
+                {"New City Name", &name, InputField::TEXT}
+            };
+            bool success = ShowForm(screen, "Edit City", form);
+            if (!success) {
+                cout << "\n[ERROR] Edit cancelled.\n";
+                continue;
+            }
+            int id = stoi(id_str);
             if (!isValidCityID(id)) {
                 cout << "Invalid City ID.\n";
                 continue;
@@ -338,29 +336,32 @@ void manageCities() {
                 cout << "City ID not found.\n";
                 continue;
             }
-            cin.ignore();
-            cout << "Enter New Name: ";
-            getline(cin, name);
             if (!isValidCityName(name)) {
                 cout << "Invalid City Name.\n";
                 continue;
             }
-            cout << "Select Province: ";
-            cout << "1. Punjab\n2. KPK\n3. Sindh\n4. Balochistan\n";
-            int provinceChoice;
-            cin >> provinceChoice;
-            switch (provinceChoice) {
-                case 1: ProvinceName = "Punjab"; break;
-                case 2: ProvinceName = "KPK"; break;
-                case 3: ProvinceName = "Sindh"; break;
-                case 4: ProvinceName = "Balochistan"; break;
-                default: cout << "Invalid choice. City not updated.\n"; continue;
+            vector<InputField> form2 = {
+                {"Province Name", &ProvinceName, InputField::DROPDOWN, {"Punjab", "KPK", "Sindh", "Balochistan"}}
+            };
+            bool success2 = ShowForm(screen, "Edit City", form2);
+            if (!success2) {
+                cout << "\n[ERROR] Edit cancelled.\n";
+                continue;
             }
             editCity(id, name, ProvinceName);
         } else if (choice == 3) {
-            int id;
-            cout << "Enter City ID to delete: ";
-            cin >> id;
+            string id_str;
+            listAllCities();
+            auto screen = ScreenInteractive::TerminalOutput();
+            vector<InputField> form3 = {
+                {"City ID", &id_str, InputField::TEXT}
+            };
+            bool success3 = ShowForm(screen, "Delete City", form3);
+            if (!success3) {
+                cout << "\n[ERROR] Delete cancelled.\n";
+                continue;
+            }
+            int id = stoi(id_str);
             if (!isValidCityID(id)) {
                 cout << "Invalid City ID.\n";
                 continue;

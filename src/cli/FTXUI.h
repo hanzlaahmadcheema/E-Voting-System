@@ -1,11 +1,19 @@
-#include <ftxui/component/screen_interactive.hpp>
-#include <ftxui/component/component.hpp>
-#include <ftxui/dom/elements.hpp>
-#include <ftxui/screen/screen.hpp>
-#include <ftxui/screen/color.hpp>
-using namespace ftxui;
-using namespace std;
+#ifndef FTXUI_H
+#define FTXUI_H
 
-extern int ShowMenu(ScreenInteractive& screen, 
-             const std::string& heading, 
-             const std::vector<std::string>& options);
+#include <custom/config.h>
+
+struct InputField {
+    string label;
+    string* value;              // Pointer to actual variable to update
+    enum Type { TEXT, NUMBER, DROPDOWN, RADIO } type;
+    vector<string> options;
+};
+bool ShowForm(ScreenInteractive& screen, const string& title, vector<InputField>& fields);
+
+int ShowMenu(ScreenInteractive& screen, 
+             const string& heading, 
+             const vector<string>& options);
+void ShowTableFTXUI(const vector<string>& headers, const vector<vector<string>>& rows, const string& title);
+
+#endif

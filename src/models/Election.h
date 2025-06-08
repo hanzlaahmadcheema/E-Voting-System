@@ -1,11 +1,8 @@
 #ifndef ELECTION_H
 #define ELECTION_H
 
-#include <string>
-#include "../../include/json.hpp"
 
-using namespace std;
-using json = nlohmann::json;
+#include <custom/config.h>
 
 class Election
 {

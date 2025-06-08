@@ -1,23 +1,16 @@
-#include "Party.h"
-#include "../core/Universal.h"
-#include <iostream>
-#include <fstream>
-#include <vector>
-#include <string>
-#include <ftxui/component/screen_interactive.hpp>
-#include <ftxui/component/component.hpp>
-#include <ftxui/dom/elements.hpp>
-#include <ftxui/screen/screen.hpp>
-#include <ftxui/screen/color.hpp>
+#include <custom/config.h>
 
-using namespace std;
-using namespace ftxui;
+
 
 extern int getNextID(const string &key);
 extern string toLower(const string& str);
 extern int ShowMenu(ScreenInteractive & screen, 
-     const std::string& heading, 
-     const std::vector<std::string>& options);
+     const string& heading, 
+     const vector<string>& options);
+void ShowTableFTXUI(const string& heading, 
+                    const vector<string>& headers, 
+                    const vector<vector<string>>& rows);
+bool ShowForm(ScreenInteractive& screen, const string& title, vector<InputField>& fields);
 
 // Party
 Party::Party() : PartyID(0), PartyName(""), PartySymbol("") {}
@@ -70,8 +63,8 @@ Party Party::fromJSON(const json &j)
 {
     return Party(
         j.at("PartyID").get<int>(),
-        j.at("PartyName").get<std::string>(),
-        j.at("PartySymbol").get<std::string>());
+        j.at("PartyName").get<string>(),
+        j.at("PartySymbol").get<string>());
 }
 
 const string PARTY_FILE = "data/parties.json";
@@ -254,7 +247,7 @@ void manageParties() {
     while (true) {
            auto screen = ScreenInteractive::TerminalOutput();
 
-    std::vector<std::string> partyMenu = {
+    vector<string> partyMenu = {
         "Add Party",
         "View All Parties",
         "Edit Party",

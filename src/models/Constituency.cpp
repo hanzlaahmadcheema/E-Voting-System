@@ -1,18 +1,4 @@
-#include "Constituency.h"
-#include "City.h"
-#include "../core/Universal.h"
-#include <iostream>
-#include <fstream>
-#include <vector>
-#include <string>
-#include <ftxui/component/screen_interactive.hpp>
-#include <ftxui/component/component.hpp>
-#include <ftxui/dom/elements.hpp>
-#include <ftxui/screen/screen.hpp>
-#include <ftxui/screen/color.hpp>
-
-using namespace std;
-using namespace ftxui;
+#include <custom/config.h>
 
 extern int getNextID(const string &key);
 extern bool cityExists(int id);
@@ -23,8 +9,12 @@ extern void listCitiesByProvince(const string &province);
 extern string getElectionTypeByID(int id);
 extern string toLower(const string& str);
 extern int ShowMenu(ScreenInteractive & screen, 
-     const std::string& heading, 
-     const std::vector<std::string>& options);
+     const string& heading, 
+     const vector<string>& options);
+void ShowTableFTXUI(const string& heading, 
+                    const vector<string>& headers, 
+                    const vector<vector<string>>& rows);
+bool ShowForm(ScreenInteractive& screen, const string& title, vector<InputField>& fields);
 
 // Constituency
 Constituency::Constituency() : ConstituencyID(0), ConstituencyName(""), CityID(0), ElectionID(0) {}
@@ -87,7 +77,7 @@ Constituency Constituency::fromJSON(const json &j)
 {
     return Constituency(
         j.at("ConstituencyID").get<int>(),
-        j.at("ConstituencyName").get<std::string>(),
+        j.at("ConstituencyName").get<string>(),
         j.at("CityID").get<int>(),
         j.at("ElectionID").get<int>());
 }
@@ -258,10 +248,19 @@ void listAllConstituencies()
         cout << "No constituencies found.\n";
         return;
     }
+    auto screen = ScreenInteractive::TerminalOutput();
+    vector<string> headers = {"Constituency ID", "Name", "City ID", "Election ID"};
+    vector<vector<string>> data;
     for (const auto &c : list)
     {
-        cout << c.getConstituencyID() << " - " << c.getConstituencyName() << endl;
+        data.push_back({
+            to_string(c.getConstituencyID()),
+            c.getConstituencyName(),
+            to_string(c.getCityID()),
+            to_string(c.getElectionID())
+        });
     }
+    ShowTableFTXUI("All Constituencies", headers, data);
 }
 
 // Admin/User: List by city
@@ -274,18 +273,27 @@ void listConstituenciesByCity(int cityID)
     }
     vector<Constituency> list = loadAllConstituencies();
     bool found = false;
+    vector<string> headers = {"Constituency ID", "Name", "City ID", "Election ID"};
+    vector<vector<string>> data;
     for (const auto &c : list)
     {
         if (c.getCityID() == cityID)
         {
-            cout << c.getConstituencyID() << " - " << c.getConstituencyName() << endl;
+            data.push_back({
+                to_string(c.getConstituencyID()),
+                c.getConstituencyName(),
+                to_string(c.getCityID()),
+                to_string(c.getElectionID())
+            });
             found = true;
         }
     }
     if (!found)
     {
         cout << "No constituencies found for this city.\n";
+        return;
     }
+    ShowTableFTXUI("Constituencies in City " + to_string(cityID), headers, data);
 }
 
 bool constituencyExists(int id) {
@@ -326,7 +334,7 @@ void manageConstituencies() {
     while (true) {
            auto screen = ScreenInteractive::TerminalOutput();
 
-    std::vector<std::string> constituencyMenu = {
+    vector<string> constituencyMenu = {
         "Add Constituency",
         "View All Constituencies",
         "Edit Constituency",
@@ -336,20 +344,31 @@ void manageConstituencies() {
 
     int choice = ShowMenu(screen, "Constituency Management", constituencyMenu);
         if (choice == 0) {
-            int cityID, ElectionID;
-            string name, type, fullName;
+            string cityID_str, ElectionID_str, name, type, fullName;
             listAllElections();
-            cout << "Enter Election ID: ";
-            cin >> ElectionID;
+            auto screen = ScreenInteractive::TerminalOutput();
+            vector<InputField> form = {
+                {"Election ID", &ElectionID_str, InputField::TEXT}
+            };
+            int ElectionID = stoi(ElectionID_str);
+            type = getElectionTypeByID(ElectionID);
+            vector<InputField> form2 = {
+                {"Constituency Name (" + type + "- )", &name, InputField::TEXT}
+            };
+            fullName = type + "-" + name;
+            bool success2 = ShowForm(screen, "Add Constituency", form2);
+            if (!success2) {
+                cout << "\n[ERROR] Constituency creation cancelled.\n";
+                continue;
+            }
             if (!electionExists(ElectionID)) {
                 cout << "Invalid Election ID.\n";
                 continue;
             }
-            type = getElectionTypeByID(ElectionID);
-            cout << "Enter Constituency Name: " << type << "-";
-            cin.ignore();
-            getline(cin, name);
-            fullName = type + "-" + name;
+            if (find(type.begin(), type.end(), type) == type.end()) {
+                cout << "Invalid Election Type.\n";
+                continue;
+            }
             if (!isValidConstituencyName(fullName)) {
                 cout << "Invalid Constituency Name.\n";
                 continue;
@@ -369,8 +388,15 @@ void manageConstituencies() {
             } else if (type == "PB") {
                 listCitiesByProvince("Balochistan");
             }
-            cout << "Enter City ID: ";
-            cin >> cityID;
+            vector<InputField> cityForm = {
+                {"City ID", &cityID_str, InputField::TEXT}
+            };
+            bool success5 = ShowForm(screen, "Add Constituency", cityForm);
+            if (!success5) {
+                cout << "\n[ERROR] City selection cancelled.\n";
+                continue;
+            }
+            int cityID = stoi(cityID_str);
             if (!cityExists(cityID)) {
                 cout << "Invalid City ID.\n";
                 continue;
@@ -380,12 +406,19 @@ void manageConstituencies() {
         } else if (choice == 1) {
             listAllConstituencies();
         } else if (choice == 2) {
-            int id, cityID, ElectionID;
+            string id_str, cityID_str, ElectionID_str, provinceName_str;
             string name, type, fullName;
-            cout << "List of Constituencies:\n";
             listAllConstituencies();
-            cout << "Enter Constituency ID: ";
-            cin >> id;
+            auto screen = ScreenInteractive::TerminalOutput();
+            vector<InputField> form = {
+                {"Constituency ID", &id_str, InputField::TEXT}
+            };
+            bool success = ShowForm(screen, "Edit Constituency", form);
+            if (!success) {
+                cout << "\n[ERROR] Edit cancelled.\n";
+                continue;
+            }
+            int id = stoi(id_str);
             if (!isValidConstituencyID(id)) {
                 cout << "Invalid Constituency ID.\n";
                 continue;
@@ -394,18 +427,29 @@ void manageConstituencies() {
                 cout << "Constituency ID doesn't exists.\n";
                 continue;
             }
-            cin.ignore();
             listAllElections();
-            cout << "Enter Election ID: ";
-            cin >> ElectionID;
+            vector<InputField> form2 = {
+                {"Election ID", &ElectionID_str, InputField::TEXT}
+            };
+            bool success2 = ShowForm(screen, "Edit Constituency", form2);
+            if (!success2) {
+                cout << "\n[ERROR] Edit cancelled.\n";
+                continue;
+            }
+            int ElectionID = stoi(ElectionID_str);
             if (!electionExists(ElectionID)) {
                 cout << "Invalid Election ID.\n";
                 continue;
             }
             type = getElectionTypeByID(ElectionID);
-            cout << "Enter new name: " << type << "-";
-            getline(cin, name);
-
+            vector<InputField> form3 = {
+                {"Constituency Name (" + type + "- )", &name, InputField::TEXT}
+            };
+            bool success3 = ShowForm(screen, "Edit Constituency", form3);
+            if (!success3) {
+                cout << "\n[ERROR] Edit cancelled.\n";
+                continue;
+            }
             fullName = type + "-" + name;
             if (!isValidConstituencyName(fullName)) {
                 cout << "Invalid Constituency Name.\n";
@@ -416,18 +460,42 @@ void manageConstituencies() {
                 continue;
             }
             listAllCities();
-            cout << "Enter City ID: ";
-            cin >> cityID;
+            vector<InputField> form4 = {
+                {"Select Province", &provinceName_str, InputField::DROPDOWN, {"Punjab", "KPK", "Sindh", "Balochistan"}}
+            };
+            bool success4 = ShowForm(screen, "Edit Constituency", form4);
+            if (!success4) {
+                cout << "\n[ERROR] City selection cancelled.\n";
+                continue;
+            }
+            listCitiesByProvince(provinceName_str);
+            vector<InputField> form5 = {
+                {"City ID", &cityID_str, InputField::TEXT}
+            };
+            bool success5 = ShowForm(screen, "Edit Constituency", form5);
+            if (!success5) {
+                cout << "\n[ERROR] City selection cancelled.\n";
+                continue;
+            }
+            int cityID = stoi(cityID_str);
             if (!cityExists(cityID)) {
                 cout << "Invalid City ID.\n";
                 continue;
             }
             editConstituency(id, fullName, cityID, ElectionID);
         } else if (choice == 3) {
-            int id;
+            string id_str;
             listAllConstituencies();
-            cout << "Enter Constituency ID to delete: ";
-            cin >> id;
+            auto screen = ScreenInteractive::TerminalOutput();
+            vector<InputField> form = {
+                {"Constituency ID", &id_str, InputField::TEXT}
+            };
+            bool success = ShowForm(screen, "Delete Constituency", form);
+            if (!success) {
+                cout << "\n[ERROR] Delete cancelled.\n";
+                continue;
+            }
+            int id = stoi(id_str);
             if (!isValidConstituencyID(id)) {
                 cout << "Invalid Constituency ID.\n";
                 continue;

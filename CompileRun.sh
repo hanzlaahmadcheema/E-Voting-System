@@ -26,7 +26,7 @@ find "$SRC_DIR" -name "*.cpp" | while read -r cpp_file; do
         echo "📦 Compiling: $rel_path"
         g++ -std=c++17 -I"$PROJECT_DIR/include" -c "$cpp_file" -o "$obj_file"
         if [ $? -ne 0 ]; then
-            echo -e "${RED}❌ Compilation failed: $rel_path${NC}"
+            echo -e "${RED}Compilation failed: $rel_path${NC}"
             exit 1
         fi
     fi
@@ -35,7 +35,7 @@ done
 echo -e "${GREEN}🔗 Linking object files...${NC}"
 g++ "$OBJ_DIR"/**/*.o "$OBJ_DIR"/*.o -o "$EXE"
 if [ $? -ne 0 ]; then
-    echo -e "${RED}❌ Linking failed.${NC}"
+    echo -e "${RED}Linking failed.${NC}"
     exit 1
 fi
 

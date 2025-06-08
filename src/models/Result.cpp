@@ -1,31 +1,18 @@
-#include "Result.h"
-#include "Vote.h"
-#include "Voter.h"
-#include "Candidate.h"
-#include "PollingStation.h"
-#include "../core/Universal.h"
-#include <iostream>
-#include <fstream>
-#include <vector>
-#include <string>
-#include <unordered_map>
-#include <set>
-#include <ftxui/component/screen_interactive.hpp>
-#include <ftxui/component/component.hpp>
-#include <ftxui/dom/elements.hpp>
-#include <ftxui/screen/screen.hpp>
-#include <ftxui/screen/color.hpp>
+#include <custom/config.h>
 
-using namespace std;
-using namespace ftxui;
+
 
 extern vector<Vote> loadAllVotes();
 extern int getNextID(const string &key);
 extern string getConstituencyTypeByID(int id);
 extern vector<PollingStation> loadAllStations();
 extern int ShowMenu(ScreenInteractive & screen, 
-     const std::string& heading, 
-     const std::vector<std::string>& options);
+     const string& heading, 
+     const vector<string>& options);
+void ShowTableFTXUI(const string& heading, 
+                    const vector<string>& headers, 
+                    const vector<vector<string>>& rows);
+bool ShowForm(ScreenInteractive& screen, const string& title, vector<InputField>& fields);
 
 
 // Result
@@ -325,19 +312,19 @@ void viewResultByConstituency(int ElectionID, int ConstituencyID)
     cout << "No result found for this constituency.\n";
 }
 
-void CleanOrphanedVotes(vector<Vote>& votes, const vector<Voter>& voters, const vector<Candidate>& candidates) {
-    set<int> validVoterIDs, validCandidateIDs;
-    for (const auto& v : voters) validVoterIDs.insert(v.getVoterID());
-    for (const auto& c : candidates) validCandidateIDs.insert(c.getCandidateID());
+// void CleanOrphanedVotes(vector<Vote>& votes, const vector<Voter>& voters, const vector<Candidate>& candidates) {
+//     set<int> validVoterIDs, validCandidateIDs;
+//     for (const auto& v : voters) validVoterIDs.insert(v.getVoterID());
+//     for (const auto& c : candidates) validCandidateIDs.insert(c.getCandidateID());
 
-    for (auto it = votes.begin(); it != votes.end(); ) {
-        if (validVoterIDs.count(it->getVoterID()) == 0 || validCandidateIDs.count(it->getCandidateID()) == 0) {
-            it = votes.erase(it);
-        } else {
-            ++it;
-        }
-    }
-}
+//     for (auto it = votes.begin(); it != votes.end(); ) {
+//         if (validVoterIDs.count(it->getVoterID()) == 0 || validCandidateIDs.count(it->getCandidateID()) == 0) {
+//             it = votes.erase(it);
+//         } else {
+//             ++it;
+//         }
+//     }
+// }
 
 // Admin/User: List all results
 void listAllResults()
@@ -362,7 +349,7 @@ void manageResults() {
     while (true) {
            auto screen = ScreenInteractive::TerminalOutput();
 
-    std::vector<std::string> resultsManagement = {
+    vector<string> resultsManagement = {
         "Compute Result by Constituency",
         "View Result by Constituency",
         "View All Results",

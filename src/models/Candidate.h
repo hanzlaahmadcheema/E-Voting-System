@@ -1,11 +1,7 @@
 #ifndef CANDIDATE_H
 #define CANDIDATE_H
 
-#include <string>
-#include "../../include/json.hpp"
-using namespace std;
-using json = nlohmann::json;
-
+#include <custom/config.h>
 class Candidate
 {
 public:

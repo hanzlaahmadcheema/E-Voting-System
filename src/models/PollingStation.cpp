@@ -1,25 +1,19 @@
-#include "PollingStation.h"
-#include "../core/Universal.h"
-#include <iostream>
-#include <fstream>
-#include <vector>
-#include <string>
-#include <ftxui/component/screen_interactive.hpp>
-#include <ftxui/component/component.hpp>
-#include <ftxui/dom/elements.hpp>
-#include <ftxui/screen/screen.hpp>
-#include <ftxui/screen/color.hpp>
 
-using namespace std;
-using namespace ftxui;
+#include <custom/config.h>
+
+
 extern int getNextID(const string& key);
 extern bool constituencyExists(int id);
 extern void listAllConstituencies();
 extern void listCitiesByProvince(const string &province);
 extern void listConstituenciesByCity(int cityID);
 extern int ShowMenu(ScreenInteractive & screen, 
-     const std::string& heading, 
-     const std::vector<std::string>& options);
+     const string& heading, 
+     const vector<string>& options);
+void ShowTableFTXUI(const string& heading, 
+                    const vector<string>& headers, 
+                    const vector<vector<string>>& rows);
+bool ShowForm(ScreenInteractive& screen, const string& title, vector<InputField>& fields);
 
 // PollingStation
 PollingStation::PollingStation() : PollingStationID(0), PollingStationName(""), PollingStationAddress(""), CityID(0), ConstituencyIDNA(0), ConstituencyIDPA(0) {}
@@ -104,8 +98,8 @@ PollingStation PollingStation::fromJSON(const json &j)
 {
     return PollingStation(
         j.at("PollingStationID").get<int>(),
-        j.at("PollingStationName").get<std::string>(),
-        j.at("PollingStationAddress").get<std::string>(),
+        j.at("PollingStationName").get<string>(),
+        j.at("PollingStationAddress").get<string>(),
         j.at("CityID").get<int>(),
         j.at("ConstituencyIDNA").get<int>(),
         j.at("ConstituencyIDPA").get<int>());
@@ -360,7 +354,7 @@ void managePollingStations() {
     while (true) {
            auto screen = ScreenInteractive::TerminalOutput();
 
-    std::vector<std::string> pollingStationMenu = {
+    vector<string> pollingStationMenu = {
         "Add Polling Station",
         "View All Polling Stations",
         "Edit Polling Station",

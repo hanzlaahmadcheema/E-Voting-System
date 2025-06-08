@@ -1,11 +1,11 @@
 #ifndef PARTY_H
 #define PARTY_H
 
-#include <string>
-#include "../../include/json.hpp"
 
-using namespace std;
-using json = nlohmann::json;
+#include <custom/config.h>
+
+
+
 
 class Party
 {

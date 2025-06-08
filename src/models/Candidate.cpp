@@ -1,20 +1,4 @@
-#include "Candidate.h"
-#include "Party.h"
-#include "Constituency.h"
-#include "PollingStation.h"
-#include "../core/Universal.h"
-#include <iostream>
-#include <fstream>
-#include <vector>
-#include <string>
-#include <ftxui/component/screen_interactive.hpp>
-#include <ftxui/component/component.hpp>
-#include <ftxui/dom/elements.hpp>
-#include <ftxui/screen/screen.hpp>
-#include <ftxui/screen/color.hpp>
-
-using namespace std;
-using namespace ftxui;
+#include <custom/config.h>
 
 extern int getNextID(const string &key);
 extern void listAllParties();
@@ -28,8 +12,12 @@ extern void deleteVotesByCandidateID(int CandidateID);
 extern void listCitiesByProvince(const string &province);
 extern void listConstituenciesByCity(int cityID);
 extern int ShowMenu(ScreenInteractive & screen, 
-     const std::string& heading, 
-     const std::vector<std::string>& options);
+     const string& heading, 
+     const vector<string>& options);
+void ShowTableFTXUI(const string& heading, 
+                    const vector<string>& headers, 
+                    const vector<vector<string>>& rows);
+bool ShowForm(ScreenInteractive& screen, const string& title, vector<InputField>& fields);
 
 Candidate::Candidate() : CandidateID(0), CandidateName(""), PartyID(0), ConstituencyID(0), ConstituencyType("") {}
 
@@ -269,16 +257,27 @@ void deleteCandidateByID(int CandidateID)
 // Admin: List all candidates
 void listAllCandidates()
 {
-    vector<Candidate> candidates = loadAllCandidates();
-    if (candidates.empty())
+    vector<Candidate> list = loadAllCandidates();
+    if (list.empty())
     {
         cout << "No candidates found.\n";
         return;
     }
-    for (const auto &c : candidates)
-    {
-        cout << c.getCandidateID() << " | " << c.getCandidateName() << " | PartyID: " << c.getPartyID() << " | ConstID: " << c.getConstituencyID() << endl;
+    // Using FTXUI for better output formatting
+    vector<string> headers = {"ID", "Name", "Party ID", "Constituency ID", "Constituency Type"};
+    vector<vector<string>> data;
+
+    for (const auto& e : list) {
+        data.push_back({
+            to_string(e.getCandidateID()),
+            e.getCandidateName(),
+            to_string(e.getPartyID()),
+            to_string(e.getConstituencyID()),
+            e.getConstituencyType()
+        });
     }
+
+    ShowTableFTXUI("All Candidates", headers, data);
 }
 
 // User: View candidates in a constituency
@@ -289,20 +288,29 @@ void viewCandidatesByConstituency(int constID)
         cerr << "Invalid constituency ID.\n";
         return;
     }
-    vector<Candidate> candidates = loadAllCandidates();
-    bool found = false;
-    for (const auto &c : candidates)
+    vector<Candidate> list = loadAllCandidates();
+    if (list.empty())
+    {
+        cout << "No candidates found in this constituency.\n";
+        return;
+    }
+    vector<string> headers = {"ID", "Name", "Party ID", "Constituency ID", "Constituency Type"};
+    vector<vector<string>> data;
+    for (const auto &c : list)
     {
         if (c.getConstituencyID() == constID)
         {
-            cout << c.getCandidateID() << " - " << c.getCandidateName() << " (PartyID: " << c.getPartyID() << ")" << endl;
-            found = true;
+            data.push_back({
+                to_string(c.getCandidateID()),
+                c.getCandidateName(),
+                to_string(c.getPartyID()),
+                to_string(c.getConstituencyID()),
+                c.getConstituencyType()
+            });
         }
     }
-    if (!found)
-    {
-        cout << "No candidates found for this constituency.\n";
-    }
+
+    ShowTableFTXUI("Candidates in Constituency " + to_string(constID), headers, data);
 }
 
 void viewCandidatesByStation(int PollingStationID)
@@ -324,19 +332,27 @@ void viewCandidatesByStation(int PollingStationID)
             constID2 = p.getConstituencyIDPA();
         }
     }
+    vector<string> headers = {"ID", "Name", "PartyID", "Constituency ID", "Type"};
+    vector<vector<string>> data;
     for (const auto &c : candidates)
     {
         if (c.getConstituencyID() == constID1 || c.getConstituencyID() == constID2)
         {
-            cout << c.getCandidateID() << " - " << c.getCandidateName() << " (PartyID: " << c.getPartyID() << ")" << endl;
+            data.push_back({
+                to_string(c.getCandidateID()),
+                c.getCandidateName(),
+                to_string(c.getPartyID()),
+                to_string(c.getConstituencyID()),
+                c.getConstituencyType()
+            });
             found = true;
         }
-
     }
     if (!found)
     {
-        cout << "No candidates found for this Polling Station ID.\n";
+        cout << "No candidates found for this Polling Station.\n";
     }
+    ShowTableFTXUI("Candidates for Polling Station", headers, data);
 }
 
 // User: Get candidate by ID
@@ -360,13 +376,28 @@ Candidate *getCandidateByID(int CandidateID)
 
 void viewCandidatesByType(string type){
     vector<Candidate> candidates = loadAllCandidates();
+    bool found = false;
+    vector<string> headers = {"ID", "Name", "Party ID", "Constituency ID", "Constituency Type"};
+    vector<vector<string>> data;
     for (const auto &c : candidates)
     {
         if (c.getConstituencyType() == type)
         {
-            cout << c.getCandidateID() << " - " << c.getCandidateName() << " (PartyID: " << c.getPartyID() << ")" << endl;
+            data.push_back({
+                to_string(c.getCandidateID()),
+                c.getCandidateName(),
+                to_string(c.getPartyID()),
+                to_string(c.getConstituencyID()),
+                c.getConstituencyType()
+            });
+            found = true;
         }
     }
+    if (!found)
+    {
+        cout << "No candidates found for this type.\n";
+    }
+    ShowTableFTXUI("Candidates by Type", headers, data);
 }
 
 bool candidateExists(int id) {
@@ -382,7 +413,7 @@ void manageCandidates() {
     while (true) {
            auto screen = ScreenInteractive::TerminalOutput();
 
-    std::vector<std::string> candidateManagement = {
+    vector<string> candidateManagement = {
         "Add Candidate",
         "View All Candidates",
         "View by Constituency",
@@ -393,103 +424,133 @@ void manageCandidates() {
 
     int choice = ShowMenu(screen, "Candidate Management", candidateManagement);
         if (choice == 0) {
-            int choice2, cityChoice, partyID, constID;
+            string partyID_str, constID_str, provinceID_str, cityID_str;
+            int partyID, constID;
             string name;
-            cout << "Enter Candidate Name: "; cin.ignore(); getline(cin, name);
-            if (!isValidCandidateName(name)) {
-                cout << "Invalid Candidate Name.\n";
+        //using ftxui 
+                auto screen = ScreenInteractive::TerminalOutput();
+
+            vector<InputField> form1 = {
+                {"Candidate Name", &name, InputField::TEXT}
+            };
+            bool success1 = ShowForm(screen, "Add Candidate", form1);
+            if (!success1) {
+                cout << "\n[ERROR] Candidate creation cancelled.\n";
                 continue;
             }
-            cout << "List of Parties:\n";
+            system("cls");
             listAllParties();
-            cout << "Enter Party ID: "; cin >> partyID;
-            if (!partyExists(partyID)) {
-                cout << "Invalid Party ID.\n";
+            vector<InputField> form2 = {
+                {"Party ID", &partyID_str, InputField::TEXT}
+            };
+            bool success2 = ShowForm(screen, "Add Candidate", form2);
+            if (!success2) {
+                cout << "\n[ERROR] Candidate creation cancelled.\n";
                 continue;
             }
-            cout << "Select Province: " << endl;
-            cout << "1. Punjab\n" 
-                    "2. KPK\n" 
-                    "3. Sindh\n"
-                    "4. Balochistan" << endl;
-            cin >> choice2;
-            if (choice2 < 1 || choice2 > 4) {
-                cout << "Invalid province choice.\n";
+            vector<InputField> form3 = {
+                {"Select Province", &provinceID_str, InputField::DROPDOWN, {"Punjab", "KPK", "Sindh", "Balochistan"}}
+            };
+            bool success3 = ShowForm(screen, "Add Candidate", form3);
+            if (!success3) {
+                cout << "\n[ERROR] Candidate creation cancelled.\n";
                 continue;
             }
-            cin.ignore();
-            if (choice2 == 1) {
-                listCitiesByProvince("Punjab");
-            } else if (choice2 == 2) {
-                listCitiesByProvince("KPK");
-            } else if (choice2 == 3) {
-                listCitiesByProvince("Sindh");
-            } else if (choice2 == 4) {
-                listCitiesByProvince("Balochistan");
-            }
-            cout << "Select City:";
-            cin >> cityChoice;
-            cout << "List of Constituencies:\n";
-            listConstituenciesByCity(cityChoice);
-            cout << "Enter Constituency ID: "; cin >> constID;
-            if (!constituencyExists(constID)) {
-                cout << "Invalid Constituency ID.\n";
+            listCitiesByProvince(provinceID_str);
+            vector<InputField> form4 = {
+                {"City ID", &cityID_str, InputField::TEXT}
+            };
+            bool success4 = ShowForm(screen, "Add Candidate", form4);
+            if (!success4) {
+                cout << "\n[ERROR] Candidate creation cancelled.\n";
                 continue;
             }
-            Candidate c(getNextID("CandidateID"), name, partyID, constID, getConstituencyTypeByID(constID));
-            addCandidate(c);
+            listConstituenciesByCity(stoi(cityID_str));
+            vector<InputField> form5 = {
+                {"Constituency ID", &constID_str, InputField::TEXT}
+            };
+            bool success5 = ShowForm(screen, "Add Candidate", form5);
+            if (!success5) {
+                cout << "\n[ERROR] Candidate creation cancelled.\n";
+                continue;
+            }
+            partyID = stoi(partyID_str);
+            constID = stoi(constID_str);
+
+            if (isValidCandidateName(name) && partyExists(partyID) && constituencyExists(constID)) {
+        Candidate c(getNextID("CandidateID"), name, partyID, constID, getConstituencyTypeByID(constID));
+        addCandidate(c);
+    } else {
+        cout << "Validation failed.\n";
+    }
         } else if (choice == 1) {
             listAllCandidates();
         } else if (choice == 2) {
-            int constID;
-            cout << "Enter Constituency ID: ";
-            cin >> constID;
+            string constID_str;
+            auto screen = ScreenInteractive::TerminalOutput();
+            vector<InputField> form = {
+                {"Constituency ID", &constID_str, InputField::TEXT}
+            };
+            bool success = ShowForm(screen, "View Candidates by Constituency", form);
+            if (!success) {
+                cout << "\n[ERROR] View cancelled.\n";
+                continue;
+            }
+            int constID = stoi(constID_str);
             if (!constituencyExists(constID)) {
                 cout << "Invalid Constituency ID.\n";
                 continue;
             }
-            cout << "Candidates in Constituency ID " << constID << ":\n";
             viewCandidatesByConstituency(constID);
         } else if (choice == 3) {
-            int id;
-            string name;
-            int partyID, constID;
-            cout << "List of Candidates:\n";
+            string id_str, name , partyID_str, constID_str;
             listAllCandidates();
-            cout << "Enter Candidate ID to edit: ";
-            cin >> id;
-            if (!isValidCandidateID(id)) {
-                cout << "Invalid Candidate ID.\n";
+            auto screen = ScreenInteractive::TerminalOutput();
+            vector<InputField> form1 = {
+                {"Candidate ID", &id_str, InputField::TEXT},
+                {"New Name", &name, InputField::TEXT}
+            };
+            bool success1 = ShowForm(screen, "Edit Candidate", form1);
+            if (!success1) {
+                cout << "\n[ERROR] Edit cancelled.\n";
                 continue;
             }
-            if (!candidateExists(id)) {
-                cout << "Candidate ID not found.\n";
-                continue;
-            }
-            cout << "Enter New Name: "; cin.ignore(); getline(cin, name);
-            if (!isValidCandidateName(name)) {
-                cout << "Invalid Candidate Name.\n";
-                continue;
-            }
+            int id = stoi(id_str);
             listAllParties();
-            cout << "Enter New Party ID: "; cin >> partyID;
-            if (!partyExists(partyID)) {
-                cout << "Invalid Party ID.\n";
+            vector<InputField> form2 = {
+                {"New Party ID", &partyID_str, InputField::TEXT}
+            };
+            bool success2 = ShowForm(screen, "Edit Candidate", form2);
+            if (!success2) {
+                cout << "\n[ERROR] Edit cancelled.\n";
                 continue;
             }
+            int partyID = stoi(partyID_str);
             listAllConstituencies();
-            cout << "Enter New Constituency ID: "; cin >> constID;
-            if (!constituencyExists(constID)) {
-                cout << "Invalid Constituency ID.\n";
+            vector<InputField> form3 = {
+                {"New Constituency ID", &constID_str, InputField::TEXT}
+            };
+            bool success3 = ShowForm(screen, "Edit Candidate", form3);
+            if (!success3) {
+                cout << "\n[ERROR] Edit cancelled.\n";
                 continue;
             }
+            int constID = stoi(constID_str);
             cout << "Editing Candidate ID " << id << "...\n";
             editCandidate(id, name, partyID, constID);
         } else if (choice == 4) {
-            int id;
+            string id_str;
             listAllCandidates();
-            cout << "Enter Candidate ID to delete: ";
-            cin >> id;
+            auto screen = ScreenInteractive::TerminalOutput();
+            vector<InputField> form = {
+                {"Candidate ID", &id_str, InputField::TEXT}
+            };
+            bool success = ShowForm(screen, "Delete Candidate", form);
+            if (!success) {
+                cout << "\n[ERROR] Delete cancelled.\n";
+                continue;
+            }
+            int id = stoi(id_str);
             if (!isValidCandidateID(id)) {
                 cout << "Invalid Candidate ID.\n";
                 continue;
@@ -507,7 +568,6 @@ void manageCandidates() {
         }
     }
 }
-
 // int main()
 // {
 //     // Example usage

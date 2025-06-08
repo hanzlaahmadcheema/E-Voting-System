@@ -1,11 +1,7 @@
 #ifndef VOTER_H
 #define VOTER_H
 
-#include <string>
-#include "../../include/json.hpp"
-
-using namespace std;
-using json = nlohmann::json;
+#include <custom/config.h>
 
 class Voter
 {

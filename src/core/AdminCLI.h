@@ -1,13 +1,13 @@
 #ifndef ADMINLOGIN_H
 #define ADMINLOGIN_H
 
-#include <string>
-#include <vector>
-#include "../../include/json.hpp"
+
+
+#include <custom/config.h>
 
 struct Admin {
-    std::string username;
-    std::string password;
+    string username;
+    string password;
 
     nlohmann::json toJSON() const {
         return nlohmann::json{
@@ -18,14 +18,14 @@ struct Admin {
 
     static Admin fromJSON(const nlohmann::json& j) {
         return Admin{
-            j.at("username").get<std::string>(),
-            j.at("password").get<std::string>()
+            j.at("username").get<string>(),
+            j.at("password").get<string>()
         };
     }
 };
 
-bool loadAdmins(std::vector<Admin>& adminList);
-bool saveAdmins(const std::vector<Admin>& adminList);
-bool loginAdmin(const std::vector<Admin>& adminList);
+bool loadAdmins(vector<Admin>& adminList);
+bool saveAdmins(const vector<Admin>& adminList);
+bool loginAdmin(const vector<Admin>& adminList);
 
 #endif

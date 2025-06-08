@@ -1,25 +1,15 @@
-#include "Election.h"
-#include "../core/Universal.h"
-#include <iostream>
-#include <fstream>
-#include <vector>
-#include <string>
-#include <iomanip>
-#include <ftxui/component/screen_interactive.hpp>
-#include <ftxui/component/component.hpp>
-#include <ftxui/dom/elements.hpp>
-#include <ftxui/dom/table.hpp>
-#include <ftxui/screen/screen.hpp>
-#include <ftxui/screen/color.hpp>
+#include <custom/config.h>
 
-using namespace std;
-using namespace ftxui;
 
 extern int getNextID(const string &key);
 void deleteVotesByElectionID(int ElectionID);
 extern int ShowMenu(ScreenInteractive & screen, 
-     const std::string& heading, 
-     const std::vector<std::string>& options);
+     const string& heading, 
+     const vector<string>& options);
+void ShowTableFTXUI(const string& heading, 
+                    const vector<string>& headers, 
+                    const vector<vector<string>>& rows);
+bool ShowForm(ScreenInteractive& screen, const string& title, vector<InputField>& fields);
 
 // Election
 Election::Election() : ElectionID(0), ElectionName(""), ElectionType(""), ElectionDate("") {}
@@ -82,9 +72,9 @@ Election Election::fromJSON(const json &j)
 {
     return Election(
         j.at("ElectionID").get<int>(),
-        j.at("ElectionName").get<std::string>(),
-        j.at("ElectionType").get<std::string>(),
-        j.at("ElectionDate").get<std::string>());
+        j.at("ElectionName").get<string>(),
+        j.at("ElectionType").get<string>(),
+        j.at("ElectionDate").get<string>());
 }
 
 const string ELECTION_FILE = "data/elections.json";
@@ -283,13 +273,6 @@ string getElectionTypeByID(int id)
     return "";
 }
 
-void printLine(int idW, int nameW, int typeW, int dateW) {
-    cout << "+" << string(idW + 2, '-') 
-         << "+" << string(nameW + 2, '-') 
-         << "+" << string(typeW + 2, '-') 
-         << "+" << string(dateW + 2, '-') << "+" << endl;
-}
-
 void listAllElections() {
     vector<Election> list = loadAllElections();
     if (list.empty()) {
@@ -297,34 +280,19 @@ void listAllElections() {
         return;
     }
 
-    // Fixed column widths (tweak if needed)
-    const int colID = 12;
-    const int colName = 30;
-    const int colType = 20;
-    const int colDate = 15;
+    vector<string> headers = {"ID", "Name", "Type", "Date"};
+    vector<vector<string>> data;
 
-    // Print header border
-    printLine(colID, colName, colType, colDate);
-
-    // Print header row
-    cout << "| " << left << setw(colID) << "Election ID"
-         << " | " << left << setw(colName) << "Election Name"
-         << " | " << left << setw(colType) << "Election Type"
-         << " | " << left << setw(colDate) << "Election Date" << " |" << endl;
-
-    // Print header bottom border
-    printLine(colID, colName, colType, colDate);
-
-    // Print data rows
-    for (const auto &e : list) {
-        cout << "| " << left << setw(colID) << e.getElectionID()
-             << " | " << left << setw(colName) << e.getElectionName()
-             << " | " << left << setw(colType) << e.getElectionType()
-             << " | " << left << setw(colDate) << e.getElectionDate() << " |" << endl;
+    for (const auto& e : list) {
+        data.push_back({
+            to_string(e.getElectionID()),
+            e.getElectionName(),
+            e.getElectionType(),
+            e.getElectionDate()
+        });
     }
 
-    // Final bottom border
-    printLine(colID, colName, colType, colDate);
+    ShowTableFTXUI("All Elections", headers, data);
 }
 
 
@@ -341,7 +309,7 @@ void manageElections() {
 
         auto screen = ScreenInteractive::TerminalOutput();
 
-    std::vector<std::string> electionManagement = {
+    vector<string> electionManagement = {
         "Create Election",
         "View All Elections",
         "Edit Election",
@@ -353,24 +321,25 @@ void manageElections() {
 
         if (choice == 0) {
             string name, type, date;
-            cin.ignore();
-            cout << "Enter Election Name: "; getline(cin, name);
-            if (!isValidElectionName(name)) {
-                cout << "Invalid Election Name.\n";
-                continue;
-            }
-            cout << "Enter Type (NA, PP, PS, PK, PB): "; getline(cin, type);
-            if (!isValidElectionType(type)) {
-                cout << "Invalid Election Type.\n";
-                continue;
-            }
-            cout << "Enter Date (YYYY-MM-DD): "; getline(cin, date);
-            if (!isValidElectionDate(date)) {
-                cout << "Invalid Election Date. Use YYYY-MM-DD.\n";
-                continue;
-            }
-            Election e(getNextID("ElectionID"), name, type, date);
-            createElection(e);
+        auto screen = ScreenInteractive::TerminalOutput();
+
+            vector<InputField> form = {
+                {"Election Name", &name, InputField::TEXT},
+                {"Election Type", &type, InputField::DROPDOWN, {"NA", "PP", "PS", "PK", "PB"}},
+                {"Election Date", &date, InputField::TEXT}
+            };
+            bool success = ShowForm(screen, "Create Election", form);
+            if (success) {
+    // Run your validation
+    if (isValidElectionName(name) && isValidElectionType(type) && isValidElectionDate(date)) {
+        Election e(getNextID("ElectionID"), name, type, date);
+        createElection(e);
+    } else {
+        cout << "Validation failed.\n";
+    }
+} else {
+    cout << "Form was not submitted.\n";
+}
         } else if (choice == 1) {
             listAllElections();
         } else if (choice == 2) {

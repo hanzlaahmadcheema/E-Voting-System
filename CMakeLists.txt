@@ -34,6 +34,13 @@ target_link_libraries(E-Voting-System
     ftxui::component
 )
 
+# Use nlohmann_json as a header-only library from local include directory
+target_include_directories(E-Voting-System PRIVATE ${PROJECT_SOURCE_DIR}/include)
+
+target_include_directories(E-Voting-System PRIVATE ${PROJECT_SOURCE_DIR}/include)
+
+target_include_directories(E-Voting-System PRIVATE ${PROJECT_SOURCE_DIR}/src)
+
 # Optional: Group source files in IDE (like VS)
 source_group(TREE ${PROJECT_SOURCE_DIR}/src PREFIX "Source Files" FILES ${SRC_FILES})
 

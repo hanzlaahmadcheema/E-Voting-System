@@ -1,17 +1,8 @@
-#include <iostream>
-#include <ctime>
-#include "../models/Voter.h"
-#include "../models/Vote.h"
-#include "../models/Candidate.h"
-#include "../models/PollingStation.h"
-#include <ftxui/component/screen_interactive.hpp>
-#include <ftxui/component/component.hpp>
-#include <ftxui/dom/elements.hpp>
-#include <ftxui/screen/screen.hpp>
-#include <ftxui/screen/color.hpp>
-
-using namespace std;
-using namespace ftxui;
+#include <custom/config.h>
+#include <models/Voter.h>
+#include <models/Candidate.h>
+#include <models/PollingStation.h>
+#include <models/Vote.h>
 
 extern vector<Voter> loadAllVoters();
 extern vector<Candidate> loadAllCandidates();
@@ -27,13 +18,25 @@ extern void viewCandidatesByType(string type);
 extern int getNextID(const string &key);
 int getElectionIDByConstituencyID(int id);
 extern int ShowMenu(ScreenInteractive & screen, 
-     const std::string& heading, 
-     const std::vector<std::string>& options);
+     const string& heading, 
+     const vector<string>& options);
+void ShowTableFTXUI(const string& heading, 
+                    const vector<string>& headers, 
+                    const vector<vector<string>>& rows);
+bool ShowForm(ScreenInteractive& screen, const string& title, vector<InputField>& fields);
 
 Voter* voterLogin() {
     string VoterCNIC;
-    cout << "Enter CNIC to log in: ";
-    getline(cin, VoterCNIC);
+    // Using FTXUI for better input handling
+    auto screen = ScreenInteractive::TerminalOutput();
+    vector<InputField> fields = {
+        {"CNIC", &VoterCNIC, InputField::TEXT}
+    };
+    bool success = ShowForm(screen, "Voter Login", fields);
+    if (!success) {
+        cout << "\n[ERROR] Login cancelled.\n";
+        return nullptr;
+    }
 
     vector<Voter> voters = loadAllVoters();
     if (VoterCNIC.empty()) {
@@ -43,7 +46,7 @@ Voter* voterLogin() {
     for (auto& v : voters) {
         if (v.getVoterCNIC() == VoterCNIC) {
             cout << "Login successful. Welcome " << v.getVoterName() << "!\n";
-            return new Voter(v);  // Create a copy
+            return new Voter(v);
         }
     }
     cout << "Voter not found.\n";
@@ -57,7 +60,7 @@ void showUserMenu(Voter* voter) {
     while (true) {
    auto screen = ScreenInteractive::TerminalOutput();
 
-    std::vector<std::string> voterMenu = {
+    vector<string> voterMenu = {
         "View Candidates",
         "Cast Vote",
         "Logout"

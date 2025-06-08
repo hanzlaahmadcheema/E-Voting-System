@@ -1,23 +1,16 @@
-#include "Vote.h"
-#include "../core/Universal.h"
-#include <iostream>
-#include <fstream>
-#include <vector>
-#include <string>
-#include <ctime>
-#include <ftxui/component/screen_interactive.hpp>
-#include <ftxui/component/component.hpp>
-#include <ftxui/dom/elements.hpp>
-#include <ftxui/screen/screen.hpp>
-#include <ftxui/screen/color.hpp>
 
-using namespace std;
-using namespace ftxui;
+#include <custom/config.h>
+
+
 
 extern int getNextID(const string &key);
 extern int ShowMenu(ScreenInteractive & screen, 
-     const std::string& heading, 
-     const std::vector<std::string>& options);
+     const string& heading, 
+     const vector<string>& options);
+void ShowTableFTXUI(const string& heading, 
+                    const vector<string>& headers, 
+                    const vector<vector<string>>& rows);
+bool ShowForm(ScreenInteractive& screen, const string& title, vector<InputField>& fields);
 
 // Vote
 Vote::Vote() : VoteID(0), VoterID(0), CandidateID(0), ElectionID(0), PollingStationID(0), VoteTime("") {}
@@ -107,7 +100,7 @@ Vote Vote::fromJSON(const json &j)
         j.at("CandidateID").get<int>(),
         j.at("ElectionID").get<int>(),
         j.at("PollingStationID").get<int>(),
-        j.at("VoteTime").get<std::string>());
+        j.at("VoteTime").get<string>());
 }
 
 const string VOTE_FILE = "data/votes.json";
@@ -164,8 +157,8 @@ bool isValidVote(const Vote &vote, const vector<Vote> &existingVotes, string &er
         }
     }
     // Check timestamp format (basic ISO 8601 check)
-    std::regex iso8601(R"(^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$)");
-    if (!std::regex_search(vote.getTimestamp(), iso8601))
+    regex iso8601(R"(^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$)");
+    if (!regex_search(vote.getTimestamp(), iso8601))
     {
         errorMsg = "Invalid timestamp format. Use YYYY-MM-DD HH:MM:SS";
         return false;
@@ -175,11 +168,11 @@ bool isValidVote(const Vote &vote, const vector<Vote> &existingVotes, string &er
 }
 
 string getCurrentTimestamp() {
-    std::time_t now = std::time(nullptr);
-    std::tm *tm = std::localtime(&now);
+    time_t now = time(nullptr);
+    tm *tm = localtime(&now);
     char buffer[80];
-    std::strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", tm);
-    return std::string(buffer);
+    strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", tm);
+    return string(buffer);
 }
 
 vector<Vote> loadAllVotes()
@@ -197,7 +190,7 @@ vector<Vote> loadAllVotes()
                 list.push_back(Vote::fromJSON(obj));
             }
         }
-        catch (const std::exception &e)
+        catch (const exception &e)
         {
             cerr << "Error loading votes: " << e.what() << endl;
         }
@@ -320,7 +313,7 @@ void manageVoting() {
     
     auto screen = ScreenInteractive::TerminalOutput();
 
-    std::vector<std::string> votingManagement = {
+    vector<string> votingManagement = {
         "View All Votes",
         "Back"
     };

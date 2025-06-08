@@ -1,18 +1,7 @@
-#include "AdminCLI.h"
-#include <fstream>
-#include <iostream>
-#include <limits>
-#include <ftxui/component/screen_interactive.hpp>
-#include <ftxui/component/component.hpp>
-#include <ftxui/dom/elements.hpp>
-#include <ftxui/screen/screen.hpp>
-#include <ftxui/screen/color.hpp>
+#include <custom/config.h>
 
-using json = nlohmann::json;
-using namespace std;
-using namespace ftxui;
 
-const std::string ADMIN_FILE = "data/admins.json";
+const string ADMIN_FILE = "data/admins.json";
         extern void manageElections();
         extern void manageCities();
         extern void manageConstituencies();
@@ -23,11 +12,11 @@ const std::string ADMIN_FILE = "data/admins.json";
         extern void manageVoting();
         extern void manageResults();
         extern int ShowMenu(ScreenInteractive & screen, 
-             const std::string& heading, 
-             const std::vector<std::string>& options);
+             const string& heading, 
+             const vector<string>& options);
 
-bool loadAdmins(std::vector<Admin>& adminList) {
-    std::ifstream file(ADMIN_FILE);
+bool loadAdmins(vector<Admin>& adminList) {
+    ifstream file(ADMIN_FILE);
     if (!file.is_open()) return false;
 
     json j;
@@ -40,8 +29,8 @@ bool loadAdmins(std::vector<Admin>& adminList) {
     return true;
 }
 
-bool saveAdmins(const std::vector<Admin>& adminList) {
-    std::ofstream file(ADMIN_FILE);
+bool saveAdmins(const vector<Admin>& adminList) {
+    ofstream file(ADMIN_FILE);
     if (!file.is_open()) return false;
 
     json j;
@@ -53,25 +42,36 @@ bool saveAdmins(const std::vector<Admin>& adminList) {
     return true;
 }
 
-bool loginAdmin(const std::vector<Admin>& adminList) {
-    std::string inputUser, inputPass;
+bool loginAdmin(const vector<Admin>& adminList) {
+    string inputUser, inputPass;
+    auto screen = ScreenInteractive::TerminalOutput();
 
-    std::cout << "\n====================================\n";
-    std::cout << "         ADMIN LOGIN PORTAL         \n";
-    std::cout << "====================================\n";
-    std::cout << "\nUsername: ";
-    std::getline(std::cin, inputUser);
-    std::cout << "Password: ";
-    std::getline(std::cin, inputPass);
-
-    for (const auto& admin : adminList) {
-        if (admin.username == inputUser && admin.password == inputPass) {
-            std::cout << "\n[SUCCESS] Admin authenticated.\n";
-            return true;
-        }
+    //using FTXUI for better input handling
+    vector<InputField> fields = {
+        {"Username", &inputUser, InputField::TEXT},
+        {"Password", &inputPass, InputField::TEXT}
+    };
+    bool success = ShowForm(screen, "Admin Login", fields);
+    if (!success) {
+        cout << "\n[ERROR] Login cancelled.\n";
+        return false;
     }
+    // cout << "\n====================================\n";
+    // cout << "         ADMIN LOGIN PORTAL         \n";
+    // cout << "====================================\n";
+    // cout << "\nUsername: ";
+    // getline(cin, inputUser);
+    // cout << "Password: ";
+    // getline(cin, inputPass);
 
-    std::cout << "\n[ERROR] Invalid credentials. Access denied.\n";
+    // for (const auto& admin : adminList) {
+    //     if (admin.username == inputUser && admin.password == inputPass) {
+    //         cout << "\n[SUCCESS] Admin authenticated.\n";
+    //         return true;
+    //     }
+    // }
+
+    cout << "\n[ERROR] Invalid credentials. Access denied.\n";
     return false;
 }
 
@@ -80,7 +80,7 @@ void adminPanel() {
 
         auto screen = ScreenInteractive::TerminalOutput();
 
-    std::vector<std::string> adminPanel = {
+    vector<string> adminPanel = {
         "Elections",
         "Cities",
         "Constituencies",
@@ -107,7 +107,7 @@ void adminPanel() {
         case 7: manageVoting(); break;
         case 8: manageResults(); break;
         case 9: return; // Exit Admin Panel
-        default: std::cout << "❌ Invalid choice. Try again.\n"; break;
+        default: cout << "Invalid choice. Try again.\n"; break;
 
     }
 }

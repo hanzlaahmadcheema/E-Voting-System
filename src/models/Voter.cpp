@@ -1,17 +1,6 @@
-#include "Voter.h"
-#include "../core/Universal.h"
-#include <iostream>
-#include <vector>
-#include <fstream>
-#include <string>
-#include <ftxui/component/screen_interactive.hpp>
-#include <ftxui/component/component.hpp>
-#include <ftxui/dom/elements.hpp>
-#include <ftxui/screen/screen.hpp>
-#include <ftxui/screen/color.hpp>
+#include <custom/config.h>
 
-using namespace std;
-using namespace ftxui;
+
 
 extern int getNextID(const string& key);
 extern bool pollingStationExists(int id);
@@ -25,8 +14,12 @@ extern void listConstituenciesByCity(int cityID);
 extern void listStationsByConstituency(int constChoice);
 extern void listStationsByCity(int cityID);
 extern int ShowMenu(ScreenInteractive & screen, 
-     const std::string& heading, 
-     const std::vector<std::string>& options);
+     const string& heading, 
+     const vector<string>& options);
+void ShowTableFTXUI(const string& heading, 
+                    const vector<string>& headers, 
+                    const vector<vector<string>>& rows);
+bool ShowForm(ScreenInteractive& screen, const string& title, vector<InputField>& fields);
 
 
 // Voter
@@ -114,11 +107,11 @@ Voter Voter::fromJSON(const json &j)
 {
     return Voter(
         j.at("VoterID").get<int>(),
-        j.at("VoterName").get<std::string>(),
-        j.at("VoterCNIC").get<std::string>(),
-        j.at("VoterGender").get<std::string>(),
+        j.at("VoterName").get<string>(),
+        j.at("VoterCNIC").get<string>(),
+        j.at("VoterGender").get<string>(),
         j.at("VoterAge").get<int>(),
-        j.at("VoterAddress").get<std::string>(),
+        j.at("VoterAddress").get<string>(),
         j.at("PollingStationID").get<int>());
 }
 
@@ -430,7 +423,7 @@ void manageVoters() {
     while (true) {
         auto screen = ScreenInteractive::TerminalOutput();
 
-    std::vector<std::string> voterManagement = {
+    vector<string> voterManagement = {
         "Register Voter",
         "View All Voters",
         "Edit Voter",
