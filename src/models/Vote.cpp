@@ -298,12 +298,18 @@ void listAllVotes()
             continue;
         }
         seenVoteIDs.insert(v.getVoteID());
-        cout << "VoteID: " << v.getVoteID()
-             << " | VoterID: " << v.getVoterID()
-             << " | CandidateID: " << v.getCandidateID()
-             << " | ElectionID: " << v.getElectionID()
-             << " | PollingStationID:" << v.getPollingStationID()
-             << " | Time: " << v.getTimestamp() << endl;
+        // auto screen = ScreenInteractive::TerminalOutput();
+        // vector<string> headers = {"VoteID", "VoterID", "CandidateID", "ElectionID", "PollingStationID", "Timestamp"};
+        // vector<string> data;
+        // data.push_back({
+        //     to_string(v.getVoteID()),
+        //     to_string(v.getVoterID()),
+        //     to_string(v.getCandidateID()),
+        //     to_string(v.getElectionID()),
+        //     to_string(v.getPollingStationID()),
+        //     v.getTimestamp()
+        // });
+        // ShowTableFTXUI("Vote Details", headers, data);
     }
 }
 

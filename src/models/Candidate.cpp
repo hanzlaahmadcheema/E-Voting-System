@@ -374,6 +374,25 @@ Candidate *getCandidateByID(int CandidateID)
     return nullptr;
 }
 
+string getCandidateNameByID(int CandidateID)
+{
+    if (CandidateID <= 0)
+    {
+        cerr << "Invalid candidate ID.\n";
+        return "";
+    }
+    vector<Candidate> candidates = loadAllCandidates();
+    for (auto &c : candidates)
+    {
+        if (c.getCandidateID() == CandidateID)
+        {
+            return c.getCandidateName();
+        }
+    }
+    return "";
+}
+
+
 void viewCandidatesByType(string type){
     vector<Candidate> candidates = loadAllCandidates();
     bool found = false;

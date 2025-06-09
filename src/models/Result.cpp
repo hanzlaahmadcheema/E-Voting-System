@@ -6,6 +6,7 @@ extern vector<Vote> loadAllVotes();
 extern int getNextID(const string &key);
 extern string getConstituencyTypeByID(int id);
 extern vector<PollingStation> loadAllStations();
+extern string getCandidateNameByID(int CandidateID);
 extern int ShowMenu(ScreenInteractive & screen, 
      const string& heading, 
      const vector<string>& options);
@@ -276,14 +277,27 @@ void computeConstituencyResult(int ElectionID, int ConstituencyID, const string&
         }
     }
 
-    // Save result (PollingStationID can be set to 0 or any representative value)
     Result result(getNextID("ResultID"), 0, ElectionID, winnerCandidateID, maxVotes, ConstituencyID);
     allResults.push_back(result);
     saveAllResults(allResults);
+    auto screen = ScreenInteractive::TerminalOutput();
 
-    cout << "Result computed for " << constituencyType << " Constituency " << ConstituencyID
-         << " | Winner CandidateID: " << winnerCandidateID
-         << " with " << maxVotes << " votes.\n";
+    vector<string> headers = {"Result ID", "Polling Station ID", "Election ID", "Winner Candidate", "Total Votes", "Constituency ID"};
+    vector<vector<string>> data;
+    for (const auto &r : allResults)
+    {
+        data.push_back({
+            to_string(r.getResultID()),
+            to_string(r.getPollingStationID()),
+            to_string(r.getElectionID()),
+            getCandidateNameByID(r.getWinnerCandidateID()),
+            to_string(r.getTotalVotes()),
+            to_string(r.getConstituencyID())
+        });
+    }
+    ShowTableFTXUI("Results In Constituency" + to_string(ConstituencyID), headers, data);
+    
+
 }
 
 // Admin/User: View result for a constituency
@@ -300,12 +314,20 @@ void viewResultByConstituency(int ElectionID, int ConstituencyID)
         cerr << "Error: No results found." << endl;
         return;
     }
+                    vector<string> headers = {"Result ID", "Polling Station ID", "Election ID", "Winner Candidate", "Total Votes", "Constituency ID"};
+    vector<vector<string>> data;
     for (const auto &r : results)
     {
         if (r.getElectionID() == ElectionID && r.getConstituencyID() == ConstituencyID)
         {
-            cout << "Constituency " << ConstituencyID << " | Winner: CandidateID "
-                 << r.getWinnerCandidateID() << " | Total Votes: " << r.getTotalVotes() << endl;
+        data.push_back({
+            to_string(r.getResultID()),
+            to_string(r.getPollingStationID()),
+            to_string(r.getElectionID()),
+            getCandidateNameByID(r.getWinnerCandidateID()),
+            to_string(r.getTotalVotes()),
+            to_string(r.getConstituencyID())
+        });
             return;
         }
     }
@@ -335,13 +357,21 @@ void listAllResults()
         cout << "No results to display." << endl;
         return;
     }
+    auto screen = ScreenInteractive::TerminalOutput();
+        vector<string> headers = {"Result ID", "Polling Station ID", "Election ID", "Winner Candidate", "Total Votes", "Constituency ID"};
+    vector<vector<string>> data;
     for (const auto &r : results)
     {
-        cout << "ElectionID: " << r.getElectionID()
-             << " | ConstID: " << r.getConstituencyID()
-             << " | WinnerID: " << r.getWinnerCandidateID()
-             << " | Votes: " << r.getTotalVotes() << endl;
+        data.push_back({
+            to_string(r.getResultID()),
+            to_string(r.getPollingStationID()),
+            to_string(r.getElectionID()),
+            getCandidateNameByID(r.getWinnerCandidateID()),
+            to_string(r.getTotalVotes()),
+            to_string(r.getConstituencyID())
+        });
     }
+    ShowTableFTXUI("All Results", headers, data);
 }
 
 void manageResults() {
@@ -358,19 +388,34 @@ void manageResults() {
 
     int choice = ShowMenu(screen, "Results Management", resultsManagement);
         if (choice == 0) {
-            int ElectionID, constID;
-            string ConstituencyType;
-            cout << "Enter Election ID: ";
-            cin >> ElectionID;
-            cout << "Enter Constituency ID: ";
-            cin >> constID;
+            string ElectionID_str, constID_str;
+            auto screen = ScreenInteractive::TerminalOutput();
+            vector<InputField> form = {
+                {"Election ID", &ElectionID_str, InputField::NUMBER},
+                {"Constituency ID", &constID_str, InputField::NUMBER}
+            };
+            bool success = ShowForm(screen, "Compute Result", form);
+            if (!success) {
+                cout << "\n[ERROR] Result computation cancelled.\n";
+                continue;
+            }
+            int ElectionID = stoi(ElectionID_str);
+            int constID = stoi(constID_str);
             computeConstituencyResult(ElectionID, constID, getConstituencyTypeByID(constID));
         } else if (choice == 1) {
-            int ElectionID, constID;
-            cout << "Enter Election ID: ";
-            cin >> ElectionID;
-            cout << "Enter Constituency ID: ";
-            cin >> constID;
+            string ElectionID_str, constID_str;
+            auto screen = ScreenInteractive::TerminalOutput();
+            vector<InputField> form = {
+                {"Election ID", &ElectionID_str, InputField::NUMBER},
+                {"Constituency ID", &constID_str, InputField::NUMBER}
+            };
+            bool success = ShowForm(screen, "Compute Result", form);
+            if (!success) {
+                cout << "\n[ERROR] Result computation cancelled.\n";
+                continue;
+            }
+            int ElectionID = stoi(ElectionID_str);
+            int constID = stoi(constID_str);
             viewResultByConstituency(ElectionID, constID);
         } else if (choice == 2) {
             listAllResults();

@@ -294,9 +294,19 @@ void listAllVoters()
     }
     for (const auto &v : voters)
     {
-        cout << v.getVoterID() << " | " << v.getVoterName() << " | " << v.getVoterCNIC() << " | "
-             << v.getVoterGender() << " | " << v.getVoterAge() << " | " << v.getVoterAddress() << " | "
-             << v.getPollingStationID() << "\n";
+        // auto screen = ScreenInteractive::TerminalOutput();
+        // vector<string> headers = {"ID", "Name", "CNIC", "Gender", "Age", "Address", "Polling Station ID"};
+        // vector<vector<string>> data;
+        //     data.push_back({
+        //         to_string(v.getVoterID()),
+        //         v.getVoterName(),
+        //         v.getVoterCNIC(),
+        //         v.getVoterGender(),
+        //         to_string(v.getVoterAge()),
+        //         v.getVoterAddress(),
+        //         to_string(v.getPollingStationID())
+        //     });
+        // ShowTableFTXUI("Voter Details", headers, data);
     }
 }
 
@@ -419,7 +429,6 @@ bool voterExists(string VoterCNIC) {
 }
 
 void manageVoters() {
-    int provChoice, cityChoice;
     while (true) {
         auto screen = ScreenInteractive::TerminalOutput();
 
@@ -434,41 +443,41 @@ void manageVoters() {
     int choice = ShowMenu(screen, "Voter Management", voterManagement);
 
         if (choice == 0) {
-            int age, pollingID;
-            string name, VoterCNIC, gender, address;
-            cin.ignore();
-            cout << "Name: "; getline(cin, name);
+            string age_str, pollingID_str, name, VoterCNIC, gender, address, cityID_str, provChoice_str;
+            vector<InputField> form1 = {
+                {"Voter Name", &name, InputField::TEXT},
+                {"Voter CNIC", &VoterCNIC, InputField::TEXT},
+                {"Voter Gender", &gender, InputField::TEXT},
+                {"Voter Age", &age_str, InputField::TEXT},
+                {"Voter Province", &provChoice_str, InputField::DROPDOWN, {"Punjab", "KPK", "Sindh", "Balochistan"}}
+                };
+            bool success1 = ShowForm(screen, "Add Voter", form1);
+            if (!success1) {
+                cout << "\n[ERROR] Creation cancelled.\n";
+                continue;
+            }
+            int age = stoi(age_str);
+            int provChoice = stoi(provChoice_str);
             if (!isValidName(name)) {
                 cout << "Invalid name. Only letters and spaces allowed.\n";
                 continue;
             }
-            cout << "CNIC: "; getline(cin, VoterCNIC);
             if (!isValidCNIC(VoterCNIC)) {
                 cout << "Invalid CNIC format.\n";
                 continue;
             }
-            cout << "Age: "; cin >> age;
             if (!isValidAge(age)) {
                 cout << "Invalid age. Age must be positive or greater than 18.\n";
                 continue;
             }
-            cout << "Gender: "; cin >> gender;
             if (!isValidGender(gender)) {
                 cout << "Invalid gender. Please enter Male or Female.\n";
                 continue;
             }
-            cin.ignore();
-                        cout << "Select Province: " << endl;
-            cout << "1. Punjab\n" 
-                    "2. KPK\n" 
-                    "3. Sindh\n"
-                    "4. Balochistan" << endl;
-            cin >> provChoice;
             if (provChoice < 1 || provChoice > 4) {
                 cout << "Invalid province choice.\n";
                 continue;
             }
-            cin.ignore();
             if (provChoice == 1) {
                 listCitiesByProvince("Punjab");
             } else if (provChoice == 2) {
@@ -478,29 +487,50 @@ void manageVoters() {
             } else if (provChoice == 4) {
                 listCitiesByProvince("Balochistan");
             }
-            cout << "Select City:";
-            cin >> cityChoice;
-            cin.ignore();
-            cout << "Address: "; getline(cin, address);
+            vector<InputField> form2 = {
+                {"City ID", &cityID_str, InputField::TEXT},
+                {"Voter Address", &address, InputField::TEXT},
+                };
+            bool success2 = ShowForm(screen, "Add Voter", form2);
+            if (!success2) {
+                cout << "\n[ERROR] Creation cancelled.\n";
+                continue;
+            }
+            int cityChoice = stoi(cityID_str);
             if (!isValidAddress(address)) {
                 cout << "Invalid address. Only letters, numbers, and spaces allowed.\n";
                 continue;
             }
             listStationsByCity(cityChoice);
-            cout << "Polling Station ID: "; cin >> pollingID;
-            if (!pollingStationExists(pollingID)) {
+            vector<InputField> form3 = {
+                {"Polling ID", &pollingID_str, InputField::TEXT}
+                };
+            bool success3 = ShowForm(screen, "Add Voter", form3);
+            if (!success3) {
+                cout << "\n[ERROR] Creation cancelled.\n";
+                continue;
+            }
+            int PollingID = stoi(pollingID_str);
+            if (!pollingStationExists(PollingID)) {
                 cout << "Invalid Polling Station ID.\n";
                 continue;
             }
-            Voter v(getNextID("VoterID"), name, VoterCNIC, gender, age, address, pollingID);
+            Voter v(getNextID("VoterID"), name, VoterCNIC, gender, age, address, PollingID);
             registerVoter(v);
         } else if (choice == 1) {
             listAllVoters();
-        } else if (choice == 2) {
-            int age, pollingID;
-            string name, VoterCNIC, gender, address;
-            cout << "Enter Voter CNIC to edit: ";
-            cin >> VoterCNIC;
+            } else if (choice == 2) {
+            string age_str, pollingID_str, name, VoterCNIC, gender, address, cityID_str, provChoice_str;
+            vector<InputField> form1 = {
+                {"Voter CNIC", &VoterCNIC, InputField::TEXT}
+                };
+            bool success1 = ShowForm(screen, "Edit Voter", form1);
+            if (!success1) {
+                cout << "\n[ERROR] Edition cancelled.\n";
+                continue;
+            }
+            int age = stoi(age_str);
+            int provChoice = stoi(provChoice_str);
             if (!voterExists(VoterCNIC)) {
                 cout << "Voter with this CNIC does not exist.\n";
                 continue;
@@ -509,44 +539,87 @@ void manageVoters() {
                 cout << "Invalid CNIC format.\n";
                 continue;
             }
-            cin.ignore();
-            cout << "New Name: "; getline(cin, name);
+            vector<InputField> form2 = {
+                {"Voter Name", &name, InputField::TEXT},
+                {"Voter CNIC", &VoterCNIC, InputField::TEXT},
+                {"Voter Gender", &gender, InputField::TEXT},
+                {"Voter Age", &age_str, InputField::TEXT},
+                {"Voter Province", &provChoice_str, InputField::DROPDOWN, {"Punjab", "KPK", "Sindh", "Balochistan"}}
+                };
+            bool success2 = ShowForm(screen, "Edit Voter", form2);
+            if (!success2) {
+                cout << "\n[ERROR] Edition cancelled.\n";
+                continue;
+            }
             if (!isValidName(name)) {
                 cout << "Invalid name. Only letters and spaces allowed.\n";
                 continue;
             }
-            cout << "New CNIC: "; getline(cin, VoterCNIC);
             if (!isValidCNIC(VoterCNIC)) {
                 cout << "Invalid CNIC format.\n";
                 continue;
             }
-            cout << "New Age: "; cin >> age;
             if (!isValidAge(age)) {
                 cout << "Invalid age. Age must be positive or greater than 18.\n";
                 continue;
             }
-            cin.ignore();
-            cout << "New Gender: "; getline(cin, gender);
             if (!isValidGender(gender)) {
                 cout << "Invalid gender. Please enter Male or Female.\n";
                 continue;
             }
-            cout << "New Address: "; getline(cin, address);
+            if (provChoice < 1 || provChoice > 4) {
+                cout << "Invalid province choice.\n";
+                continue;
+            }
+            if (provChoice == 1) {
+                listCitiesByProvince("Punjab");
+            } else if (provChoice == 2) {
+                listCitiesByProvince("KPK");
+            } else if (provChoice == 3) {
+                listCitiesByProvince("Sindh");
+            } else if (provChoice == 4) {
+                listCitiesByProvince("Balochistan");
+            }
+            vector<InputField> form3 = {
+                {"City ID", &cityID_str, InputField::TEXT},
+                {"Voter Address", &address, InputField::TEXT},
+                };
+            bool success3 = ShowForm(screen, "Edit Voter", form3);
+            if (!success3) {
+                cout << "\n[ERROR] Edition cancelled.\n";
+                continue;
+            }
+            int cityChoice = stoi(cityID_str);
             if (!isValidAddress(address)) {
                 cout << "Invalid address. Only letters, numbers, and spaces allowed.\n";
                 continue;
             }
-            listAllStations();
-            cout << "New Polling Station ID: "; cin >> pollingID;
-            if (!pollingStationExists(pollingID)) {
+            listStationsByCity(cityChoice);
+            vector<InputField> form4 = {
+                {"Polling ID", &pollingID_str, InputField::TEXT}
+                };
+            bool success4 = ShowForm(screen, "Edit Voter", form4);
+            if (!success4) {
+                cout << "\n[ERROR] Edition cancelled.\n";
+                continue;
+            }
+            int PollingID = stoi(pollingID_str);
+            if (!pollingStationExists(PollingID)) {
                 cout << "Invalid Polling Station ID.\n";
                 continue;
             }
-            editVoterByCNIC(VoterCNIC, Voter(getVoterIDByCNIC(VoterCNIC), name, VoterCNIC, gender, age, address, pollingID));
+            editVoterByCNIC(VoterCNIC, Voter(getVoterIDByCNIC(VoterCNIC), name, VoterCNIC, gender, age, address, PollingID));
         } else if (choice == 3) {
             string VoterCNIC;
-            cout << "Enter Voter CNIC to delete: ";
-            cin >> VoterCNIC;
+            auto screen = ScreenInteractive::TerminalOutput();
+            vector<InputField> form1 = {
+                {"Voter CNIC", &VoterCNIC, InputField::TEXT}
+                };
+            bool success1 = ShowForm(screen, "Delete Voter", form1);
+            if (!success1) {
+                cout << "\n[ERROR] Deletion cancelled.\n";
+                continue;
+            }
             if (!voterExists(VoterCNIC)) {
                 cout << "Voter with this CNIC does not exist.\n";
                 continue;

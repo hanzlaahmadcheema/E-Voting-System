@@ -34,6 +34,7 @@ public:
     static Candidate *getCandidateByID(int CandidateID);
     static bool candidateExists(int id);
     static void manageCandidates();
+    static string getCandidateNameByID(int id);
 
 private:
     int CandidateID;
