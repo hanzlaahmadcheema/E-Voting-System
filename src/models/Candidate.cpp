@@ -458,7 +458,7 @@ void manageCandidates() {
             }
             listCitiesByProvince(provinceID_str);
             vector<InputField> form4 = {
-                {"City ID", &cityID_str, InputField::TEXT}
+                {"City ID", &cityID_str, InputField::NUMBER}
             };
             bool success4 = ShowForm(screen, "Add Candidate", form4);
             if (!success4) {
@@ -467,7 +467,7 @@ void manageCandidates() {
             }
             listConstituenciesByCity(stoi(cityID_str));
             vector<InputField> form5 = {
-                {"Constituency ID", &constID_str, InputField::TEXT}
+                {"Constituency ID", &constID_str, InputField::NUMBER}
             };
             bool success5 = ShowForm(screen, "Add Candidate", form5);
             if (!success5) {
@@ -489,7 +489,7 @@ void manageCandidates() {
             string constID_str;
             auto screen = ScreenInteractive::TerminalOutput();
             vector<InputField> form = {
-                {"Constituency ID", &constID_str, InputField::TEXT}
+                {"Constituency ID", &constID_str, InputField::NUMBER}
             };
             bool success = ShowForm(screen, "View Candidates by Constituency", form);
             if (!success) {
@@ -507,7 +507,7 @@ void manageCandidates() {
             listAllCandidates();
             auto screen = ScreenInteractive::TerminalOutput();
             vector<InputField> form1 = {
-                {"Candidate ID", &id_str, InputField::TEXT},
+                {"Candidate ID", &id_str, InputField::NUMBER},
                 {"New Name", &name, InputField::TEXT}
             };
             bool success1 = ShowForm(screen, "Edit Candidate", form1);
@@ -518,7 +518,7 @@ void manageCandidates() {
             int id = stoi(id_str);
             listAllParties();
             vector<InputField> form2 = {
-                {"New Party ID", &partyID_str, InputField::TEXT}
+                {"New Party ID", &partyID_str, InputField::NUMBER}
             };
             bool success2 = ShowForm(screen, "Edit Candidate", form2);
             if (!success2) {
@@ -528,7 +528,7 @@ void manageCandidates() {
             int partyID = stoi(partyID_str);
             listAllConstituencies();
             vector<InputField> form3 = {
-                {"New Constituency ID", &constID_str, InputField::TEXT}
+                {"New Constituency ID", &constID_str, InputField::NUMBER}
             };
             bool success3 = ShowForm(screen, "Edit Candidate", form3);
             if (!success3) {
@@ -543,7 +543,7 @@ void manageCandidates() {
             listAllCandidates();
             auto screen = ScreenInteractive::TerminalOutput();
             vector<InputField> form = {
-                {"Candidate ID", &id_str, InputField::TEXT}
+                {"Candidate ID", &id_str, InputField::NUMBER}
             };
             bool success = ShowForm(screen, "Delete Candidate", form);
             if (!success) {

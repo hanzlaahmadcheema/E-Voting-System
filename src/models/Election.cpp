@@ -79,7 +79,6 @@ Election Election::fromJSON(const json &j)
 
 const string ELECTION_FILE = "data/elections.json";
 
-// Load elections
 #include <regex>
 
 bool isValidElectionID(int id)
@@ -130,12 +129,15 @@ vector<Election> loadAllElections()
                 catch (...)
                 {
                     // Skip invalid entry
+                    continue;
                 }
             }
         }
         catch (...)
         {
             // Invalid JSON, return empty list
+            cerr << "Error: Invalid JSON format in elections file.\n";
+            return list;
         }
     }
     return list;
@@ -343,12 +345,21 @@ void manageElections() {
         } else if (choice == 1) {
             listAllElections();
         } else if (choice == 2) {
-            int id;
-            string name, type, date;
-            cout << "List of Elections:\n";
+            string id_str, name, type, date;
             listAllElections();
-            cout << "Enter Election ID: "; cin >> id;
-            cin.ignore();
+            auto screen = ScreenInteractive::TerminalOutput();
+            vector<InputField> form = {
+                {"Election ID", &id_str, InputField::TEXT},
+                {"Election Name", &name, InputField::TEXT},
+                {"Election Type", &type, InputField::DROPDOWN, {"NA", "PP", "PS", "PK", "PB"}},
+                {"Election Date (YYYY-MM-DD)", &date, InputField::TEXT}
+            };
+            bool success = ShowForm(screen, "Edit Election", form);
+            if (!success) {
+                cout << "\n[ERROR] Edit cancelled.\n";
+                continue;
+            }
+            int id = stoi(id_str);
             if (!isValidElectionID(id)) {
                 cout << "Invalid Election ID.\n";
                 continue;
@@ -357,26 +368,32 @@ void manageElections() {
                 cout << "Election ID not found.\n";
                 continue;
             }
-            cout << "Enter New Name: "; getline(cin, name);
             if (!isValidElectionName(name)) {
                 cout << "Invalid Election Name.\n";
                 continue;
             }
-            cout << "Enter New Type (NA, PP, PS, PK, PB): "; getline(cin, type);
             if (!isValidElectionType(type)) {
                 cout << "Invalid Election Type.\n";
                 continue;
             }
-            cout << "Enter New Date (YYYY-MM-DD): "; getline(cin, date);
             if (!isValidElectionDate(date)) {
                 cout << "Invalid Election Date. Use YYYY-MM-DD.\n";
                 continue;
             }
             editElection(id, name, type, date);
         } else if (choice == 3) {
-            int id;
-            cout << "Enter Election ID to delete: ";
-            cin >> id;
+            string id_str;
+            listAllElections();
+            auto screen = ScreenInteractive::TerminalOutput();
+            vector<InputField> form = {
+                {"Election ID", &id_str, InputField::TEXT}
+            };
+            bool success = ShowForm(screen, "Delete Election", form);
+            if (!success) {
+                cout << "\n[ERROR] Edit cancelled.\n";
+                continue;
+            }
+            int id = stoi(id_str);
             if (!isValidElectionID(id)) {
                 cout << "Invalid Election ID.\n";
                 continue;

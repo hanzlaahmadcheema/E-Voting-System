@@ -236,10 +236,17 @@ void listAllParties()
         cout << "No parties found.\n";
         return;
     }
+    auto screen = ScreenInteractive::TerminalOutput();
+    vector<string> headers = {"Party ID", "Name", "Symbol"};
+    vector<vector<string>> data;
     for (const auto &p : list)
     {
-        cout << p.getPartyID() << " | " << p.getPartyName() << " | Symbol: " << p.getPartySymbol() << endl;
+        data.push_back({
+            to_string(p.getPartyID()),
+            p.getPartyName(),
+            p.getPartySymbol()});
     }
+    ShowTableFTXUI("All Parties", headers, data);
 }
 
 void manageParties() {
@@ -258,9 +265,16 @@ void manageParties() {
     int choice = ShowMenu(screen, "Party Menu", partyMenu);
         if (choice == 0) {
             string name, symbol;
-            cin.ignore();
-            cout << "Enter Party Name: ";
-            getline(cin, name);
+            auto screen = ScreenInteractive::TerminalOutput();
+            vector<InputField> form = {
+                {"Party Name", &name, InputField::TEXT},
+                {"Party Symbol", &symbol, InputField::TEXT}
+            };
+            bool success = ShowForm(screen, "Add Party", form);
+            if (!success) {
+                cout << "\n[ERROR] Party creation cancelled.\n";
+                continue;
+            }
             if (!isValidPartyName(name)) {
                 cout << "Invalid Party Name.\n";
                 continue;
@@ -269,8 +283,6 @@ void manageParties() {
                 cout << "Party Name already exists.\n";
                 continue;
             }
-            cout << "Enter Party Symbol: ";
-            getline(cin, symbol);
             if (!isValidPartySymbol(symbol)) {
                 cout << "Invalid Party Symbol.\n";
                 continue;
@@ -284,12 +296,20 @@ void manageParties() {
         } else if (choice == 1) {
             listAllParties();
         } else if (choice == 2) {
-            int id;
-            string name, symbol;
-            cout << "List of Parties:\n";
+            string id_str, name, symbol;
             listAllParties();
-            cout << "Enter Party ID to edit: ";
-            cin >> id;
+            auto screen = ScreenInteractive::TerminalOutput();
+            vector<InputField> form = {
+                {"Party ID", &name, InputField::TEXT},
+                {"Party Name", &name, InputField::TEXT},
+                {"Party Symbol", &symbol, InputField::TEXT}
+            };
+            bool success = ShowForm(screen, "Edit Party", form);
+            if (!success) {
+                cout << "\n[ERROR] Party Editing cancelled.\n";
+                continue;
+            }
+            int id = stoi(id_str);
             if (!isValidPartyID(id)) {
                 cout << "Invalid Party ID.\n";
                 continue;
@@ -298,9 +318,6 @@ void manageParties() {
                 cout << "Party ID not found.\n";
                 continue;
             }
-            cin.ignore();
-            cout << "Enter new name: ";
-            getline(cin, name);
             if (!isValidPartyName(name)) {
                 cout << "Invalid Party Name.\n";
                 continue;
@@ -309,8 +326,6 @@ void manageParties() {
                 cout << "Party Name already exists.\n";
                 continue;
             }
-            cout << "Enter new symbol: ";
-            getline(cin, symbol);
             if (!isValidPartySymbol(symbol)) {
                 cout << "Invalid Party Symbol.\n";
                 continue;
@@ -321,10 +336,18 @@ void manageParties() {
             }
             editParty(id, name, symbol);
         } else if (choice == 3) {
-            int id;
+            string id_str;
             listAllParties();
-            cout << "Enter Party ID to delete: ";
-            cin >> id;
+            auto screen = ScreenInteractive::TerminalOutput();
+            vector<InputField> form = {
+                {"Party ID", &id_str, InputField::TEXT}
+            };
+            bool success = ShowForm(screen, "Delete Party", form);
+            if (!success) {
+                cout << "\n[ERROR] Party Deletion cancelled.\n";
+                continue;
+            }
+            int id = stoi(id_str);
             if (!isValidPartyID(id)) {
                 cout << "Invalid Party ID.\n";
                 continue;

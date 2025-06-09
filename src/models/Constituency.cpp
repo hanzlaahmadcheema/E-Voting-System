@@ -350,6 +350,11 @@ void manageConstituencies() {
             vector<InputField> form = {
                 {"Election ID", &ElectionID_str, InputField::TEXT}
             };
+            bool success = ShowForm(screen, "Add Constituency", form);
+            if (!success) {
+                cout << "\n[ERROR] Constituency creation cancelled.\n";
+                continue;
+            }
             int ElectionID = stoi(ElectionID_str);
             type = getElectionTypeByID(ElectionID);
             vector<InputField> form2 = {
@@ -363,10 +368,6 @@ void manageConstituencies() {
             }
             if (!electionExists(ElectionID)) {
                 cout << "Invalid Election ID.\n";
-                continue;
-            }
-            if (find(type.begin(), type.end(), type) == type.end()) {
-                cout << "Invalid Election Type.\n";
                 continue;
             }
             if (!isValidConstituencyName(fullName)) {
@@ -403,11 +404,11 @@ void manageConstituencies() {
             }
             Constituency c(getNextID("ConstituencyID"), fullName, cityID, ElectionID);
             addConstituency(c);
-        } else if (choice == 1) {
+        } 
+        else if (choice == 1) {
             listAllConstituencies();
         } else if (choice == 2) {
-            string id_str, cityID_str, ElectionID_str, provinceName_str;
-            string name, type, fullName;
+            string id_str, cityID_str, ElectionID_str, provinceName_str, name, type, fullName;
             listAllConstituencies();
             auto screen = ScreenInteractive::TerminalOutput();
             vector<InputField> form = {
@@ -483,7 +484,8 @@ void manageConstituencies() {
                 continue;
             }
             editConstituency(id, fullName, cityID, ElectionID);
-        } else if (choice == 3) {
+        } 
+        else if (choice == 3) {
             string id_str;
             listAllConstituencies();
             auto screen = ScreenInteractive::TerminalOutput();

@@ -281,25 +281,28 @@ void listStationsByConstituency(int constID)
     }
     vector<PollingStation> list = loadAllStations();
     bool found = false;
+    auto screen = ScreenInteractive::TerminalOutput();
+    vector<string> headers = {"Station ID", "Name", "Address", "City ID", "Constituency ID"};
+    vector<vector<string>> data;
     for (const auto &s : list)
     {
-        if (s.getConstituencyIDNA() == constID)
+        if (s.getConstituencyIDNA() == constID || s.getConstituencyIDPA() == constID)
         {
-            cout << s.getPollingStationID() << " - " << s.getPollingStationName()
-                 << " (" << s.getPollingStationAddress() << ")" << endl;
-            found = true;
-        }
-                if (s.getConstituencyIDPA() == constID)
-        {
-            cout << s.getPollingStationID() << " - " << s.getPollingStationName()
-                 << " (" << s.getPollingStationAddress() << ")" << endl;
-            found = true;
+            data.push_back({
+                to_string(s.getPollingStationID()),
+                s.getPollingStationName(),
+                s.getPollingStationAddress(),
+                to_string(s.getCityID()),
+                to_string(s.getConstituencyIDNA())
+            });
         }
     }
+    ShowTableFTXUI("Polling Stations in Constituency " + to_string(constID), headers, data);
     if (!found)
     {
         cout << "No polling stations found for this constituency.\n";
     }
+
 }
 
 void listStationsByCity(int cityID)
@@ -311,15 +314,23 @@ void listStationsByCity(int cityID)
     }
     vector<PollingStation> list = loadAllStations();
     bool found = false;
+    auto screen = ScreenInteractive::TerminalOutput();
+    vector<string> headers = {"Station ID", "Name", "Address", "City ID", "Constituency ID"};
+    vector<vector<string>> data;
     for (const auto &s : list)
     {
         if (s.getCityID() == cityID)
         {
-            cout << s.getPollingStationID() << " - " << s.getPollingStationName()
-                 << " (" << s.getPollingStationAddress() << ")" << endl;
-            found = true;
+            data.push_back({
+                to_string(s.getPollingStationID()),
+                s.getPollingStationName(),
+                s.getPollingStationAddress(),
+                to_string(s.getCityID()),
+                to_string(s.getConstituencyIDNA())
+            });
         }
     }
+    ShowTableFTXUI("Polling Stations in City " + to_string(cityID), headers, data);
     if (!found)
     {
         cout << "No polling stations found for this city.\n";
@@ -364,21 +375,16 @@ void managePollingStations() {
 
     int choice = ShowMenu(screen, "Polling Station Management", pollingStationMenu);
         if (choice == 0) {
-            int choice, cityChoice, ConstituencyIDNA, ConstituencyIDPA;
-            string name, address;
+            string cityChoice_str, name, address, constituencyIDNA_str, constituencyIDPA_str;
             cin.ignore();
-
-            cout << "Select Province: " << endl;
-            cout << "1. Punjab\n" 
-                    "2. KPK\n" 
-                    "3. Sindh\n"
-                    "4. Balochistan" << endl;
-            cin >> choice;
-            if (choice < 1 || choice > 4) {
-                cout << "Invalid province choice.\n";
-                continue;
-            }
-            cin.ignore();
+            auto screen = ScreenInteractive::TerminalOutput();
+            vector<string> provinceMenu = {
+                "Punjab",
+                "KPK",
+                "Sindh",
+                "Balochistan"
+            };
+            int choice = ShowMenu(screen, "Select Province", provinceMenu);
             if (choice == 1) {
                 listCitiesByProvince("Punjab");
             } else if (choice == 2) {
@@ -388,27 +394,50 @@ void managePollingStations() {
             } else if (choice == 4) {
                 listCitiesByProvince("Balochistan");
             }
-            cout << "Select City:";
-            cin >> cityChoice;
-            cin.ignore();
+            vector<InputField> form = {
+                {"City ID", &cityChoice_str, InputField::TEXT}
+            };
+            bool success = ShowForm(screen, "Create Polling Station", form);
+            if (!success) {
+                cout << "\n[ERROR] Creation cancelled.\n";
+                continue;
+            }
+            int cityChoice = stoi(cityChoice_str);
             listStationsByCity(cityChoice);
-            cout << "Enter Station Name: "; getline(cin, name);
+            vector<InputField> form2 = {
+                {"Name", &name, InputField::TEXT},
+                {"Address", &address, InputField::TEXT}
+            };
+            bool success2 = ShowForm(screen, "Create Polling Station", form2);
+            if (!success2) {
+                cout << "\n[ERROR] Creation cancelled.\n";
+                continue;
+            }
             if (!isValidPollingStationName(name)) {
                 cout << "Invalid Polling Station Name.\n";
                 continue;
             }
-            cout << "Enter Address: "; getline(cin, address);
             if (!isValidPollingStationAddress(address)) {
                 cout << "Invalid Polling Station Address.\n";
                 continue;
             }
             listConstituenciesByCity(cityChoice);
-            cout << "Enter Constituency ID for National Assembly: "; cin >> ConstituencyIDNA;
+            vector<InputField> form3 = {
+                {"Constituency ID2", &constituencyIDNA_str, InputField::TEXT},
+                {"Constituency ID1", &constituencyIDPA_str, InputField::TEXT}
+            };
+            bool success3 = ShowForm(screen, "Create Polling Station", form3);
+            if (!success3) {
+                cout << "\n[ERROR] Creation cancelled.\n";
+                continue;
+            }
+            int ConstituencyIDNA = stoi(constituencyIDNA_str);
+            int ConstituencyIDPA = stoi(constituencyIDPA_str);
+
             if (!constituencyExists(ConstituencyIDNA)) {
                 cout << "Invalid Constituency ID.\n";
                 continue;
             }
-            cout << "Enter Constituency ID for Provincial Assembly: "; cin >> ConstituencyIDPA;
             if (!constituencyExists(ConstituencyIDPA)) {
                 cout << "Invalid Constituency ID.\n";
                 continue;
@@ -418,11 +447,20 @@ void managePollingStations() {
         } else if (choice == 1) {
             listAllStations();
         } else if (choice == 2) {
-            int id;
-            string name, address;
-            cout << "List of Polling Stations:\n";
+            string id_str, name, address;
             listAllStations();
-            cout << "Enter Station ID to edit: "; cin >> id;
+            auto screen = ScreenInteractive::TerminalOutput();
+            vector<InputField> form = {
+                {"Station ID", &id_str, InputField::TEXT},
+                {"Station Name", &name, InputField::TEXT},
+                {"Station Address", &address, InputField::TEXT}
+            };
+            bool success = ShowForm(screen, "Edit Polling Station", form);
+            if (!success) {
+                cout << "\n[ERROR] Editing cancelled.\n";
+                continue;
+            }
+            int id = stoi(id_str);
             if (!isValidPollingStationID(id)) {
                 cout << "Invalid Polling Station ID.\n";
                 continue;
@@ -431,23 +469,28 @@ void managePollingStations() {
                 cout << "Polling Station ID not found.\n";
                 continue;
             }
-            cin.ignore();
-            cout << "Enter New Name: "; getline(cin, name);
             if (!isValidPollingStationName(name)) {
                 cout << "Invalid Polling Station Name.\n";
                 continue;
             }
-            cout << "Enter New Address: "; getline(cin, address);
             if (!isValidPollingStationAddress(address)) {
                 cout << "Invalid Polling Station Address.\n";
                 continue;
             }
             editPollingStation(id, name, address);
         } else if (choice == 3) {
-            int id;
+            string id_str;
             listAllStations();
-            cout << "Enter Station ID to delete: ";
-            cin >> id;
+            auto screen = ScreenInteractive::TerminalOutput();
+            vector<InputField> form = {
+                {"Station ID", &id_str, InputField::TEXT}
+            };
+            bool success = ShowForm(screen, "Delete Polling Station", form);
+            if (!success) {
+                cout << "\n[ERROR] Deletion cancelled.\n";
+                continue;
+            }
+            int id = stoi(id_str);
             if (!isValidPollingStationID(id)) {
                 cout << "Invalid Polling Station ID.\n";
                 continue;
