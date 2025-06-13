@@ -68,6 +68,7 @@ void ShowTableFTXUI(const string& heading,
 
     auto screen = ScreenInteractive::TerminalOutput();
 
+    bool done = false;
     auto renderer = Renderer([&] {
         Elements table_elements;
 
@@ -90,10 +91,17 @@ void ShowTableFTXUI(const string& heading,
         }
 
         // Compose whole table vertically
+        table_elements.push_back(text("Press any key to continue...") | center | dim);
         return vbox(move(table_elements)) | center | border;
     });
 
-    screen.Loop(renderer);
+    auto event_handler = CatchEvent(renderer, [&](Event event) {
+        done = true;
+        screen.Exit();
+        return true;
+    });
+
+    screen.Loop(event_handler);
 }
 
 bool ShowForm(ScreenInteractive& screen, const string& title, vector<InputField>& fields) {
