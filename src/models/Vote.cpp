@@ -220,7 +220,7 @@ bool castVote(const Vote &newVote)
     string errorMsg;
     if (!isValidVote(newVote, votes, errorMsg))
     {
-        ShowMessage(screen,"Vote not cast: " << errorMsg << , "Error");
+        ShowMessage(screen,"Vote not cast: " + errorMsg , "Error");
         return false;
     }
     votes.push_back(newVote);
@@ -238,9 +238,9 @@ void deleteVotesByVoterID(int VoterID){
     saveAllVotes(votes);
     size_t after = votes.size();
     if (after < before)
-        ShowMessage(screen,"Votes deleted for Voter ID: " << VoterID << , "Success");
+        ShowMessage(screen,"Votes deleted for Voter ID: " + to_string(VoterID) ,"Success");
     else
-        ShowMessage(screen,"No votes found for Voter ID: " << VoterID << , "Info");
+        ShowMessage(screen,"No votes found for Voter ID: " + to_string(VoterID) , "Info");
 }
 
 void deleteVotesByCandidateID(int CandidateID){
@@ -252,9 +252,9 @@ void deleteVotesByCandidateID(int CandidateID){
     saveAllVotes(votes);
     size_t after = votes.size();
     if (after < before)
-        ShowMessage(screen,"Votes deleted for Candidate ID: " << CandidateID << , "Success");
+        ShowMessage(screen,"Votes deleted for Candidate ID: " + to_string(CandidateID)  , "Success");
     else
-        ShowMessage(screen,"No votes found for Candidate ID: " << CandidateID << , "Info");
+        ShowMessage(screen,"No votes found for Candidate ID: " + to_string(CandidateID) , "Info");
 }
 
 void deleteVotesByElectionID(int ElectionID){
@@ -266,9 +266,9 @@ void deleteVotesByElectionID(int ElectionID){
     saveAllVotes(votes);
     size_t after = votes.size();
     if (after < before)
-        ShowMessage(screen,"Votes deleted for Election ID: " << ElectionID << , "Success");
+        ShowMessage(screen,"Votes deleted for Election ID: " + to_string(ElectionID)  , "Success");
     else
-        ShowMessage(screen,"No votes found for Election ID: " << ElectionID << , "Info");
+        ShowMessage(screen,"No votes found for Election ID: " + to_string(ElectionID) , "Info");
 }
 
 // Admin: View all votes
@@ -282,13 +282,13 @@ void listAllVotes()
         string errorMsg;
         if (!isValidVote(v, {}, errorMsg))
         {
-            ShowMessage(screen,"Invalid vote (VoteID: " << v.getVoteID() << "): " << errorMsg << , "Error");
+            ShowMessage(screen,"Invalid vote (VoteID: " + to_string(v.getVoteID()) + " ): " + errorMsg , "error");
             continue;
         }
         // Check for duplicate VoteID in file
         if (seenVoteIDs.count(v.getVoteID()))
         {
-            ShowMessage(screen,"Duplicate VoteID detected: " << v.getVoteID() << ," skipping.");
+            ShowMessage(screen,"Duplicate VoteID detected: " + to_string(v.getVoteID()) ,"error");
             continue;
         }
         seenVoteIDs.insert(v.getVoteID());
@@ -324,7 +324,7 @@ void manageVoting() {
         } else if (choice == 1) {
             break;
         } else {
-            ShowMessage(screen,<< "Invalid option. Please try again.", "Error");
+            ShowMessage(screen, "Invalid option. Please try again.", "Error");
         }
     }
 }
