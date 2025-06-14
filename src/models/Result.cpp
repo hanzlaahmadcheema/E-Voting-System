@@ -83,14 +83,6 @@ int Result::getTotalVotes() const
 {
     return TotalVotes;
 }
-void Result::displayResultInfo() const
-{
-    cout << "Result ID: " << ResultID << "\n"
-         << "Polling Station ID: " << PollingStationID << "\n"
-         << "Election ID: " << ElectionID << "\n"
-         << "Winner Candidate ID: " << WinnerCandidateID << "\n"
-         << "Total Votes: " << TotalVotes << endl;
-}
 
 json Result::toJSON() const
 {
@@ -333,7 +325,7 @@ void viewResultByConstituency(int ElectionID, int ConstituencyID)
             return;
         }
     }
-    cout << "No result found for this constituency.\n";
+      ShowMessage(screen, "No result found for this constituency.", "Error");
 }
 
 // void CleanOrphanedVotes(vector<Vote>& votes, const vector<Voter>& voters, const vector<Candidate>& candidates) {
@@ -356,7 +348,7 @@ void listAllResults()
     vector<Result> results = loadAllResults();
     if (results.empty())
     {
-        cout << "No results to display." << endl;
+          ShowMessage(screen,"No results to display.","Error");
         return;
     }
     
@@ -398,7 +390,7 @@ void manageResults() {
             };
             bool success = ShowForm(screen, "Compute Result", form);
             if (!success) {
-                cout << "\n[ERROR] Result computation cancelled.\n";
+                  ShowMessage(screen,"[ERROR] Result computation cancelled.","error");
                 continue;
             }
             int ElectionID = stoi(ElectionID_str);
@@ -413,7 +405,7 @@ void manageResults() {
             };
             bool success = ShowForm(screen, "Compute Result", form);
             if (!success) {
-                cout << "\n[ERROR] Result computation cancelled.\n";
+                  ShowMessage(screen,"[ERROR] Result computation cancelled.","error");
                 continue;
             }
             int ElectionID = stoi(ElectionID_str);
@@ -424,7 +416,7 @@ void manageResults() {
         } else if (choice == 3) {
             break;
         } else {
-            cout << " Invalid option.\n";
+              ShowMessage(screen," Invalid option. Please try again.","error");
         }
     }
 }
