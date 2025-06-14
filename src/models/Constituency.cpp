@@ -349,7 +349,7 @@ void manageConstituencies() {
             };
             bool success = ShowForm(screen, "Add Constituency", form);
             if (!success) {
-                cout << "\n[ERROR] Constituency creation cancelled.\n";
+                ShowMessage(screen, "[ERROR] Constituency creation cancelled.","error");
                 continue;
             }
             int ElectionID = stoi(ElectionID_str);
@@ -391,12 +391,12 @@ void manageConstituencies() {
             };
             bool success5 = ShowForm(screen, "Add Constituency", cityForm);
             if (!success5) {
-                  ShowMessage(screen,"[ERROR] City selection cancelled.","error");
+                ShowMessage(screen,"[ERROR] City selection cancelled.","error");
                 continue;
             }
             int cityID = stoi(cityID_str);
             if (!cityExists(cityID)) {
-                  ShowMessage(screen,"Invalid City ID.","error");
+                ShowMessage(screen,"Invalid City ID.","error");
                 continue;
             }
             Constituency c(getNextID("ConstituencyID"), fullName, cityID, ElectionID);
