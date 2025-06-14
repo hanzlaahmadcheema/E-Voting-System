@@ -166,7 +166,7 @@ void addCity(const City &newCity)
     }
     cities.push_back(newCity);
     saveAllCities(cities);
-    showMessage(screen,"City added successfully.","success");
+    ShowMessage(screen,"City added successfully.","success");
 }
 
 // Admin: Edit city by ID
@@ -207,7 +207,7 @@ void editCity(int cityID, const string &newName, const string &newProvinceName)
         return;
     }
     saveAllCities(cities);
-    showMessage(screen,"City updated.","success");
+    ShowMessage(screen,"City updated.","success");
 }
 
 // Admin: Delete city by ID
@@ -228,7 +228,7 @@ void deleteCityByID(int cityID)
     }
     cities.erase(it, cities.end());
     saveAllCities(cities);
-    showMessage(screen,"City deleted if existed.","info");
+    ShowMessage(screen,"City deleted if existed.","info");
 }
 
 // Admin/User: View all cities
@@ -237,7 +237,7 @@ void listCitiesByProvince(const string &province)
     vector<City> cities = loadAllCities();
     if (cities.empty())
     {
-        showMessage(screen,"No cities found.","info");
+        ShowMessage(screen,"No cities found.","info");
         return;
     }
     
@@ -258,7 +258,7 @@ void listAllCities()
     vector<City> cities = loadAllCities();
     if (cities.empty())
     {
-        showMessage(screen,"No cities found.","info");
+        ShowMessage(screen,"No cities found.","info");
         return;
     }
     
@@ -303,7 +303,7 @@ void manageCities() {
             };
             bool success = ShowForm(screen, "Add City", form);
             if (!success) {
-                showMessage(screen,"[ERROR] City creation cancelled.","error");
+                ShowMessage(screen,"[ERROR] City creation cancelled.","error");
                 continue;
             }
         } else if (choice == 1) {
@@ -318,20 +318,20 @@ void manageCities() {
             };
             bool success = ShowForm(screen, "Edit City", form);
             if (!success) {
-                showMessage(screen,"[ERROR] Edit cancelled.","error");
+                ShowMessage(screen,"[ERROR] Edit cancelled.","error");
                 continue;
             }
             int id = stoi(id_str);
             if (!isValidCityID(id)) {
-                showMessage(screen,"Invalid City ID.","error");
+                ShowMessage(screen,"Invalid City ID.","error");
                 continue;
             }
             if (!cityExists(id)) {
-                showMessage(screen,"City ID not found.","info");
+                ShowMessage(screen,"City ID not found.","info");
                 continue;
             }
             if (!isValidCityName(name)) {
-                showMessage(screen,"Invalid City Name.","error");
+                ShowMessage(screen,"Invalid City Name.","error");
                 continue;
             }
             vector<InputField> form2 = {
@@ -339,7 +339,7 @@ void manageCities() {
             };
             bool success2 = ShowForm(screen, "Edit City", form2);
             if (!success2) {
-                showMessage(screen,"[ERROR] Edit cancelled.","error");
+                ShowMessage(screen,"[ERROR] Edit cancelled.","error");
                 continue;
             }
             editCity(id, name, ProvinceName);
@@ -352,23 +352,23 @@ void manageCities() {
             };
             bool success3 = ShowForm(screen, "Delete City", form3);
             if (!success3) {
-                showMessage(screen,"[ERROR] Delete cancelled.","error");
+                ShowMessage(screen,"[ERROR] Delete cancelled.","error");
                 continue;
             }
             int id = stoi(id_str);
             if (!isValidCityID(id)) {
-                showMessage(screen,"Invalid City ID.","error");
+                ShowMessage(screen,"Invalid City ID.","error");
                 continue;
             }
             if (!cityExists(id)) {
-                showMessage(screen,"City ID not found.","info");
+                ShowMessage(screen,"City ID not found.","info");
                 continue;
             }
             deleteCityByID(id);
         } else if (choice == 4) {
             break;
         } else {
-            showMessage(screen,"Invalid option.","error");
+            ShowMessage(screen,"Invalid option.","error");
         }
     }
 }
