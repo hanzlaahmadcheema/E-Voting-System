@@ -400,7 +400,7 @@ void managePollingStations() {
             };
             bool success = ShowForm(screen, "Create Polling Station", form);
             if (!success) {
-                cout << "\n[ERROR] Creation cancelled.\n";
+                  ShowMessage(screen,"[ERROR] Creation cancelled.","error");
                 continue;
             }
             int cityChoice = stoi(cityChoice_str);
@@ -411,15 +411,15 @@ void managePollingStations() {
             };
             bool success2 = ShowForm(screen, "Create Polling Station", form2);
             if (!success2) {
-                cout << "\n[ERROR] Creation cancelled.\n";
+                  ShowMessage(screen,"[ERROR] Creation cancelled.","error");
                 continue;
             }
             if (!isValidPollingStationName(name)) {
-                cout << "Invalid Polling Station Name.\n";
+                  ShowMessage(screen,"Invalid Polling Station Name.","error");
                 continue;
             }
             if (!isValidPollingStationAddress(address)) {
-                cout << "Invalid Polling Station Address.\n";
+                  ShowMessage(screen,"Invalid Polling Station Address.","error");
                 continue;
             }
             listConstituenciesByCity(cityChoice);
@@ -429,18 +429,18 @@ void managePollingStations() {
             };
             bool success3 = ShowForm(screen, "Create Polling Station", form3);
             if (!success3) {
-                cout << "\n[ERROR] Creation cancelled.\n";
+                  ShowMessage(screen,"[ERROR] Creation cancelled.","error");
                 continue;
             }
             int ConstituencyIDNA = stoi(constituencyIDNA_str);
             int ConstituencyIDPA = stoi(constituencyIDPA_str);
 
             if (!constituencyExists(ConstituencyIDNA)) {
-                cout << "Invalid Constituency ID.\n";
+                  ShowMessage(screen,"Invalid Constituency ID.","error");
                 continue;
             }
             if (!constituencyExists(ConstituencyIDPA)) {
-                cout << "Invalid Constituency ID.\n";
+                  ShowMessage(screen,"Invalid Constituency ID.","error");
                 continue;
             }
             PollingStation ps(getNextID("PollingStationID"), name, address, cityChoice, ConstituencyIDNA, ConstituencyIDPA);
@@ -458,24 +458,24 @@ void managePollingStations() {
             };
             bool success = ShowForm(screen, "Edit Polling Station", form);
             if (!success) {
-                cout << "\n[ERROR] Editing cancelled.\n";
+                  ShowMessage(screen,"[ERROR] Editing cancelled.","error");
                 continue;
             }
             int id = stoi(id_str);
             if (!isValidPollingStationID(id)) {
-                cout << "Invalid Polling Station ID.\n";
+                  ShowMessage(screen,"Invalid Polling Station ID.","error");
                 continue;
             }
             if (!pollingStationExists(id)) {
-                cout << "Polling Station ID not found.\n";
+                  ShowMessage(screen,"Polling Station ID not found.","error");
                 continue;
             }
             if (!isValidPollingStationName(name)) {
-                cout << "Invalid Polling Station Name.\n";
+                  ShowMessage(screen,"Invalid Polling Station Name.","error");
                 continue;
             }
             if (!isValidPollingStationAddress(address)) {
-                cout << "Invalid Polling Station Address.\n";
+                  ShowMessage(screen,"Invalid Polling Station Address.","error");
                 continue;
             }
             editPollingStation(id, name, address);
@@ -488,23 +488,23 @@ void managePollingStations() {
             };
             bool success = ShowForm(screen, "Delete Polling Station", form);
             if (!success) {
-                cout << "\n[ERROR] Deletion cancelled.\n";
+                  ShowMessage(screen,"[ERROR] Deletion cancelled.","error");
                 continue;
             }
             int id = stoi(id_str);
             if (!isValidPollingStationID(id)) {
-                cout << "Invalid Polling Station ID.\n";
+                  ShowMessage(screen,"Invalid Polling Station ID.","error");
                 continue;
             }
             if (!pollingStationExists(id)) {
-                cout << "Polling Station ID not found.\n";
+                  ShowMessage(screen,"Polling Station ID not found.","error");
                 continue;
             }
             deletePollingStation(id);
         } else if (choice == 4) {
             break;
         } else {
-            cout << "Invalid option.\n";
+              ShowMessage(screen,"Invalid option. Please try again.","error");
         }
     }
 }
