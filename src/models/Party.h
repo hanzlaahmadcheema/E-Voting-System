@@ -20,7 +20,6 @@ public:
     int getPartyID() const;
     string getPartyName() const;
     string getPartySymbol() const;
-    void displayPartyInfo() const;
 
     json toJSON() const;
     static Party fromJSON(const json &j);
