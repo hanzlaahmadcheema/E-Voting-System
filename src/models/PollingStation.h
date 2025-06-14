@@ -26,7 +26,6 @@ public:
     int getCityID() const;
     int getConstituencyIDNA() const;
     int getConstituencyIDPA() const;
-    void displayPollingStationInfo() const;
 
     json toJSON() const;
     static PollingStation fromJSON(const json &j);
