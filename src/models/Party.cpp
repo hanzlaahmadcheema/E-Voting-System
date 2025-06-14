@@ -171,7 +171,7 @@ void addParty(const Party &p)
     }
     list.push_back(p);
     saveAllParties(list);
-    cout << "Party added.\n";
+    ShowMessage(screen, "Party added.","success");
 }
 
 // Admin: Edit party
