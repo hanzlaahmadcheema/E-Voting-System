@@ -29,12 +29,7 @@ Result::Result(int ResultID, int PollingStationID, int ElectionID, int WinnerCan
     this->TotalVotes = TotalVotes;
     this->ConstituencyID = ConstituencyID;
 }
-void Result::declareResult()
-{
-    cout << "Result declared for Election ID: " << ElectionID << "\n"
-         << "Winner Candidate ID: " << WinnerCandidateID << "\n"
-         << "Total Votes: " << TotalVotes << endl;
-}
+
 void Result::setResultID(int ResultID)
 {
     this->ResultID = ResultID;
