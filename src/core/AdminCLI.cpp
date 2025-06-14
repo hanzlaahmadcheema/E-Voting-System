@@ -76,6 +76,7 @@ bool loginAdmin(const vector<Admin>& adminList) {
 }
 
 void adminPanel() {
+    system("cls");
     while (true) {
 
         auto screen = ScreenInteractive::TerminalOutput();
@@ -94,9 +95,10 @@ void adminPanel() {
     };
 
     int choice = ShowMenu(screen, "Admin Panel", adminPanel);
+    system("cls");
 
     switch (choice) {
-        
+
         case 0: manageElections(); break;
         case 1: manageCities(); break;
         case 2: manageConstituencies(); break;

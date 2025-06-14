@@ -36,3 +36,7 @@
 using namespace std;
 using namespace ftxui;
 using json = nlohmann::json;
+
+void ShowSpinner(ftxui::ScreenInteractive& screen, const std::string& message);
+void ShowProgressBar(ftxui::ScreenInteractive& screen, const std::string& label);
+void ShowMessage(ScreenInteractive& screen, const std::string& msg, const std::string& type);

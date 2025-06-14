@@ -169,3 +169,96 @@ bool ShowForm(ScreenInteractive& screen, const string& title, vector<InputField>
     screen.Loop(renderer);
     return submitted;
 }
+
+void ShowSpinner(ScreenInteractive& screen, const std::string& message) {
+    std::atomic<bool> loading = true;
+    std::string dots = "";
+    
+    auto renderer = Renderer([&] {
+        return hbox({
+            text(message) | bold | color(Color::Green),
+            text(dots)
+        }) | center;
+    });
+
+    std::thread anim([&] {
+        while (loading) {
+            dots = (dots == "...") ? "" : dots + ".";
+            screen.PostEvent(Event::Custom);
+            std::this_thread::sleep_for(std::chrono::milliseconds(300));
+        }
+    });
+
+    std::thread closer([&] {
+        std::this_thread::sleep_for(std::chrono::seconds(3)); // Simulate loading
+        loading = false;
+        screen.Exit();
+    });
+
+    screen.Loop(renderer);
+    anim.join();
+    closer.join();
+    system("cls");
+}
+
+void ShowProgressBar(ScreenInteractive& screen, const std::string& label) {
+    int progress = 0;
+    auto renderer = Renderer([&] {
+        return vbox({
+            text(label) | bold | center,
+            gauge(progress / 100.0f) | color(Color::Green) | size(WIDTH, EQUAL, 50)
+        }) | center;
+    });
+
+    std::thread worker([&] {
+        while (progress < 100) {
+            std::this_thread::sleep_for(std::chrono::milliseconds(40));
+            progress++;
+            screen.PostEvent(Event::Custom);
+        }
+        screen.Exit();
+    });
+
+    screen.Loop(renderer);
+    worker.join();
+    system("cls");
+}
+void ShowMessage(ScreenInteractive& screen, const std::string& msg, const std::string& type) {
+    system("cls");
+    Color msg_color = Color::White;
+    std::string prefix;
+
+    if (type == "success") {
+        msg_color = Color::Green;
+        prefix = "✔ Success: ";
+    } else if (type == "error") {
+        msg_color = Color::Red;
+        prefix = "✖ Error: ";
+    } else if (type == "info") {
+        msg_color = Color::Blue;
+        prefix = "ℹ Info: ";
+    } else {
+        prefix = ""; // Fallback if unknown type
+    }
+
+    auto renderer = Renderer([&] {
+        return vbox({
+            filler(),
+            hbox({
+                filler(),
+                text(prefix + msg) | bold | color(msg_color) | border,
+                filler(),
+            }),
+            filler(),
+        });
+    });
+
+    std::thread closer([&] {
+        std::this_thread::sleep_for(std::chrono::seconds(3));
+        screen.Exit();
+    });
+
+    screen.Loop(renderer);
+    closer.join();
+    system("cls");
+}
