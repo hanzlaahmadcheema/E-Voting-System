@@ -74,15 +74,6 @@ string Vote::getTimestamp() const
 {
     return VoteTime;
 }
-void Vote::displayVoteInfo() const
-{
-    cout << "Vote ID: " << VoteID << "\n"
-         << "Voter ID: " << VoterID << "\n"
-         << "Candidate ID: " << CandidateID << "\n"
-         << "Election ID: " << ElectionID << "\n"
-         << "Polling Station ID: " << PollingStationID << "\n"
-         << "Timestamp: " << VoteTime << endl;
-}
 
 json Vote::toJSON() const
 {
@@ -229,12 +220,12 @@ bool castVote(const Vote &newVote)
     string errorMsg;
     if (!isValidVote(newVote, votes, errorMsg))
     {
-        cout << "Vote not cast: " << errorMsg << endl;
+        ShowMessage(screen,"Vote not cast: " << errorMsg << , "Error");
         return false;
     }
     votes.push_back(newVote);
     saveAllVotes(votes);
-    cout << "Vote cast successfully.\n";
+    ShowMessage(screen,"Vote cast successfully.", "Success");
     return true;
 }
 
@@ -247,9 +238,9 @@ void deleteVotesByVoterID(int VoterID){
     saveAllVotes(votes);
     size_t after = votes.size();
     if (after < before)
-        cout << "Votes deleted for Voter ID: " << VoterID << endl;
+        ShowMessage(screen,"Votes deleted for Voter ID: " << VoterID << , "Success");
     else
-        cout << "No votes found for Voter ID: " << VoterID << endl;
+        ShowMessage(screen,"No votes found for Voter ID: " << VoterID << , "Info");
 }
 
 void deleteVotesByCandidateID(int CandidateID){
@@ -261,9 +252,9 @@ void deleteVotesByCandidateID(int CandidateID){
     saveAllVotes(votes);
     size_t after = votes.size();
     if (after < before)
-        cout << "Votes deleted for Candidate ID: " << CandidateID << endl;
+        ShowMessage(screen,"Votes deleted for Candidate ID: " << CandidateID << , "Success");
     else
-        cout << "No votes found for Candidate ID: " << CandidateID << endl;
+        ShowMessage(screen,"No votes found for Candidate ID: " << CandidateID << , "Info");
 }
 
 void deleteVotesByElectionID(int ElectionID){
@@ -275,9 +266,9 @@ void deleteVotesByElectionID(int ElectionID){
     saveAllVotes(votes);
     size_t after = votes.size();
     if (after < before)
-        cout << "Votes deleted for Election ID: " << ElectionID << endl;
+        ShowMessage(screen,"Votes deleted for Election ID: " << ElectionID << , "Success");
     else
-        cout << "No votes found for Election ID: " << ElectionID << endl;
+        ShowMessage(screen,"No votes found for Election ID: " << ElectionID << , "Info");
 }
 
 // Admin: View all votes
@@ -291,13 +282,13 @@ void listAllVotes()
         string errorMsg;
         if (!isValidVote(v, {}, errorMsg))
         {
-            cout << "Invalid vote (VoteID: " << v.getVoteID() << "): " << errorMsg << endl;
+            ShowMessage(screen,"Invalid vote (VoteID: " << v.getVoteID() << "): " << errorMsg << , "Error");
             continue;
         }
         // Check for duplicate VoteID in file
         if (seenVoteIDs.count(v.getVoteID()))
         {
-            cout << "Duplicate VoteID detected: " << v.getVoteID() << endl;
+            ShowMessage(screen,"Duplicate VoteID detected: " << v.getVoteID() << ," skipping.");
             continue;
         }
         seenVoteIDs.insert(v.getVoteID());
@@ -333,7 +324,7 @@ void manageVoting() {
         } else if (choice == 1) {
             break;
         } else {
-            cout << "Invalid option.\n";
+            ShowMessage(screen,<< "Invalid option. Please try again.", "Error");
         }
     }
 }
