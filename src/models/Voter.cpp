@@ -189,7 +189,7 @@ vector<Voter> loadAllVoters()
         }
         catch (...)
         {
-            cout << "Error: Failed to parse voters file.\n";
+            ShowMessage(screen,"Error: Failed to parse voters file.","error");
         }
     }
     return voters;
@@ -213,37 +213,37 @@ void registerVoter(const Voter &newVoter)
     // Field validations
     if (!isValidID(newVoter.getVoterID()))
     {
-        cout << "Error: Invalid Voter ID.\n";
+        ShowMessage(screen,"Error: Invalid Voter ID.", "error");
         return;
     }
     if (!isValidName(newVoter.getVoterName()))
     {
-        cout << "Error: Invalid name. Only letters and spaces allowed.\n";
+        ShowMessage(screen,"Error: Invalid name. Only letters and spaces allowed.", "error");
         return;
     }
     if (!isValidCNIC(newVoter.getVoterCNIC()))
     {
-        cout << "Error: Invalid CNIC. Must be 13 digits.\n";
+        ShowMessage(screen,"Error: Invalid CNIC. Must be 13 digits.", "error");
         return;
     }
     if (!isValidGender(newVoter.getVoterGender()))
     {
-        cout << "Error: Invalid gender. Use Male, Female, or Other.\n";
+        ShowMessage(screen,"Error: Invalid gender. Use Male, Female, or Other.", "error");
         return;
     }
     if (!isValidAge(newVoter.getVoterAge()))
     {
-        cout << "Error: Invalid age. Must be between 18 and 120.\n";
+        ShowMessage(screen,"Error: Invalid age. Must be between 18 and 120.", "error");
         return;
     }
     if (!isValidAddress(newVoter.getVoterAddress()))
     {
-        cout << "Error: Address cannot be empty.\n";
+        ShowMessage(screen,"Error: Address cannot be empty.", "error");
         return;
     }
     if (!isValidID(newVoter.getPollingStationID()))
     {
-        cout << "Error: Invalid Polling Station ID.\n";
+        ShowMessage(screen,"Error: Invalid Polling Station ID.", "error");
         return;
     }
 
@@ -253,12 +253,12 @@ void registerVoter(const Voter &newVoter)
     {
         if (v.getVoterCNIC() == newVoter.getVoterCNIC())
         {
-            cout << "Error: Voter with this CNIC already exists.\n";
+            ShowMessage(screen,"Error: Voter with this CNIC already exists.", "error");
             return;
         }
         if (v.getVoterID() == newVoter.getVoterID())
         {
-            cout << "Error: Voter with this ID already exists.\n";
+            ShowMessage(screen,"Error: Voter with this ID already exists.", "error");
             return;
         }
     }
@@ -277,11 +277,11 @@ void registerVoter(const Voter &newVoter)
     }
     if (found)
     {
-        cout << "Voter registered successfully.\n";
+        ShowMessage(screen,"Voter registered successfully.", "success");
     }
     else
     {
-        cout << "Error: Failed to add voter.\n";
+        ShowMessage(screen,"Error: Failed to add voter. Please try again.", "error");
     }
 }
 
@@ -291,7 +291,7 @@ void listAllVoters()
     vector<Voter> voters = loadAllVoters();
     if (voters.empty())
     {
-        cout << "No voters found.\n";
+        ShowMessage(screen,"No voters found.","info");
         return;
     }
     for (const auto &v : voters)
@@ -317,7 +317,7 @@ void editVoterByCNIC(const string &VoterCNIC, const Voter &updatedVoter)
 {
     if (!isValidCNIC(VoterCNIC))
     {
-        cout << "Error: Invalid CNIC format.\n";
+        ShowMessage(screen,"Error: Invalid CNIC format.", "error");
         return;
     }
     vector<Voter> voters = loadAllVoters();
@@ -333,18 +333,18 @@ void editVoterByCNIC(const string &VoterCNIC, const Voter &updatedVoter)
     }
     if (!found)
     {
-        cout << "Error: Voter with CNIC " << VoterCNIC << " not found.\n";
+        ShowMessage(screen,"Error: Voter with CNIC " << VoterCNIC << " not found.", "error");
         return;
     }
     saveAllVoters(voters);
-    cout << "Voter updated successfully.\n";
+    ShowMessage(screen,"Voter updated successfully.", "success");
 }
 
 void deleteVoterByCNIC(const string &VoterCNIC)
 {
     if (!isValidCNIC(VoterCNIC))
     {
-        cout << "Error: Invalid CNIC format.\n";
+        ShowMessage(screen,"Error: Invalid CNIC format.", "error");
         return;
     }
     vector<Voter> voters = loadAllVoters();
@@ -366,11 +366,11 @@ void deleteVoterByCNIC(const string &VoterCNIC)
 
     if (after < before)
     {
-        cout << "Voter deleted successfully.\n";
+        ShowMessage(screen,"Voter deleted successfully.", "success");
     }
     else
     {
-        cout << "Error: Voter with CNIC " << VoterCNIC << " not found.\n";
+        ShowMessage(screen,"Error: Voter with CNIC " << VoterCNIC << " not found.", "error");
     }
 }
 
@@ -379,7 +379,7 @@ Voter *loginByCNIC(const string &VoterCNIC)
 {
     if (!isValidCNIC(VoterCNIC))
     {
-        cout << "Error: Invalid CNIC format.\n";
+        ShowMessage(screen,"Error: Invalid CNIC format.", "error");
         return nullptr;
     }
     vector<Voter> voters = loadAllVoters();
@@ -390,7 +390,7 @@ Voter *loginByCNIC(const string &VoterCNIC)
             return new Voter(v);
         }
     }
-    cout << "Error: No voter found with this CNIC.\n";
+    ShowMessage(screen,"Error: No voter found with this CNIC.", "error");
     return nullptr;
 }
 
@@ -455,29 +455,29 @@ void manageVoters() {
                 };
             bool success1 = ShowForm(screen, "Add Voter", form1);
             if (!success1) {
-                cout << "\n[ERROR] Creation cancelled.\n";
+                ShowMessage(screen,"[ERROR] Creation cancelled.", "error");
                 continue;
             }
             int age = stoi(age_str);
             int provChoice = stoi(provChoice_str);
             if (!isValidName(name)) {
-                cout << "Invalid name. Only letters and spaces allowed.\n";
+                ShowMessage(screen,"Invalid name. Only letters and spaces allowed.", "error");
                 continue;
             }
             if (!isValidCNIC(VoterCNIC)) {
-                cout << "Invalid CNIC format.\n";
+                ShowMessage(screen,"Invalid CNIC format.", "error");
                 continue;
             }
             if (!isValidAge(age)) {
-                cout << "Invalid age. Age must be positive or greater than 18.\n";
+                ShowMessage(screen,"Invalid age. Age must be positive or greater than 18."," error");
                 continue;
             }
             if (!isValidGender(gender)) {
-                cout << "Invalid gender. Please enter Male or Female.\n";
+                ShowMessage(screen,"Invalid gender. Please enter Male or Female.", "error");
                 continue;
             }
             if (provChoice < 1 || provChoice > 4) {
-                cout << "Invalid province choice.\n";
+                ShowMessage(screen,"Invalid province choice.", "error");
                 continue;
             }
             if (provChoice == 1) {
@@ -495,12 +495,12 @@ void manageVoters() {
                 };
             bool success2 = ShowForm(screen, "Add Voter", form2);
             if (!success2) {
-                cout << "\n[ERROR] Creation cancelled.\n";
+                ShowMessage(screen,"[ERROR] Creation cancelled.", "error");
                 continue;
             }
             int cityChoice = stoi(cityID_str);
             if (!isValidAddress(address)) {
-                cout << "Invalid address. Only letters, numbers, and spaces allowed.\n";
+                ShowMessage(screen,"Invalid address. Only letters, numbers, and spaces allowed.", "error");
                 continue;
             }
             listStationsByCity(cityChoice);
@@ -509,12 +509,12 @@ void manageVoters() {
                 };
             bool success3 = ShowForm(screen, "Add Voter", form3);
             if (!success3) {
-                cout << "\n[ERROR] Creation cancelled.\n";
+                ShowMessage(screen,"[ERROR] Creation cancelled.", "error");
                 continue;
             }
             int PollingID = stoi(pollingID_str);
             if (!pollingStationExists(PollingID)) {
-                cout << "Invalid Polling Station ID.\n";
+                ShowMessage(screen,"Invalid Polling Station ID.", "error");
                 continue;
             }
             Voter v(getNextID("VoterID"), name, VoterCNIC, gender, age, address, PollingID);
@@ -528,17 +528,17 @@ void manageVoters() {
                 };
             bool success1 = ShowForm(screen, "Edit Voter", form1);
             if (!success1) {
-                cout << "\n[ERROR] Edition cancelled.\n";
+                ShowMessage(screen,"[ERROR] Edition cancelled.", "error");
                 continue;
             }
             int age = stoi(age_str);
             int provChoice = stoi(provChoice_str);
             if (!voterExists(VoterCNIC)) {
-                cout << "Voter with this CNIC does not exist.\n";
+                ShowMessage(screen,"Voter with this CNIC does not exist.", "error");
                 continue;
             }
             if (!isValidCNIC(VoterCNIC)) {
-                cout << "Invalid CNIC format.\n";
+                ShowMessage(screen,"Invalid CNIC format.", "error");
                 continue;
             }
             vector<InputField> form2 = {
@@ -550,27 +550,27 @@ void manageVoters() {
                 };
             bool success2 = ShowForm(screen, "Edit Voter", form2);
             if (!success2) {
-                cout << "\n[ERROR] Edition cancelled.\n";
+                ShowMessage(screen,"[ERROR] Edition cancelled.", "error");
                 continue;
             }
             if (!isValidName(name)) {
-                cout << "Invalid name. Only letters and spaces allowed.\n";
+                ShowMessage(screen,"Invalid name. Only letters and spaces allowed.", "error");
                 continue;
             }
             if (!isValidCNIC(VoterCNIC)) {
-                cout << "Invalid CNIC format.\n";
+                ShowMessage(screen,"Invalid CNIC format.", "error");
                 continue;
             }
             if (!isValidAge(age)) {
-                cout << "Invalid age. Age must be positive or greater than 18.\n";
+                ShowMessage(screen,"Invalid age. Age must be positive or greater than 18.", "error");
                 continue;
             }
             if (!isValidGender(gender)) {
-                cout << "Invalid gender. Please enter Male or Female.\n";
+                ShowMessage(screen,"Invalid gender. Please enter Male or Female.", "error");
                 continue;
             }
             if (provChoice < 1 || provChoice > 4) {
-                cout << "Invalid province choice.\n";
+                ShowMessage(screen,"Invalid province choice.", "error");
                 continue;
             }
             if (provChoice == 1) {
@@ -588,12 +588,12 @@ void manageVoters() {
                 };
             bool success3 = ShowForm(screen, "Edit Voter", form3);
             if (!success3) {
-                cout << "\n[ERROR] Edition cancelled.\n";
+                ShowMessage(screen,"[ERROR] Edition cancelled.", "error");
                 continue;
             }
             int cityChoice = stoi(cityID_str);
             if (!isValidAddress(address)) {
-                cout << "Invalid address. Only letters, numbers, and spaces allowed.\n";
+                ShowMessage(screen,"Invalid address. Only letters, numbers, and spaces allowed.", "error");
                 continue;
             }
             listStationsByCity(cityChoice);
@@ -602,12 +602,12 @@ void manageVoters() {
                 };
             bool success4 = ShowForm(screen, "Edit Voter", form4);
             if (!success4) {
-                cout << "\n[ERROR] Edition cancelled.\n";
+                ShowMessage(screen,"[ERROR] Edition cancelled.", "error");
                 continue;
             }
             int PollingID = stoi(pollingID_str);
             if (!pollingStationExists(PollingID)) {
-                cout << "Invalid Polling Station ID.\n";
+                ShowMessage(screen,"Invalid Polling Station ID.", "error");
                 continue;
             }
             editVoterByCNIC(VoterCNIC, Voter(getVoterIDByCNIC(VoterCNIC), name, VoterCNIC, gender, age, address, PollingID));
@@ -619,22 +619,22 @@ void manageVoters() {
                 };
             bool success1 = ShowForm(screen, "Delete Voter", form1);
             if (!success1) {
-                cout << "\n[ERROR] Deletion cancelled.\n";
+                ShowMessage(screen,"[ERROR] Deletion cancelled.", "error");
                 continue;
             }
             if (!voterExists(VoterCNIC)) {
-                cout << "Voter with this CNIC does not exist.\n";
+                ShowMessage(screen,"Voter with this CNIC does not exist.", "error");
                 continue;
             }
             if (!isValidCNIC(VoterCNIC)) {
-                cout << "Invalid CNIC format.\n";
+                ShowMessage(screen,"Invalid CNIC format.", "error");
                 continue;
             }
             deleteVoterByCNIC(VoterCNIC);
         } else if (choice == 4) {
             break;
         } else {
-            cout << "Invalid option.\n";
+            ShowMessage(screen,"Invalid option. Please try again.", "error");
         }
     }
 }
