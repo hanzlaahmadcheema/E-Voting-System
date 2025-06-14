@@ -21,8 +21,7 @@ public:
     string getConstituencyName() const;
     int getCityID() const;
     int getElectionID() const;
-    void displayConstituencyInfo() const;
-
+   
     json toJSON() const;
     static Constituency fromJSON(const json &j);
 
