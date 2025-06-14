@@ -19,8 +19,7 @@ public:
     int getCityID() const;
     string getCityName() const;
     string getProvinceName() const;
-    void displayCityInfo() const;
-
+    
     json toJSON() const;
     static City fromJSON(const json &j);
 
