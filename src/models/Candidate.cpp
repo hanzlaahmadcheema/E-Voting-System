@@ -551,7 +551,7 @@ void manageCandidates() {
                 continue;
             }
             int constID = stoi(constID_str);
-            ShowMessage(screen,"Editing Candidate ID " + id + "...","info");
+            ShowMessage(screen,"Editing Candidate ID" + to_string(id) + "...." , "info");
             editCandidate(id, name, partyID, constID);
         } else if (choice == 4) {
             string id_str;
@@ -574,7 +574,7 @@ void manageCandidates() {
                 ShowMessage(screen,"Candidate ID not found.","info");
                 continue;
             }
-            ShowMessage(screen,"Deleting Candidate ID " + id + "...","info");
+            ShowMessage(screen,"Deleting Candidate ID " + to_string(id) + "...","info");
             deleteCandidateByID(id);
         } else if (choice == 5) {
             break;
