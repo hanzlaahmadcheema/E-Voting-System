@@ -4,6 +4,7 @@
 
 #include <custom/config.h>
 
+
 class Election
 {
 public:

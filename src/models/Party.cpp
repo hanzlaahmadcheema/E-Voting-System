@@ -2,6 +2,7 @@
 
 
 
+
 extern int getNextID(const string &key);
 extern string toLower(const string& str);
 extern int ShowMenu(ScreenInteractive & screen, 
@@ -11,6 +12,8 @@ void ShowTableFTXUI(const string& heading,
                     const vector<string>& headers, 
                     const vector<vector<string>>& rows);
 bool ShowForm(ScreenInteractive& screen, const string& title, vector<InputField>& fields);
+
+;
 
 // Party
 Party::Party() : PartyID(0), PartyName(""), PartySymbol("") {}
@@ -236,7 +239,7 @@ void listAllParties()
         cout << "No parties found.\n";
         return;
     }
-    auto screen = ScreenInteractive::TerminalOutput();
+    
     vector<string> headers = {"Party ID", "Name", "Symbol"};
     vector<vector<string>> data;
     for (const auto &p : list)
@@ -252,7 +255,7 @@ void listAllParties()
 void manageParties() {
     int choice;
     while (true) {
-           auto screen = ScreenInteractive::TerminalOutput();
+   
 
     vector<string> partyMenu = {
         "Add Party",
@@ -265,7 +268,7 @@ void manageParties() {
     int choice = ShowMenu(screen, "Party Menu", partyMenu);
         if (choice == 0) {
             string name, symbol;
-            auto screen = ScreenInteractive::TerminalOutput();
+    
             vector<InputField> form = {
                 {"Party Name", &name, InputField::TEXT},
                 {"Party Symbol", &symbol, InputField::TEXT}
@@ -298,7 +301,7 @@ void manageParties() {
         } else if (choice == 2) {
             string id_str, name, symbol;
             listAllParties();
-            auto screen = ScreenInteractive::TerminalOutput();
+    
             vector<InputField> form = {
                 {"Party ID", &name, InputField::TEXT},
                 {"Party Name", &name, InputField::TEXT},
@@ -338,7 +341,7 @@ void manageParties() {
         } else if (choice == 3) {
             string id_str;
             listAllParties();
-            auto screen = ScreenInteractive::TerminalOutput();
+    
             vector<InputField> form = {
                 {"Party ID", &id_str, InputField::TEXT}
             };

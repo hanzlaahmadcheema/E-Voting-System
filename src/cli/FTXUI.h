@@ -15,8 +15,8 @@ int ShowMenu(ScreenInteractive& screen,
              const string& heading, 
              const vector<string>& options);
 void ShowTableFTXUI(const vector<string>& headers, const vector<vector<string>>& rows, const string& title);
-void ShowSpinner(ftxui::ScreenInteractive& screen, const std::string& message);
-void ShowProgressBar(ftxui::ScreenInteractive& screen, const std::string& label);
-void ShowMessage(ScreenInteractive& screen, const std::string& msg, const std::string& type);
+void ShowSpinner(ScreenInteractive& screen, const string& message);
+void ShowProgressBar(ScreenInteractive& screen, const string& label);
+void ShowMessage(ScreenInteractive& screen, const string& msg, const string& type);
 
 #endif

@@ -1,8 +1,10 @@
 #include <custom/config.h>
 
+
 int ShowMenu(ScreenInteractive& screen, 
              const string& heading, 
              const vector<string>& options) {
+
 
     int selected = 0;
 
@@ -66,8 +68,6 @@ void ShowTableFTXUI(const string& heading,
         return hbox(move(parts));
     };
 
-    auto screen = ScreenInteractive::TerminalOutput();
-
     bool done = false;
     auto renderer = Renderer([&] {
         Elements table_elements;
@@ -94,6 +94,7 @@ void ShowTableFTXUI(const string& heading,
         table_elements.push_back(text("Press any key to continue...") | center | dim);
         return vbox(move(table_elements)) | center | border;
     });
+auto screen = ScreenInteractive::TerminalOutput();
 
     auto event_handler = CatchEvent(renderer, [&](Event event) {
         done = true;
@@ -170,10 +171,11 @@ bool ShowForm(ScreenInteractive& screen, const string& title, vector<InputField>
     return submitted;
 }
 
-void ShowSpinner(ScreenInteractive& screen, const std::string& message) {
-    std::atomic<bool> loading = true;
-    std::string dots = "";
+void ShowSpinner(ScreenInteractive& screen, const string& message) {
+    atomic<bool> loading = true;
+    string dots = "";
     
+
     auto renderer = Renderer([&] {
         return hbox({
             text(message) | bold | color(Color::Green),
@@ -181,16 +183,16 @@ void ShowSpinner(ScreenInteractive& screen, const std::string& message) {
         }) | center;
     });
 
-    std::thread anim([&] {
+    thread anim([&] {
         while (loading) {
             dots = (dots == "...") ? "" : dots + ".";
             screen.PostEvent(Event::Custom);
-            std::this_thread::sleep_for(std::chrono::milliseconds(300));
+            this_thread::sleep_for(chrono::milliseconds(300));
         }
     });
 
-    std::thread closer([&] {
-        std::this_thread::sleep_for(std::chrono::seconds(3)); // Simulate loading
+    thread closer([&] {
+        this_thread::sleep_for(chrono::seconds(3)); // Simulate loading
         loading = false;
         screen.Exit();
     });
@@ -201,8 +203,10 @@ void ShowSpinner(ScreenInteractive& screen, const std::string& message) {
     system("cls");
 }
 
-void ShowProgressBar(ScreenInteractive& screen, const std::string& label) {
+void ShowProgressBar(ScreenInteractive& screen, const string& label) {
     int progress = 0;
+    
+
     auto renderer = Renderer([&] {
         return vbox({
             text(label) | bold | center,
@@ -210,9 +214,9 @@ void ShowProgressBar(ScreenInteractive& screen, const std::string& label) {
         }) | center;
     });
 
-    std::thread worker([&] {
+    thread worker([&] {
         while (progress < 100) {
-            std::this_thread::sleep_for(std::chrono::milliseconds(40));
+            this_thread::sleep_for(chrono::milliseconds(40));
             progress++;
             screen.PostEvent(Event::Custom);
         }
@@ -223,10 +227,11 @@ void ShowProgressBar(ScreenInteractive& screen, const std::string& label) {
     worker.join();
     system("cls");
 }
-void ShowMessage(ScreenInteractive& screen, const std::string& msg, const std::string& type) {
+void ShowMessage(ScreenInteractive& screen, const string& msg, const string& type) {
+    
     system("cls");
     Color msg_color = Color::White;
-    std::string prefix;
+    string prefix;
 
     if (type == "success") {
         msg_color = Color::Green;
@@ -253,8 +258,8 @@ void ShowMessage(ScreenInteractive& screen, const std::string& msg, const std::s
         });
     });
 
-    std::thread closer([&] {
-        std::this_thread::sleep_for(std::chrono::seconds(3));
+    thread closer([&] {
+        this_thread::sleep_for(chrono::seconds(3));
         screen.Exit();
     });
 

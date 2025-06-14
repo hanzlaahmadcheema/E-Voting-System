@@ -1,6 +1,7 @@
 #include <custom/config.h>
 
 
+
 const string ADMIN_FILE = "data/admins.json";
         extern void manageElections();
         extern void manageCities();
@@ -44,10 +45,10 @@ bool saveAdmins(const vector<Admin>& adminList) {
 
 bool loginAdmin(const vector<Admin>& adminList) {
     string inputUser, inputPass;
-    auto screen = ScreenInteractive::TerminalOutput();
 
-    //using FTXUI for better input handling
-    vector<InputField> fields = {
+auto screen = ScreenInteractive::TerminalOutput();
+
+vector<InputField> fields = {
         {"Username", &inputUser, InputField::TEXT},
         {"Password", &inputPass, InputField::TEXT}
     };
@@ -78,8 +79,6 @@ bool loginAdmin(const vector<Admin>& adminList) {
 void adminPanel() {
     system("cls");
     while (true) {
-
-        auto screen = ScreenInteractive::TerminalOutput();
 
     vector<string> adminPanel = {
         "Elections",

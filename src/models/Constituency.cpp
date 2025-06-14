@@ -1,5 +1,6 @@
 #include <custom/config.h>
 
+
 extern int getNextID(const string &key);
 extern bool cityExists(int id);
 extern bool electionExists(int id);
@@ -15,6 +16,8 @@ void ShowTableFTXUI(const string& heading,
                     const vector<string>& headers, 
                     const vector<vector<string>>& rows);
 bool ShowForm(ScreenInteractive& screen, const string& title, vector<InputField>& fields);
+
+;
 
 // Constituency
 Constituency::Constituency() : ConstituencyID(0), ConstituencyName(""), CityID(0), ElectionID(0) {}
@@ -248,7 +251,7 @@ void listAllConstituencies()
         cout << "No constituencies found.\n";
         return;
     }
-    auto screen = ScreenInteractive::TerminalOutput();
+    
     vector<string> headers = {"Constituency ID", "Name", "City ID", "Election ID"};
     vector<vector<string>> data;
     for (const auto &c : list)
@@ -332,7 +335,7 @@ void manageConstituencies() {
     int choice;
     vector<Constituency> list = loadAllConstituencies();
     while (true) {
-           auto screen = ScreenInteractive::TerminalOutput();
+   
 
     vector<string> constituencyMenu = {
         "Add Constituency",
@@ -346,7 +349,7 @@ void manageConstituencies() {
         if (choice == 0) {
             string cityID_str, ElectionID_str, name, type, fullName;
             listAllElections();
-            auto screen = ScreenInteractive::TerminalOutput();
+    
             vector<InputField> form = {
                 {"Election ID", &ElectionID_str, InputField::TEXT}
             };
@@ -410,7 +413,7 @@ void manageConstituencies() {
         } else if (choice == 2) {
             string id_str, cityID_str, ElectionID_str, provinceName_str, name, type, fullName;
             listAllConstituencies();
-            auto screen = ScreenInteractive::TerminalOutput();
+    
             vector<InputField> form = {
                 {"Constituency ID", &id_str, InputField::TEXT}
             };
@@ -488,7 +491,7 @@ void manageConstituencies() {
         else if (choice == 3) {
             string id_str;
             listAllConstituencies();
-            auto screen = ScreenInteractive::TerminalOutput();
+    
             vector<InputField> form = {
                 {"Constituency ID", &id_str, InputField::TEXT}
             };

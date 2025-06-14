@@ -2,6 +2,7 @@
 
 
 
+
 extern vector<Vote> loadAllVotes();
 extern int getNextID(const string &key);
 extern string getConstituencyTypeByID(int id);
@@ -15,6 +16,7 @@ void ShowTableFTXUI(const string& heading,
                     const vector<vector<string>>& rows);
 bool ShowForm(ScreenInteractive& screen, const string& title, vector<InputField>& fields);
 
+;
 
 // Result
 Result::Result() : ResultID(0), PollingStationID(0), ElectionID(0), WinnerCandidateID(0), TotalVotes(0), ConstituencyID(0) {}
@@ -280,7 +282,7 @@ void computeConstituencyResult(int ElectionID, int ConstituencyID, const string&
     Result result(getNextID("ResultID"), 0, ElectionID, winnerCandidateID, maxVotes, ConstituencyID);
     allResults.push_back(result);
     saveAllResults(allResults);
-    auto screen = ScreenInteractive::TerminalOutput();
+    
 
     vector<string> headers = {"Result ID", "Polling Station ID", "Election ID", "Winner Candidate", "Total Votes", "Constituency ID"};
     vector<vector<string>> data;
@@ -357,7 +359,7 @@ void listAllResults()
         cout << "No results to display." << endl;
         return;
     }
-    auto screen = ScreenInteractive::TerminalOutput();
+    
         vector<string> headers = {"Result ID", "Polling Station ID", "Election ID", "Winner Candidate", "Total Votes", "Constituency ID"};
     vector<vector<string>> data;
     for (const auto &r : results)
@@ -377,7 +379,7 @@ void listAllResults()
 void manageResults() {
     int choice;
     while (true) {
-           auto screen = ScreenInteractive::TerminalOutput();
+   
 
     vector<string> resultsManagement = {
         "Compute Result by Constituency",
@@ -389,7 +391,7 @@ void manageResults() {
     int choice = ShowMenu(screen, "Results Management", resultsManagement);
         if (choice == 0) {
             string ElectionID_str, constID_str;
-            auto screen = ScreenInteractive::TerminalOutput();
+    
             vector<InputField> form = {
                 {"Election ID", &ElectionID_str, InputField::NUMBER},
                 {"Constituency ID", &constID_str, InputField::NUMBER}
@@ -404,7 +406,7 @@ void manageResults() {
             computeConstituencyResult(ElectionID, constID, getConstituencyTypeByID(constID));
         } else if (choice == 1) {
             string ElectionID_str, constID_str;
-            auto screen = ScreenInteractive::TerminalOutput();
+    
             vector<InputField> form = {
                 {"Election ID", &ElectionID_str, InputField::NUMBER},
                 {"Constituency ID", &constID_str, InputField::NUMBER}

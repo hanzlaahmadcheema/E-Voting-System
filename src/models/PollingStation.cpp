@@ -1,7 +1,6 @@
 
 #include <custom/config.h>
 
-
 extern int getNextID(const string& key);
 extern bool constituencyExists(int id);
 extern void listAllConstituencies();
@@ -14,6 +13,8 @@ void ShowTableFTXUI(const string& heading,
                     const vector<string>& headers, 
                     const vector<vector<string>>& rows);
 bool ShowForm(ScreenInteractive& screen, const string& title, vector<InputField>& fields);
+
+;
 
 // PollingStation
 PollingStation::PollingStation() : PollingStationID(0), PollingStationName(""), PollingStationAddress(""), CityID(0), ConstituencyIDNA(0), ConstituencyIDPA(0) {}
@@ -281,7 +282,7 @@ void listStationsByConstituency(int constID)
     }
     vector<PollingStation> list = loadAllStations();
     bool found = false;
-    auto screen = ScreenInteractive::TerminalOutput();
+    
     vector<string> headers = {"Station ID", "Name", "Address", "City ID", "Constituency ID"};
     vector<vector<string>> data;
     for (const auto &s : list)
@@ -314,7 +315,7 @@ void listStationsByCity(int cityID)
     }
     vector<PollingStation> list = loadAllStations();
     bool found = false;
-    auto screen = ScreenInteractive::TerminalOutput();
+    
     vector<string> headers = {"Station ID", "Name", "Address", "City ID", "Constituency ID"};
     vector<vector<string>> data;
     for (const auto &s : list)
@@ -363,7 +364,7 @@ bool pollingStationExists(int id) {
 void managePollingStations() {
     int choice;
     while (true) {
-           auto screen = ScreenInteractive::TerminalOutput();
+   
 
     vector<string> pollingStationMenu = {
         "Add Polling Station",
@@ -377,7 +378,7 @@ void managePollingStations() {
         if (choice == 0) {
             string cityChoice_str, name, address, constituencyIDNA_str, constituencyIDPA_str;
             cin.ignore();
-            auto screen = ScreenInteractive::TerminalOutput();
+    
             vector<string> provinceMenu = {
                 "Punjab",
                 "KPK",
@@ -449,7 +450,7 @@ void managePollingStations() {
         } else if (choice == 2) {
             string id_str, name, address;
             listAllStations();
-            auto screen = ScreenInteractive::TerminalOutput();
+    
             vector<InputField> form = {
                 {"Station ID", &id_str, InputField::TEXT},
                 {"Station Name", &name, InputField::TEXT},
@@ -481,7 +482,7 @@ void managePollingStations() {
         } else if (choice == 3) {
             string id_str;
             listAllStations();
-            auto screen = ScreenInteractive::TerminalOutput();
+    
             vector<InputField> form = {
                 {"Station ID", &id_str, InputField::TEXT}
             };

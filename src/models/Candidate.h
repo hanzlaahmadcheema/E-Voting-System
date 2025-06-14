@@ -2,6 +2,7 @@
 #define CANDIDATE_H
 
 #include <custom/config.h>
+
 class Candidate
 {
 public:

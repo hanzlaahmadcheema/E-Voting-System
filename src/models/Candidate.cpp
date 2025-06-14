@@ -1,5 +1,6 @@
 #include <custom/config.h>
 
+
 extern int getNextID(const string &key);
 extern void listAllParties();
 extern void listAllConstituencies();
@@ -18,6 +19,8 @@ void ShowTableFTXUI(const string& heading,
                     const vector<string>& headers, 
                     const vector<vector<string>>& rows);
 bool ShowForm(ScreenInteractive& screen, const string& title, vector<InputField>& fields);
+
+;
 
 Candidate::Candidate() : CandidateID(0), CandidateName(""), PartyID(0), ConstituencyID(0), ConstituencyType("") {}
 
@@ -430,7 +433,7 @@ bool candidateExists(int id) {
 void manageCandidates() {
     int choice;
     while (true) {
-           auto screen = ScreenInteractive::TerminalOutput();
+   
 
     vector<string> candidateManagement = {
         "Add Candidate",
@@ -447,7 +450,7 @@ void manageCandidates() {
             int partyID, constID;
             string name;
         //using ftxui 
-                auto screen = ScreenInteractive::TerminalOutput();
+        
 
             vector<InputField> form1 = {
                 {"Candidate Name", &name, InputField::TEXT}
@@ -506,7 +509,7 @@ void manageCandidates() {
             listAllCandidates();
         } else if (choice == 2) {
             string constID_str;
-            auto screen = ScreenInteractive::TerminalOutput();
+    
             vector<InputField> form = {
                 {"Constituency ID", &constID_str, InputField::NUMBER}
             };
@@ -524,7 +527,7 @@ void manageCandidates() {
         } else if (choice == 3) {
             string id_str, name , partyID_str, constID_str;
             listAllCandidates();
-            auto screen = ScreenInteractive::TerminalOutput();
+    
             vector<InputField> form1 = {
                 {"Candidate ID", &id_str, InputField::NUMBER},
                 {"New Name", &name, InputField::TEXT}
@@ -560,7 +563,7 @@ void manageCandidates() {
         } else if (choice == 4) {
             string id_str;
             listAllCandidates();
-            auto screen = ScreenInteractive::TerminalOutput();
+    
             vector<InputField> form = {
                 {"Candidate ID", &id_str, InputField::NUMBER}
             };

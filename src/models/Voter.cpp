@@ -2,6 +2,7 @@
 
 
 
+
 extern int getNextID(const string& key);
 extern bool pollingStationExists(int id);
 extern bool constituencyExists(int id);
@@ -21,6 +22,7 @@ void ShowTableFTXUI(const string& heading,
                     const vector<vector<string>>& rows);
 bool ShowForm(ScreenInteractive& screen, const string& title, vector<InputField>& fields);
 
+;
 
 // Voter
 Voter::Voter() : VoterID(0), VoterName(""), VoterCNIC(""), VoterGender(""), VoterAge(0), VoterAddress(""), PollingStationID(0) {}
@@ -294,7 +296,7 @@ void listAllVoters()
     }
     for (const auto &v : voters)
     {
-        // auto screen = ScreenInteractive::TerminalOutput();
+        // 
         // vector<string> headers = {"ID", "Name", "CNIC", "Gender", "Age", "Address", "Polling Station ID"};
         // vector<vector<string>> data;
         //     data.push_back({
@@ -430,7 +432,7 @@ bool voterExists(string VoterCNIC) {
 
 void manageVoters() {
     while (true) {
-        auto screen = ScreenInteractive::TerminalOutput();
+
 
     vector<string> voterManagement = {
         "Register Voter",
@@ -611,7 +613,7 @@ void manageVoters() {
             editVoterByCNIC(VoterCNIC, Voter(getVoterIDByCNIC(VoterCNIC), name, VoterCNIC, gender, age, address, PollingID));
         } else if (choice == 3) {
             string VoterCNIC;
-            auto screen = ScreenInteractive::TerminalOutput();
+    
             vector<InputField> form1 = {
                 {"Voter CNIC", &VoterCNIC, InputField::TEXT}
                 };

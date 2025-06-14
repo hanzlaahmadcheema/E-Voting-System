@@ -4,6 +4,7 @@
 
 #include <custom/config.h>
 
+
 int getNextID(const string& key);
 string toLower(const string& str);
 #endif

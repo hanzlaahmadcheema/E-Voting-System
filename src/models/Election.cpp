@@ -1,6 +1,7 @@
 #include <custom/config.h>
 
 
+
 extern int getNextID(const string &key);
 void deleteVotesByElectionID(int ElectionID);
 extern int ShowMenu(ScreenInteractive & screen, 
@@ -10,6 +11,8 @@ void ShowTableFTXUI(const string& heading,
                     const vector<string>& headers, 
                     const vector<vector<string>>& rows);
 bool ShowForm(ScreenInteractive& screen, const string& title, vector<InputField>& fields);
+
+;
 
 // Election
 Election::Election() : ElectionID(0), ElectionName(""), ElectionType(""), ElectionDate("") {}
@@ -302,7 +305,7 @@ bool electionExists(int id) {
 void manageElections() {
     while (true) {
 
-        auto screen = ScreenInteractive::TerminalOutput();
+
 ShowSpinner(screen, "Loading Elections");
 
     vector<string> electionManagement = {
@@ -318,7 +321,7 @@ ShowSpinner(screen, "Loading Elections");
         if (choice == 0) {
             string name, type, date;
 
-        auto screen = ScreenInteractive::TerminalOutput();
+
             vector<InputField> form = {
                 {"Election Name", &name, InputField::TEXT},
                 {"Election Type", &type, InputField::DROPDOWN, {"NA", "PP", "PS", "PK", "PB"}},
@@ -349,7 +352,7 @@ ShowSpinner(screen, "Loading Elections");
         } else if (choice == 2) {
             string id_str, name, type, date;
             listAllElections();
-            auto screen = ScreenInteractive::TerminalOutput();
+    
             vector<InputField> form = {
                 {"Election ID", &id_str, InputField::TEXT},
                 {"Election Name", &name, InputField::TEXT},
@@ -386,7 +389,7 @@ ShowSpinner(screen, "Loading Elections");
         } else if (choice == 3) {
             string id_str;
             listAllElections();
-            auto screen = ScreenInteractive::TerminalOutput();
+    
             vector<InputField> form = {
                 {"Election ID", &id_str, InputField::TEXT}
             };

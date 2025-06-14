@@ -1,6 +1,7 @@
 
 
 #include <custom/config.h>
+
 const string COUNTER_FILE = "data/counters.json";
 
 int getNextID(const string &key)

@@ -1,7 +1,5 @@
 #include <custom/config.h>
 
-
-
 extern int getNextID(const string &key);
 extern int ShowMenu(ScreenInteractive & screen, 
      const string& heading, 
@@ -10,6 +8,8 @@ void ShowTableFTXUI(const string& heading,
                     const vector<string>& headers, 
                     const vector<vector<string>>& rows);
 bool ShowForm(ScreenInteractive& screen, const string& title, vector<InputField>& fields);
+
+;
 
 // City
 City::City() : CityID(0), CityName(""), ProvinceName("") {}
@@ -246,7 +246,7 @@ void listCitiesByProvince(const string &province)
         cout << "No cities found.\n";
         return;
     }
-    auto screen = ScreenInteractive::TerminalOutput();
+    
     vector<string> headers = {"City ID", "City Name", "Province Name"};
     vector<vector<string>> data;
     for (const auto &c : cities)
@@ -267,7 +267,7 @@ void listAllCities()
         cout << "No cities found.\n";
         return;
     }
-    auto screen = ScreenInteractive::TerminalOutput();
+    
     vector<string> headers = {"City ID", "City Name", "Province Name"};
     vector<vector<string>> data;
     for (const auto &c : cities)
@@ -288,7 +288,7 @@ bool cityExists(int id) {
 void manageCities() {
     int choice;
     while (true) {
-           auto screen = ScreenInteractive::TerminalOutput();
+   
 
     vector<string> cityManagement = {
         "Add City",
@@ -302,7 +302,7 @@ void manageCities() {
 
         if (choice == 0) {
             string name, ProvinceName;
-            auto screen = ScreenInteractive::TerminalOutput();
+    
             vector<InputField> form = {
                 {"City Name", &name, InputField::TEXT},
                 {"Select Province", &ProvinceName, InputField::DROPDOWN, {"Punjab", "KPK", "Sindh", "Balochistan"}}
@@ -317,7 +317,7 @@ void manageCities() {
         } else if (choice == 2) {
             string id_str, name, ProvinceName;
             listAllCities();
-            auto screen = ScreenInteractive::TerminalOutput();
+    
             vector<InputField> form = {
                 {"City ID", &id_str, InputField::NUMBER},
                 {"New City Name", &name, InputField::TEXT}
@@ -352,7 +352,7 @@ void manageCities() {
         } else if (choice == 3) {
             string id_str;
             listAllCities();
-            auto screen = ScreenInteractive::TerminalOutput();
+    
             vector<InputField> form3 = {
                 {"City ID", &id_str, InputField::TEXT}
             };

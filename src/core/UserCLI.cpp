@@ -1,4 +1,5 @@
 #include <custom/config.h>
+
 #include <models/Voter.h>
 #include <models/Candidate.h>
 #include <models/PollingStation.h>
@@ -25,10 +26,11 @@ void ShowTableFTXUI(const string& heading,
                     const vector<vector<string>>& rows);
 bool ShowForm(ScreenInteractive& screen, const string& title, vector<InputField>& fields);
 
+auto screen = ScreenInteractive::TerminalOutput();
+
 Voter* voterLogin() {
     string VoterCNIC;
-    // Using FTXUI for better input handling
-    auto screen = ScreenInteractive::TerminalOutput();
+
     vector<InputField> fields = {
         {"CNIC", &VoterCNIC, InputField::TEXT}
     };
@@ -58,7 +60,6 @@ void showUserMenu(Voter* voter) {
     int c1 = ps.getConstituencyIDNA();
     int c2 = ps.getConstituencyIDPA();
     while (true) {
-   auto screen = ScreenInteractive::TerminalOutput();
 
     vector<string> voterMenu = {
         "View Candidates",

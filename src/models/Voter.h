@@ -3,6 +3,7 @@
 
 #include <custom/config.h>
 
+
 class Voter
 {
 public:

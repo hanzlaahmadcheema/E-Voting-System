@@ -3,6 +3,7 @@
 
 
 
+
 extern int getNextID(const string &key);
 extern int ShowMenu(ScreenInteractive & screen, 
      const string& heading, 
@@ -11,6 +12,8 @@ void ShowTableFTXUI(const string& heading,
                     const vector<string>& headers, 
                     const vector<vector<string>>& rows);
 bool ShowForm(ScreenInteractive& screen, const string& title, vector<InputField>& fields);
+
+;
 
 // Vote
 Vote::Vote() : VoteID(0), VoterID(0), CandidateID(0), ElectionID(0), PollingStationID(0), VoteTime("") {}
@@ -298,7 +301,7 @@ void listAllVotes()
             continue;
         }
         seenVoteIDs.insert(v.getVoteID());
-        // auto screen = ScreenInteractive::TerminalOutput();
+        // 
         // vector<string> headers = {"VoteID", "VoterID", "CandidateID", "ElectionID", "PollingStationID", "Timestamp"};
         // vector<string> data;
         // data.push_back({
@@ -317,7 +320,7 @@ void manageVoting() {
     int choice;
     while (true) {
     
-    auto screen = ScreenInteractive::TerminalOutput();
+    
 
     vector<string> votingManagement = {
         "View All Votes",
