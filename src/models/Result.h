@@ -9,7 +9,6 @@ class Result
 public:
     Result();
     Result(int ResultID, int PollingStationID, int ElectionID, int WinnerCandidateID, int TotalVotes, int ConstituencyID);
-    void declareResult();
     void setResultID(int ResultID);
     void setPollingStationID(int PollingStationID);
     void setElectionID(int ElectionID);
