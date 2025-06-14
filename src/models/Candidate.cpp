@@ -460,7 +460,7 @@ void manageCandidates() {
             };
             bool success2 = ShowForm(screen, "Add Candidate", form2);
             if (!success2) {
-                Showmessage(screen,"[ERROR] Candidate creation cancelled.","error");
+                ShowMessage(screen,"[ERROR] Candidate creation cancelled.","error");
                 continue;
             }
             vector<InputField> form3 = {
@@ -486,7 +486,7 @@ void manageCandidates() {
             };
             bool success5 = ShowForm(screen, "Add Candidate", form5);
             if (!success5) {
-                showMessage(screen,"[ERROR] Candidate creation cancelled.","error");
+                ShowMessage(screen,"[ERROR] Candidate creation cancelled.","error");
                 continue;
             }
             partyID = stoi(partyID_str);
@@ -496,7 +496,7 @@ void manageCandidates() {
         Candidate c(getNextID("CandidateID"), name, partyID, constID, getConstituencyTypeByID(constID));
         addCandidate(c);
     } else {
-        showMessage(screen,"Validation failed.","error");
+        ShowMessage(screen,"Validation failed.","error");
     }
         } else if (choice == 1) {
             listAllCandidates();
@@ -513,7 +513,7 @@ void manageCandidates() {
             }
             int constID = stoi(constID_str);
             if (!constituencyExists(constID)) {
-                showMessage(screen,"Invalid Constituency ID.","error");
+                ShowMessage(screen,"Invalid Constituency ID.","error");
                 continue;
             }
             viewCandidatesByConstituency(constID);
@@ -527,7 +527,7 @@ void manageCandidates() {
             };
             bool success1 = ShowForm(screen, "Edit Candidate", form1);
             if (!success1) {
-                showMessage(screen,"[ERROR] Edit cancelled.","error");
+                ShowMessage(screen,"[ERROR] Edit cancelled.","error");
                 continue;
             }
             int id = stoi(id_str);
@@ -537,7 +537,7 @@ void manageCandidates() {
             };
             bool success2 = ShowForm(screen, "Edit Candidate", form2);
             if (!success2) {
-                showMessage(screen,"[ERROR] Edit cancelled.","error");
+                ShowMessage(screen,"[ERROR] Edit cancelled.","error");
                 continue;
             }
             int partyID = stoi(partyID_str);
@@ -547,11 +547,11 @@ void manageCandidates() {
             };
             bool success3 = ShowForm(screen, "Edit Candidate", form3);
             if (!success3) {
-                showMessage(screen,"[ERROR] Edit cancelled.","error");
+                ShowMessage(screen,"[ERROR] Edit cancelled.","error");
                 continue;
             }
             int constID = stoi(constID_str);
-            showMessage(screen,"Editing Candidate ID " << id << "...","info");
+            ShowMessage(screen,"Editing Candidate ID " << id << "...","info");
             editCandidate(id, name, partyID, constID);
         } else if (choice == 4) {
             string id_str;
@@ -562,16 +562,16 @@ void manageCandidates() {
             };
             bool success = ShowForm(screen, "Delete Candidate", form);
             if (!success) {
-                showMessage(screen,"[ERROR] Delete cancelled.","error");
+                ShowMessage(screen,"[ERROR] Delete cancelled.","error");
                 continue;
             }
             int id = stoi(id_str);
             if (!isValidCandidateID(id)) {
-                showMessage(screen,"Invalid Candidate ID.","error");
+                ShowMessage(screen,"Invalid Candidate ID.","error");
                 continue;
             }
             if (!candidateExists(id)) {
-                showMessage(screen,"Candidate ID not found.","info");
+                ShowMessage(screen,"Candidate ID not found.","info");
                 continue;
             }
             cout << "Deleting Candidate ID " << id << "...\n";
@@ -579,7 +579,7 @@ void manageCandidates() {
         } else if (choice == 5) {
             break;
         } else {
-            showMessage(screen,"Invalid option.","error");
+            ShowMessage(screen,"Invalid option.","error");
         }
     }
 }
