@@ -333,7 +333,7 @@ void editVoterByCNIC(const string &VoterCNIC, const Voter &updatedVoter)
     }
     if (!found)
     {
-        ShowMessage(screen,"Error: Voter with CNIC " << VoterCNIC << " not found.", "error");
+        ShowMessage(screen,"Error: Voter with CNIC " + VoterCNIC + " not found.", "error");
         return;
     }
     saveAllVoters(voters);
@@ -370,7 +370,7 @@ void deleteVoterByCNIC(const string &VoterCNIC)
     }
     else
     {
-        ShowMessage(screen,"Error: Voter with CNIC " << VoterCNIC << " not found.", "error");
+        ShowMessage(screen,"Error: Voter with CNIC " + VoterCNIC + " not found.", "error");
     }
 }
 
@@ -407,20 +407,6 @@ int getVoterIDByCNIC(const string &VoterCNIC)
     }
     return -1; // Not found
 }
-
-// User: View own profile
-void viewProfile(const Voter &v)
-{
-    cout << "Voter Profile\n";
-    cout << "ID: " << v.getVoterID() << "\n";
-    cout << "Name: " << v.getVoterName() << "\n";
-    cout << "CNIC: " << v.getVoterCNIC() << "\n";
-    cout << "Gender: " << v.getVoterGender() << "\n";
-    cout << "Age: " << v.getVoterAge() << "\n";
-    cout << "Address: " << v.getVoterAddress() << "\n";
-    cout << "Polling Station ID: " << v.getPollingStationID() << "\n";
-}
-
 
 bool voterExists(string VoterCNIC) {
     vector<Voter> list = loadAllVoters();
