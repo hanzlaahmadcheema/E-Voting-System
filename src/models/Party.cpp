@@ -47,12 +47,6 @@ string Party::getPartySymbol() const
 {
     return PartySymbol;
 }
-void Party::displayPartyInfo() const
-{
-    cout << "Party ID: " << PartyID << "\n"
-         << "Name: " << PartyName << "\n"
-         << "Symbol: " << PartySymbol << endl;
-}
 
 json Party::toJSON() const
 {
@@ -162,17 +156,17 @@ void addParty(const Party &p)
     vector<Party> list = loadAllParties();
     if (partyExists(p.getPartyID()))
     {
-        cout << "Party ID already exists.\n";
+          ShowMessage(screen,"Party ID already exists.","error");
         return;
     }
     if (!isValidPartyName(p.getPartyName()))
     {
-        cout << "Invalid party name (empty or too long).\n";
+          ShowMessage(screen,"Invalid party name (empty or too long).","error");
         return;
     }
     if (!isValidPartySymbol(p.getPartySymbol()))
     {
-        cout << "Invalid party symbol (empty or too long).\n";
+          ShowMessage(screen,"Invalid party symbol (empty or too long).","error");
         return;
     }
     list.push_back(p);
@@ -187,12 +181,12 @@ void editParty(int id, const string &name, const string &symbol)
     bool found = false;
     if (!isValidPartyName(name))
     {
-        cout << "Invalid party name (empty or too long).\n";
+          ShowMessage(screen,"Invalid party name (empty or too long).","error");
         return;
     }
     if (!isValidPartySymbol(symbol))
     {
-        cout << "Invalid party symbol (empty or too long).\n";
+          ShowMessage(screen,"Invalid party symbol (empty or too long).","error");
         return;
     }
     for (auto &p : list)
@@ -207,11 +201,11 @@ void editParty(int id, const string &name, const string &symbol)
     }
     if (!found)
     {
-        cout << "Party ID not found.\n";
+          ShowMessage(screen,"Party ID not found.","error");
         return;
     }
     saveAllParties(list);
-    cout << "Party updated.\n";
+      ShowMessage(screen,"Party updated.","success");
 }
 
 // Admin: Delete party
@@ -222,12 +216,12 @@ void deleteParty(int id)
                         { return p.getPartyID() == id; });
     if (it == list.end())
     {
-        cout << "Party ID not found.\n";
+          ShowMessage(screen,"Party ID not found.","error");
         return;
     }
     list.erase(it, list.end());
     saveAllParties(list);
-    cout << "Party deleted.\n";
+      ShowMessage(screen,"Party deleted.","success");
 }
 
 // Admin/User: View all parties
@@ -236,7 +230,7 @@ void listAllParties()
     vector<Party> list = loadAllParties();
     if (list.empty())
     {
-        cout << "No parties found.\n";
+          ShowMessage(screen,"No parties found.","info");
         return;
     }
     
@@ -275,23 +269,23 @@ void manageParties() {
             };
             bool success = ShowForm(screen, "Add Party", form);
             if (!success) {
-                cout << "\n[ERROR] Party creation cancelled.\n";
+                  ShowMessage(screen,"[ERROR] Party creation cancelled.","error");
                 continue;
             }
             if (!isValidPartyName(name)) {
-                cout << "Invalid Party Name.\n";
+                  ShowMessage(screen,"Invalid Party Name.","error");
                 continue;
             }
             if (partyNameExists(loadAllParties(), name)) {
-                cout << "Party Name already exists.\n";
+                  ShowMessage(screen,"Party Name already exists.","error");
                 continue;
             }
             if (!isValidPartySymbol(symbol)) {
-                cout << "Invalid Party Symbol.\n";
+                  ShowMessage(screen,"Invalid Party Symbol.","error");
                 continue;
             }
             if (partySymbolExists(loadAllParties(), symbol)) {
-                cout << "Party Symbol already exists.\n";
+                  ShowMessage(screen,"Party Symbol already exists.","error");
                 continue;
             }
             Party p(getNextID("PartyID"), name, symbol);
@@ -309,32 +303,32 @@ void manageParties() {
             };
             bool success = ShowForm(screen, "Edit Party", form);
             if (!success) {
-                cout << "\n[ERROR] Party Editing cancelled.\n";
+                  ShowMessage(screen,"[ERROR] Party Editing cancelled.","error");
                 continue;
             }
             int id = stoi(id_str);
             if (!isValidPartyID(id)) {
-                cout << "Invalid Party ID.\n";
+                  ShowMessage(screen,"Invalid Party ID.","error");
                 continue;
             }
             if (!partyExists(id)) {
-                cout << "Party ID not found.\n";
+                  ShowMessage(screen,"Party ID not found.","error");
                 continue;
             }
             if (!isValidPartyName(name)) {
-                cout << "Invalid Party Name.\n";
+                  ShowMessage(screen,"Invalid Party Name.","error");
                 continue;
             }
             if (partyNameExists(loadAllParties(), name)) {
-                cout << "Party Name already exists.\n";
+                  ShowMessage(screen,"Party Name already exists.","error");
                 continue;
             }
             if (!isValidPartySymbol(symbol)) {
-                cout << "Invalid Party Symbol.\n";
+                  ShowMessage(screen,"Invalid Party Symbol.","error");
                 continue;
             }
             if (partySymbolExists(loadAllParties(), symbol)) {
-                cout << "Party Symbol already exists.\n";
+                  ShowMessage(screen,"Party Symbol already exists.","error");
                 continue;
             }
             editParty(id, name, symbol);
@@ -347,23 +341,23 @@ void manageParties() {
             };
             bool success = ShowForm(screen, "Delete Party", form);
             if (!success) {
-                cout << "\n[ERROR] Party Deletion cancelled.\n";
+                  ShowMessage(screen,"[ERROR] Party Deletion cancelled.","error");
                 continue;
             }
             int id = stoi(id_str);
             if (!isValidPartyID(id)) {
-                cout << "Invalid Party ID.\n";
+                  ShowMessage(screen,"Invalid Party ID.","error");
                 continue;
             }
             if (!partyExists(id)) {
-                cout << "Party ID not found.\n";
+                  ShowMessage(screen,"Party ID not found.","error");
                 continue;
             }
             deleteParty(id);
         } else if (choice == 4) {
             break;
         } else {
-            cout << "Invalid option.\n";
+              ShowMessage(screen,"Invalid option.","error");
         }
     }
 }
