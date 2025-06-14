@@ -25,7 +25,6 @@ public:
     int getElectionID() const;
     int getPollingStationID() const;
     string getTimestamp() const;
-    void displayVoteInfo() const;
 
     json toJSON() const;
     static Vote fromJSON(const json &j);
