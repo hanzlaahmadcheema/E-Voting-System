@@ -60,13 +60,7 @@ int Constituency::getElectionID() const
 {
     return ElectionID;
 }
-void Constituency::displayConstituencyInfo() const
-{
-    cout << "Constituency ID: " << ConstituencyID << "\n"
-         << "Name: " << ConstituencyName << "\n"
-         << "City ID: " << CityID << "\n"
-         << "Election ID: " << ElectionID << endl;
-}
+
 // Add any other methods or member functions as needed
 json Constituency::toJSON() const
 {
@@ -156,28 +150,28 @@ void addConstituency(const Constituency &newConst)
     // Validation: ID positive, unique; Name non-empty, unique; CityID positive
     if (newConst.getConstituencyID() <= 0)
     {
-        cout << "Error: Constituency ID must be positive.\n";
+        ShowMessage(screen,"Error: Constituency ID must be positive.","error");
         return;
     }
     if (newConst.getConstituencyName().empty())
     {
-        cout << "Error: Constituency name cannot be empty.\n";
+          ShowMessage(screen,"Error: Constituency name cannot be empty.","error") ;
         return;
     }
     if (constituencyNameExists(list, newConst.getConstituencyName()))
     {
-        cout << "Error: Constituency name already exists.\n";
+          ShowMessage(screen,"Error: Constituency name already exists.","error");
         return;
     }
     if (newConst.getCityID() <= 0)
     {
-        cout << "Error: City ID must be positive.\n";
+          ShowMessage(screen,"Error: City ID must be positive.","error");
         return;
     }
 
     list.push_back(newConst);
     saveAllConstituencies(list);
-    cout << "Constituency added.\n";
+      ShowMessage(screen,"Constituency added.","success");
 }
 
 // Admin: Edit constituency name
@@ -188,17 +182,17 @@ void editConstituency(int id, const string &newName, int CityID, int ElectionID)
 
     if (id <= 0)
     {
-        cout << "Error: Invalid constituency ID.\n";
+          ShowMessage(screen,"Error: Invalid constituency ID.","error");
         return;
     }
     if (newName.empty())
     {
-        cout << "Error: New name cannot be empty.\n";
+          ShowMessage(screen,"Error: New name cannot be empty.","error");
         return;
     }
     if (constituencyNameExists(list, newName))
     {
-        cout << "Error: Constituency name already exists.\n";
+          ShowMessage(screen,"Error: Constituency name already exists.","error");
         return;
     }
 
@@ -213,11 +207,11 @@ void editConstituency(int id, const string &newName, int CityID, int ElectionID)
     }
     if (!found)
     {
-        cout << "Error: Constituency ID not found.\n";
+          ShowMessage(screen,"Error: Constituency ID not found.","error");
         return;
     }
     saveAllConstituencies(list);
-    cout << "Constituency updated.\n";
+      ShowMessage(screen,"Constituency updated.","success");
 }
 
 // Admin: Delete constituency by ID
@@ -225,7 +219,7 @@ void deleteConstituency(int id)
 {
     if (id <= 0)
     {
-        cout << "Error: Invalid constituency ID.\n";
+          ShowMessage(screen,"Error: Invalid constituency ID.","error");
         return;
     }
     vector<Constituency> list = loadAllConstituencies();
@@ -235,11 +229,11 @@ void deleteConstituency(int id)
     list.erase(it, list.end());
     if (list.size() == before)
     {
-        cout << "Error: Constituency ID not found.\n";
+          ShowMessage(screen,"Error: Constituency ID not found.","error");
         return;
     }
     saveAllConstituencies(list);
-    cout << "Constituency deleted.\n";
+      ShowMessage(screen,"Constituency deleted.","success");
 }
 
 // Admin/User: View all constituencies
@@ -248,7 +242,7 @@ void listAllConstituencies()
     vector<Constituency> list = loadAllConstituencies();
     if (list.empty())
     {
-        cout << "No constituencies found.\n";
+          ShowMessage(screen,"No constituencies found.","info");
         return;
     }
     
@@ -271,7 +265,7 @@ void listConstituenciesByCity(int cityID)
 {
     if (cityID <= 0)
     {
-        cout << "Error: Invalid city ID.\n";
+          ShowMessage(screen,"Error: Invalid city ID.","error");
         return;
     }
     vector<Constituency> list = loadAllConstituencies();
@@ -293,7 +287,7 @@ void listConstituenciesByCity(int cityID)
     }
     if (!found)
     {
-        cout << "No constituencies found for this city.\n";
+          ShowMessage(screen,"No constituencies found for this city.","info");
         return;
     }
     ShowTableFTXUI("Constituencies in City " + to_string(cityID), headers, data);
@@ -366,19 +360,19 @@ void manageConstituencies() {
             fullName = type + "-" + name;
             bool success2 = ShowForm(screen, "Add Constituency", form2);
             if (!success2) {
-                cout << "\n[ERROR] Constituency creation cancelled.\n";
+                  ShowMessage(screen,"[ERROR] Constituency creation cancelled.","error");
                 continue;
             }
             if (!electionExists(ElectionID)) {
-                cout << "Invalid Election ID.\n";
+                  ShowMessage(screen,"Invalid Election ID.","error");
                 continue;
             }
             if (!isValidConstituencyName(fullName)) {
-                cout << "Invalid Constituency Name.\n";
+                  ShowMessage(screen,"Invalid Constituency Name.","error");
                 continue;
             }
             if (constituencyNameExists(list, fullName)) {
-                cout << "Constituency Name already exists.\n";
+                  ShowMessage(screen,"Constituency Name already exists.","error");
                 continue;
             }
             if (type == "NA") {
@@ -397,12 +391,12 @@ void manageConstituencies() {
             };
             bool success5 = ShowForm(screen, "Add Constituency", cityForm);
             if (!success5) {
-                cout << "\n[ERROR] City selection cancelled.\n";
+                  ShowMessage(screen,"[ERROR] City selection cancelled.","error");
                 continue;
             }
             int cityID = stoi(cityID_str);
             if (!cityExists(cityID)) {
-                cout << "Invalid City ID.\n";
+                  ShowMessage(screen,"Invalid City ID.","error");
                 continue;
             }
             Constituency c(getNextID("ConstituencyID"), fullName, cityID, ElectionID);
@@ -419,16 +413,16 @@ void manageConstituencies() {
             };
             bool success = ShowForm(screen, "Edit Constituency", form);
             if (!success) {
-                cout << "\n[ERROR] Edit cancelled.\n";
+                  ShowMessage(screen,"[ERROR] Edit cancelled.","error");
                 continue;
             }
             int id = stoi(id_str);
             if (!isValidConstituencyID(id)) {
-                cout << "Invalid Constituency ID.\n";
+                  ShowMessage(screen,"Invalid Constituency ID.","error");
                 continue;
             }
             if (!constituencyExists(id)) {
-                cout << "Constituency ID doesn't exists.\n";
+                  ShowMessage(screen,"Constituency ID doesn't exists.","error");
                 continue;
             }
             listAllElections();
@@ -437,12 +431,12 @@ void manageConstituencies() {
             };
             bool success2 = ShowForm(screen, "Edit Constituency", form2);
             if (!success2) {
-                cout << "\n[ERROR] Edit cancelled.\n";
+                  ShowMessage(screen,"[ERROR] Edit cancelled.","error");
                 continue;
             }
             int ElectionID = stoi(ElectionID_str);
             if (!electionExists(ElectionID)) {
-                cout << "Invalid Election ID.\n";
+                  ShowMessage(screen,"Invalid Election ID.","error");
                 continue;
             }
             type = getElectionTypeByID(ElectionID);
@@ -451,16 +445,16 @@ void manageConstituencies() {
             };
             bool success3 = ShowForm(screen, "Edit Constituency", form3);
             if (!success3) {
-                cout << "\n[ERROR] Edit cancelled.\n";
+                  ShowMessage(screen,"[ERROR] Edit cancelled.","error");
                 continue;
             }
             fullName = type + "-" + name;
             if (!isValidConstituencyName(fullName)) {
-                cout << "Invalid Constituency Name.\n";
+                  ShowMessage(screen,"Invalid Constituency Name.","error");
                 continue;
             }
             if (constituencyNameExists(list, fullName)) {
-                cout << "Constituency Name already exists.\n";
+                  ShowMessage(screen,"Constituency Name already exists.","error");
                 continue;
             }
             listAllCities();
@@ -469,7 +463,7 @@ void manageConstituencies() {
             };
             bool success4 = ShowForm(screen, "Edit Constituency", form4);
             if (!success4) {
-                cout << "\n[ERROR] City selection cancelled.\n";
+                  ShowMessage(screen,"[ERROR] City selection cancelled.","error");
                 continue;
             }
             listCitiesByProvince(provinceName_str);
@@ -478,12 +472,12 @@ void manageConstituencies() {
             };
             bool success5 = ShowForm(screen, "Edit Constituency", form5);
             if (!success5) {
-                cout << "\n[ERROR] City selection cancelled.\n";
+                  ShowMessage(screen,"[ERROR] City selection cancelled.","error");
                 continue;
             }
             int cityID = stoi(cityID_str);
             if (!cityExists(cityID)) {
-                cout << "Invalid City ID.\n";
+                  ShowMessage(screen,"Invalid City ID.","error");
                 continue;
             }
             editConstituency(id, fullName, cityID, ElectionID);
@@ -497,23 +491,23 @@ void manageConstituencies() {
             };
             bool success = ShowForm(screen, "Delete Constituency", form);
             if (!success) {
-                cout << "\n[ERROR] Delete cancelled.\n";
+                  ShowMessage(screen,"[ERROR] Delete cancelled.","error");
                 continue;
             }
             int id = stoi(id_str);
             if (!isValidConstituencyID(id)) {
-                cout << "Invalid Constituency ID.\n";
+                  ShowMessage(screen,"Invalid Constituency ID.","error");
                 continue;
             }
             if (!constituencyExists(id)) {
-                cout << "Constituency ID not found.\n";
+                  ShowMessage(screen,"Constituency ID not found.","error");
                 continue;
             }
             deleteConstituency(id);
         } else if (choice == 4) {
             break;
         } else {
-            cout << "Invalid option.\n";
+              ShowMessage(screen,"Invalid option.","error");
         }
     }
 }
