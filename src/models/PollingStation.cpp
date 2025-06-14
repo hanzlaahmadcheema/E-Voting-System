@@ -75,14 +75,6 @@ int PollingStation::getConstituencyIDPA() const
 {
     return ConstituencyIDPA;
 }
-void PollingStation::displayPollingStationInfo() const
-{
-    cout << "Polling Station ID: " << PollingStationID << "\n"
-         << "Name: " << PollingStationName << "\n"
-         << "Address: " << PollingStationAddress << "\n"
-         << "Constituency ID2: " << ConstituencyIDNA << "\n"
-         << "Constituency ID1: " << ConstituencyIDPA << endl;
-}
 
 json PollingStation::toJSON() const
 {
@@ -175,32 +167,32 @@ void addPollingStation(const PollingStation &s)
     // Validation
     if (s.getPollingStationID() <= 0)
     {
-        cout << "Invalid Polling Station ID.\n";
+        ShowMessage(screen,"Invalid Polling Station ID.","error");
         return;
     }
     if (isBlank(s.getPollingStationName()))
     {
-        cout << "Polling Station name cannot be empty.\n";
+        ShowMessage(screen,"Polling Station name cannot be empty.","error");
         return;
     }
     if (isBlank(s.getPollingStationAddress()))
     {
-        cout << "Polling Station address cannot be empty.\n";
+        ShowMessage(screen,"Polling Station address cannot be empty.","error");
         return;
     }
     if (s.getConstituencyIDNA() <= 0)
     {
-        cout << "Invalid Constituency ID.\n";
+        ShowMessage(screen,"Invalid Constituency ID.","error");
         return;
     }
     if (s.getConstituencyIDPA() <= 0)
     {
-        cout << "Invalid Constituency ID.\n";
+        ShowMessage(screen,"Invalid Constituency ID.","error");
         return;
     }
     list.push_back(s);
     saveAllStations(list);
-    cout << "Polling station added.\n";
+    ShowMessage(screen,"Polling station added.","success");
 }
 
 // Admin: Edit station
@@ -211,17 +203,17 @@ void editPollingStation(int id, const string &newName, const string &newAddress)
 
     if (id <= 0)
     {
-        cout << "Invalid Polling Station ID.\n";
+        ShowMessage(screen,"Invalid Polling Station ID.","error");
         return;
     }
     if (isBlank(newName))
     {
-        cout << "New name cannot be empty.\n";
+        ShowMessage(screen,"New name cannot be empty.","error");
         return;
     }
     if (isBlank(newAddress))
     {
-        cout << "New address cannot be empty.\n";
+        ShowMessage(screen,"New address cannot be empty.","error");
         return;
     }
 
@@ -237,11 +229,11 @@ void editPollingStation(int id, const string &newName, const string &newAddress)
     }
     if (!found)
     {
-        cout << "Polling station not found.\n";
+        ShowMessage(screen,"Polling station not found.","error");
         return;
     }
     saveAllStations(list);
-    cout << "Polling station updated.\n";
+    ShowMessage(screen,"Polling station updated.","success");
 }
 
 // Admin: Delete station
@@ -249,7 +241,7 @@ void deletePollingStation(int id)
 {
     if (id <= 0)
     {
-        cout << "Invalid Polling Station ID.\n";
+        ShowMessage(screen,"Invalid Polling Station ID.","error");
         return;
     }
     vector<PollingStation> list = loadAllStations();
@@ -257,12 +249,12 @@ void deletePollingStation(int id)
                         { return s.getPollingStationID() == id; });
     if (it == list.end())
     {
-        cout << "Polling station not found.\n";
+        ShowMessage(screen,"Polling station not found.","error");
         return;
     }
     list.erase(it, list.end());
     saveAllStations(list);
-    cout << "Polling station deleted.\n";
+    ShowMessage(screen,"Polling station deleted.","success");
 }
 
 PollingStation getPollingStationByID(int id) {
@@ -277,7 +269,7 @@ void listStationsByConstituency(int constID)
 {
     if (constID <= 0)
     {
-        cout << "Invalid Constituency ID.\n";
+        ShowMessage(screen,"Invalid Constituency ID.","error");
         return;
     }
     vector<PollingStation> list = loadAllStations();
@@ -301,7 +293,7 @@ void listStationsByConstituency(int constID)
     ShowTableFTXUI("Polling Stations in Constituency " + to_string(constID), headers, data);
     if (!found)
     {
-        cout << "No polling stations found for this constituency.\n";
+        ShowMessage(screen,"No polling stations found for this constituency.","info");
     }
 
 }
@@ -310,7 +302,7 @@ void listStationsByCity(int cityID)
 {
     if (cityID <= 0)
     {
-        cout << "Invalid City ID.\n";
+        ShowMessage(screen,"Invalid City ID.","error");
         return;
     }
     vector<PollingStation> list = loadAllStations();
@@ -334,7 +326,7 @@ void listStationsByCity(int cityID)
     ShowTableFTXUI("Polling Stations in City " + to_string(cityID), headers, data);
     if (!found)
     {
-        cout << "No polling stations found for this city.\n";
+        ShowMessage(screen,"No polling stations found for this city.","info");
     }
 }
 
@@ -343,14 +335,14 @@ void listAllStations()
     vector<PollingStation> list = loadAllStations();
     if (list.empty())
     {
-        cout << "ℹNo polling stations found.\n";
+        ShowMessage(screen,"ℹNo polling stations found.","info");
         return;
     }
     for (const auto &s : list)
     {
-        cout << s.getPollingStationID() << " - " << s.getPollingStationName()
-             << " (" << s.getPollingStationAddress() << ")" << endl;
+        
     }
+
 }
 
 bool pollingStationExists(int id) {
