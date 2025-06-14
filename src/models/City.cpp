@@ -43,12 +43,6 @@ string City::getProvinceName() const
 {
     return ProvinceName;
 }
-void City::displayCityInfo() const
-{
-    cout << "City ID: " << CityID << "\n"
-         << "Name: " << CityName << endl
-         << "Province: " << ProvinceName << endl;
-}
 
 json City::toJSON() const
 {
@@ -172,7 +166,7 @@ void addCity(const City &newCity)
     }
     cities.push_back(newCity);
     saveAllCities(cities);
-    cout << "City added successfully.\n";
+    showMessage(screen,"City added successfully.","success");
 }
 
 // Admin: Edit city by ID
@@ -213,7 +207,7 @@ void editCity(int cityID, const string &newName, const string &newProvinceName)
         return;
     }
     saveAllCities(cities);
-    cout << "City updated.\n";
+    showMessage(screen,"City updated.","success");
 }
 
 // Admin: Delete city by ID
@@ -234,7 +228,7 @@ void deleteCityByID(int cityID)
     }
     cities.erase(it, cities.end());
     saveAllCities(cities);
-    cout << "City deleted if existed.\n";
+    showMessage(screen,"City deleted if existed.","info");
 }
 
 // Admin/User: View all cities
@@ -243,7 +237,7 @@ void listCitiesByProvince(const string &province)
     vector<City> cities = loadAllCities();
     if (cities.empty())
     {
-        cout << "No cities found.\n";
+        showMessage(screen,"No cities found.","info");
         return;
     }
     
@@ -264,7 +258,7 @@ void listAllCities()
     vector<City> cities = loadAllCities();
     if (cities.empty())
     {
-        cout << "No cities found.\n";
+        showMessage(screen,"No cities found.","info");
         return;
     }
     
@@ -309,7 +303,7 @@ void manageCities() {
             };
             bool success = ShowForm(screen, "Add City", form);
             if (!success) {
-                cout << "\n[ERROR] City creation cancelled.\n";
+                showMessage(screen,"[ERROR] City creation cancelled.","error");
                 continue;
             }
         } else if (choice == 1) {
@@ -324,20 +318,20 @@ void manageCities() {
             };
             bool success = ShowForm(screen, "Edit City", form);
             if (!success) {
-                cout << "\n[ERROR] Edit cancelled.\n";
+                showMessage(screen,"[ERROR] Edit cancelled.","error");
                 continue;
             }
             int id = stoi(id_str);
             if (!isValidCityID(id)) {
-                cout << "Invalid City ID.\n";
+                showMessage(screen,"Invalid City ID.","error");
                 continue;
             }
             if (!cityExists(id)) {
-                cout << "City ID not found.\n";
+                showMessage(screen,"City ID not found.","info");
                 continue;
             }
             if (!isValidCityName(name)) {
-                cout << "Invalid City Name.\n";
+                showMessage(screen,"Invalid City Name.","error");
                 continue;
             }
             vector<InputField> form2 = {
@@ -345,7 +339,7 @@ void manageCities() {
             };
             bool success2 = ShowForm(screen, "Edit City", form2);
             if (!success2) {
-                cout << "\n[ERROR] Edit cancelled.\n";
+                showMessage(screen,"[ERROR] Edit cancelled.","error");
                 continue;
             }
             editCity(id, name, ProvinceName);
@@ -358,23 +352,23 @@ void manageCities() {
             };
             bool success3 = ShowForm(screen, "Delete City", form3);
             if (!success3) {
-                cout << "\n[ERROR] Delete cancelled.\n";
+                showMessage(screen,"[ERROR] Delete cancelled.","error");
                 continue;
             }
             int id = stoi(id_str);
             if (!isValidCityID(id)) {
-                cout << "Invalid City ID.\n";
+                showMessage(screen,"Invalid City ID.","error");
                 continue;
             }
             if (!cityExists(id)) {
-                cout << "City ID not found.\n";
+                showMessage(screen,"City ID not found.","info");
                 continue;
             }
             deleteCityByID(id);
         } else if (choice == 4) {
             break;
         } else {
-            cout << "Invalid option.\n";
+            showMessage(screen,"Invalid option.","error");
         }
     }
 }
