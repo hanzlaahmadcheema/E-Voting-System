@@ -8,7 +8,6 @@ class Candidate
 public:
     Candidate();
     Candidate(int CandidateID, const string &CandidateName, int PartyID, int ConstituencyID, const string &ConstituencyType);
-    void displayCandidateInfo() const;
     void setCandidateID(int CandidateID);
     void setCandidateName(const string &CandidateName);
     void setPartyID(int PartyID);

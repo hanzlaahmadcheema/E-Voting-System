@@ -74,13 +74,6 @@ string Candidate::getConstituencyType() const
     return ConstituencyType;
 }
 
-void Candidate::displayCandidateInfo() const
-{
-    cout << "Candidate ID: " << CandidateID << "\n"
-         << "Name: " << CandidateName << "\n"
-         << "Party ID: " << PartyID << "\n"
-         << "Constituency ID: " << ConstituencyID << endl;
-}
 // Add any other methods or member functions as needed
 json Candidate::toJSON() const
 {
@@ -198,7 +191,7 @@ void addCandidate(const Candidate &newCandidate)
     vector<Candidate> candidates = loadAllCandidates();
     candidates.push_back(newCandidate);
     saveAllCandidates(candidates);
-    cout << "Candidate added successfully.\n";
+    ShowMessage(screen,"Candidate added successfully!","success");
 }
 
 // Admin: Edit candidate by ID
@@ -229,7 +222,7 @@ void editCandidate(int CandidateID, const string &newName, int newPartyID, int n
         return;
     }
     saveAllCandidates(candidates);
-    cout << "Candidate updated successfully.\n";
+    ShowMessage(screen, "Candidate updated successfully!","success");
 }
 // Admin: Delete candidate by ID
 void deleteCandidateByID(int CandidateID)
@@ -252,9 +245,9 @@ void deleteCandidateByID(int CandidateID)
 
     saveAllCandidates(candidates);
     if (candidates.size() < before)
-        cout << "Candidate deleted.\n";
+        ShowMessage(screen, "Candidate deleted.","success");
     else
-        cout << "Candidate ID not found.\n";
+        ShowMessage(screen, "Candidate ID not found.","error");
 }
 
 // Admin: List all candidates
@@ -263,7 +256,7 @@ void listAllCandidates()
     vector<Candidate> list = loadAllCandidates();
     if (list.empty())
     {
-        cout << "No candidates found.\n";
+        ShowMessage(screen,"No candidates found.","info");
         return;
     }
     // Using FTXUI for better output formatting
@@ -294,7 +287,7 @@ void viewCandidatesByConstituency(int constID)
     vector<Candidate> list = loadAllCandidates();
     if (list.empty())
     {
-        cout << "No candidates found in this constituency.\n";
+        ShowMessage(screen,"No candidates found in this constituency.","info");
         return;
     }
     vector<string> headers = {"ID", "Name", "Party ID", "Constituency ID", "Constituency Type"};
@@ -353,7 +346,7 @@ void viewCandidatesByStation(int PollingStationID)
     }
     if (!found)
     {
-        cout << "No candidates found for this Polling Station.\n";
+        ShowMessage(screen,"No candidates found for this Polling Station.","info");
     }
     ShowTableFTXUI("Candidates for Polling Station", headers, data);
 }
@@ -417,7 +410,7 @@ void viewCandidatesByType(string type){
     }
     if (!found)
     {
-        cout << "No candidates found for this type.\n";
+        ShowMessage(screen,"No candidates found for this type.","info");
     }
     ShowTableFTXUI("Candidates by Type", headers, data);
 }
@@ -457,7 +450,7 @@ void manageCandidates() {
             };
             bool success1 = ShowForm(screen, "Add Candidate", form1);
             if (!success1) {
-                cout << "\n[ERROR] Candidate creation cancelled.\n";
+                ShowMessage(screen,"[ERROR] Candidate creation cancelled.","error");
                 continue;
             }
             system("cls");
@@ -467,7 +460,7 @@ void manageCandidates() {
             };
             bool success2 = ShowForm(screen, "Add Candidate", form2);
             if (!success2) {
-                cout << "\n[ERROR] Candidate creation cancelled.\n";
+                Showmessage(screen,"[ERROR] Candidate creation cancelled.","error");
                 continue;
             }
             vector<InputField> form3 = {
@@ -475,7 +468,7 @@ void manageCandidates() {
             };
             bool success3 = ShowForm(screen, "Add Candidate", form3);
             if (!success3) {
-                cout << "\n[ERROR] Candidate creation cancelled.\n";
+                ShowMessage(screen,"[ERROR] Candidate creation cancelled.","error");
                 continue;
             }
             listCitiesByProvince(provinceID_str);
@@ -484,7 +477,7 @@ void manageCandidates() {
             };
             bool success4 = ShowForm(screen, "Add Candidate", form4);
             if (!success4) {
-                cout << "\n[ERROR] Candidate creation cancelled.\n";
+                ShowMessage(screen,"[ERROR] Candidate creation cancelled.","error");
                 continue;
             }
             listConstituenciesByCity(stoi(cityID_str));
@@ -493,7 +486,7 @@ void manageCandidates() {
             };
             bool success5 = ShowForm(screen, "Add Candidate", form5);
             if (!success5) {
-                cout << "\n[ERROR] Candidate creation cancelled.\n";
+                showMessage(screen,"[ERROR] Candidate creation cancelled.","error");
                 continue;
             }
             partyID = stoi(partyID_str);
@@ -503,7 +496,7 @@ void manageCandidates() {
         Candidate c(getNextID("CandidateID"), name, partyID, constID, getConstituencyTypeByID(constID));
         addCandidate(c);
     } else {
-        cout << "Validation failed.\n";
+        showMessage(screen,"Validation failed.","error");
     }
         } else if (choice == 1) {
             listAllCandidates();
@@ -515,12 +508,12 @@ void manageCandidates() {
             };
             bool success = ShowForm(screen, "View Candidates by Constituency", form);
             if (!success) {
-                cout << "\n[ERROR] View cancelled.\n";
+                ShowMessage(screen,"[ERROR] View cancelled.","error");
                 continue;
             }
             int constID = stoi(constID_str);
             if (!constituencyExists(constID)) {
-                cout << "Invalid Constituency ID.\n";
+                showMessage(screen,"Invalid Constituency ID.","error");
                 continue;
             }
             viewCandidatesByConstituency(constID);
@@ -534,7 +527,7 @@ void manageCandidates() {
             };
             bool success1 = ShowForm(screen, "Edit Candidate", form1);
             if (!success1) {
-                cout << "\n[ERROR] Edit cancelled.\n";
+                showMessage(screen,"[ERROR] Edit cancelled.","error");
                 continue;
             }
             int id = stoi(id_str);
@@ -544,7 +537,7 @@ void manageCandidates() {
             };
             bool success2 = ShowForm(screen, "Edit Candidate", form2);
             if (!success2) {
-                cout << "\n[ERROR] Edit cancelled.\n";
+                showMessage(screen,"[ERROR] Edit cancelled.","error");
                 continue;
             }
             int partyID = stoi(partyID_str);
@@ -554,11 +547,11 @@ void manageCandidates() {
             };
             bool success3 = ShowForm(screen, "Edit Candidate", form3);
             if (!success3) {
-                cout << "\n[ERROR] Edit cancelled.\n";
+                showMessage(screen,"[ERROR] Edit cancelled.","error");
                 continue;
             }
             int constID = stoi(constID_str);
-            cout << "Editing Candidate ID " << id << "...\n";
+            showMessage(screen,"Editing Candidate ID " << id << "...","info");
             editCandidate(id, name, partyID, constID);
         } else if (choice == 4) {
             string id_str;
@@ -569,16 +562,16 @@ void manageCandidates() {
             };
             bool success = ShowForm(screen, "Delete Candidate", form);
             if (!success) {
-                cout << "\n[ERROR] Delete cancelled.\n";
+                showMessage(screen,"[ERROR] Delete cancelled.","error");
                 continue;
             }
             int id = stoi(id_str);
             if (!isValidCandidateID(id)) {
-                cout << "Invalid Candidate ID.\n";
+                showMessage(screen,"Invalid Candidate ID.","error");
                 continue;
             }
             if (!candidateExists(id)) {
-                cout << "Candidate ID not found.\n";
+                showMessage(screen,"Candidate ID not found.","info");
                 continue;
             }
             cout << "Deleting Candidate ID " << id << "...\n";
@@ -586,7 +579,7 @@ void manageCandidates() {
         } else if (choice == 5) {
             break;
         } else {
-            cout << "Invalid option.\n";
+            showMessage(screen,"Invalid option.","error");
         }
     }
 }
