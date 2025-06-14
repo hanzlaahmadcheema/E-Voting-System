@@ -22,7 +22,6 @@ public:
     int getWinnerCandidateID() const;
     int getTotalVotes() const;
     int getConstituencyID() const;
-    void displayResultInfo() const;
 
     json toJSON() const;
     static Result fromJSON(const json &j);
