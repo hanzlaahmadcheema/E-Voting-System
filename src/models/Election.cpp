@@ -11,6 +11,8 @@ void ShowTableFTXUI(const string& heading,
                 const vector<vector<string>>& rows);
 bool ShowForm(ScreenInteractive& screen, const string& title, vector<InputField>& fields);
 
+
+
 const string ELECTION_FILE = "data/elections.json";
 
 // Election class implementation

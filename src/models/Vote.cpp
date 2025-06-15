@@ -6,6 +6,8 @@ extern int ShowMenu(ScreenInteractive & screen, const string& heading, const vec
 void ShowTableFTXUI(const string& heading, const vector<string>& headers, const vector<vector<string>>& rows);
 bool ShowForm(ScreenInteractive& screen, const string& title, vector<InputField>& fields);
 
+
+
 const string VOTE_FILE = "data/votes.json";
 
 // Vote implementation

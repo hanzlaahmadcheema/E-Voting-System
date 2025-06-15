@@ -8,9 +8,10 @@ extern int ShowMenu(ScreenInteractive& screen,
              const string& heading, 
              const vector<string>& options);
 
+ftxui::ScreenInteractive screen = ftxui::ScreenInteractive::TerminalOutput();
 
 int main() {
-    auto screen = ScreenInteractive::TerminalOutput();
+    
 
     vector<string> main_menu = {
         "Admin Panel",

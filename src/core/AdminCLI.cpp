@@ -46,7 +46,7 @@ bool saveAdmins(const vector<Admin>& adminList) {
 bool loginAdmin(const vector<Admin>& adminList) {
     string inputUser, inputPass;
 
-auto screen = ScreenInteractive::TerminalOutput();
+
 
 vector<InputField> fields = {
         {"Username", &inputUser, InputField::TEXT},
@@ -102,7 +102,6 @@ void adminPanel() {
     
 
     switch (choice) {
-
         case 0: manageElections(); break;
         case 1: manageCities(); break;
         case 2: manageConstituencies(); break;

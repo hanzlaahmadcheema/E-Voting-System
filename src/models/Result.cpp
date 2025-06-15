@@ -13,6 +13,8 @@ void ShowTableFTXUI(const string& heading,
                 const vector<vector<string>>& rows);
 bool ShowForm(ScreenInteractive& screen, const string& title, vector<InputField>& fields);
 
+
+
 static bool isValidPositiveInt(const string& str) {
     if (str.empty()) return false;
     for (char c : str) if (!isdigit(c)) return false;

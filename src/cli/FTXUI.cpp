@@ -94,7 +94,7 @@ void ShowTableFTXUI(const string& heading,
         table_elements.push_back(text("Press any key to continue...") | center | dim);
         return vbox(move(table_elements)) | center | border;
     });
-auto screen = ScreenInteractive::TerminalOutput();
+
 
     auto event_handler = CatchEvent(renderer, [&](Event event) {
         done = true;

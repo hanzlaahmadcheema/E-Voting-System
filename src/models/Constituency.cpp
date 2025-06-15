@@ -17,6 +17,8 @@ void ShowTableFTXUI(const string& heading,
                 const vector<vector<string>>& rows);
 bool ShowForm(ScreenInteractive& screen, const string& title, vector<InputField>& fields);
 
+
+
 // Constituency
 Constituency::Constituency() : ConstituencyID(0), ConstituencyName(""), CityID(0), ElectionID(0) {}
 Constituency::Constituency(int ConstituencyID, const string &ConstituencyName, int CityID, int ElectionID)

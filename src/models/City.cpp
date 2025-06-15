@@ -9,6 +9,8 @@ void ShowTableFTXUI(const string& heading,
                 const vector<vector<string>>& rows);
 bool ShowForm(ScreenInteractive& screen, const string& title, vector<InputField>& fields);
 
+
+
 // City
 City::City() : CityID(0), CityName(""), ProvinceName("") {}
 City::City(int CityID, const string &CityName, const string &ProvinceName)

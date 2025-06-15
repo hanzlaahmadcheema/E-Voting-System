@@ -1,16 +1,5 @@
 #include <custom/config.h>
 
-// Helper: Validate integer string
-bool isValidInt(const string& str) {
-    try {
-        size_t idx;
-        int val = stoi(str, &idx);
-        return idx == str.size() && val > 0;
-    } catch (...) {
-        return false;
-    }
-}
-
 extern int getNextID(const string &key);
 extern string toLower(const string& str);
 extern int ShowMenu(ScreenInteractive & screen, 
@@ -20,6 +9,8 @@ void ShowTableFTXUI(const string& heading,
                     const vector<string>& headers, 
                     const vector<vector<string>>& rows);
 bool ShowForm(ScreenInteractive& screen, const string& title, vector<InputField>& fields);
+
+
 
 // Party
 Party::Party() : PartyID(0), PartyName(""), PartySymbol("") {}
@@ -76,6 +67,16 @@ Party Party::fromJSON(const json &j)
 }
 
 const string PARTY_FILE = "data/parties.json";
+
+bool isValidInt(const string& str) {
+    try {
+        size_t idx;
+        int val = stoi(str, &idx);
+        return idx == str.size() && val > 0;
+    } catch (...) {
+        return false;
+    }
+}
 
 bool isValidPartyID(int id)
 {
