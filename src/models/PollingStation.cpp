@@ -136,7 +136,7 @@ vector<PollingStation> loadAllStations()
         }
         catch (...)
         {
-            cerr << "Error: Corrupted polling station data.\n";
+            cerr << "Error: Corrupted polling station data.";
         }
     }
     return list;
@@ -148,7 +148,7 @@ void saveAllStations(const vector<PollingStation> &list)
     ofstream file(STATION_FILE);
     if (!file.is_open())
     {
-        cerr << "Error: Cannot open file to save polling stations.\n";
+        cerr << "Error: Cannot open file to save polling stations.";
         return;
     }
     json j;
@@ -338,11 +338,26 @@ void listAllStations()
         ShowMessage(screen,"ℹNo polling stations found.","info");
         return;
     }
+    bool found = false;
+    vector<string> headers = {"Station ID", "Name", "Address", "City ID", "Constituency ID"};
+    vector<vector<string>> data;
     for (const auto &s : list)
     {
-        
+        {
+            data.push_back({
+                to_string(s.getPollingStationID()),
+                s.getPollingStationName(),
+                s.getPollingStationAddress(),
+                to_string(s.getCityID()),
+                to_string(s.getConstituencyIDNA())
+            });
     }
-
+    }
+        ShowTableFTXUI("AllPolling Stations.", headers, data);
+    if (!found)
+    {
+        ShowMessage(screen,"No polling stations found.","info");
+    }
 }
 
 bool pollingStationExists(int id) {
@@ -369,7 +384,6 @@ void managePollingStations() {
     int choice = ShowMenu(screen, "Polling Station Management", pollingStationMenu);
         if (choice == 0) {
             string cityChoice_str, name, address, constituencyIDNA_str, constituencyIDPA_str;
-            cin.ignore();
     
             vector<string> provinceMenu = {
                 "Punjab",
@@ -392,7 +406,7 @@ void managePollingStations() {
             };
             bool success = ShowForm(screen, "Create Polling Station", form);
             if (!success) {
-                  ShowMessage(screen,"[ERROR] Creation cancelled.","error");
+                  ShowMessage(screen,"Creation cancelled.","error");
                 continue;
             }
             int cityChoice = stoi(cityChoice_str);
@@ -403,7 +417,7 @@ void managePollingStations() {
             };
             bool success2 = ShowForm(screen, "Create Polling Station", form2);
             if (!success2) {
-                  ShowMessage(screen,"[ERROR] Creation cancelled.","error");
+                  ShowMessage(screen,"Creation cancelled.","error");
                 continue;
             }
             if (!isValidPollingStationName(name)) {
@@ -421,7 +435,7 @@ void managePollingStations() {
             };
             bool success3 = ShowForm(screen, "Create Polling Station", form3);
             if (!success3) {
-                  ShowMessage(screen,"[ERROR] Creation cancelled.","error");
+                  ShowMessage(screen,"Creation cancelled.","error");
                 continue;
             }
             int ConstituencyIDNA = stoi(constituencyIDNA_str);
@@ -450,7 +464,7 @@ void managePollingStations() {
             };
             bool success = ShowForm(screen, "Edit Polling Station", form);
             if (!success) {
-                  ShowMessage(screen,"[ERROR] Editing cancelled.","error");
+                  ShowMessage(screen,"Editing cancelled.","error");
                 continue;
             }
             int id = stoi(id_str);
@@ -480,7 +494,7 @@ void managePollingStations() {
             };
             bool success = ShowForm(screen, "Delete Polling Station", form);
             if (!success) {
-                  ShowMessage(screen,"[ERROR] Deletion cancelled.","error");
+                  ShowMessage(screen,"Deletion cancelled.","error");
                 continue;
             }
             int id = stoi(id_str);

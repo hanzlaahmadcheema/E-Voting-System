@@ -36,22 +36,22 @@ Voter* voterLogin() {
     };
     bool success = ShowForm(screen, "Voter Login", fields);
     if (!success) {
-        cout << "\n[ERROR] Login cancelled.\n";
+        ShowMessage(screen,"Login cancelled.", "error");
         return nullptr;
     }
 
     vector<Voter> voters = loadAllVoters();
     if (VoterCNIC.empty()) {
-        cout << "CNIC cannot be empty.\n";
+        ShowMessage(screen,"CNIC cannot be empty.", "error");
         return nullptr;
     }
     for (auto& v : voters) {
         if (v.getVoterCNIC() == VoterCNIC) {
-            cout << "Login successful. Welcome " << v.getVoterName() << "!\n";
+            ShowMessage(screen,"Login successful. Welcome " + v.getVoterName() + "!", "success");
             return new Voter(v);
         }
     }
-    cout << "Voter not found.\n";
+    ShowMessage(screen,"Voter not found.", "info");
     return nullptr;
 }
 
@@ -69,44 +69,59 @@ void showUserMenu(Voter* voter) {
 
     int choice = ShowMenu(screen, "Voter Menu", voterMenu);
         if (choice == 0) {
-            cout << "Candidates in Constituency " << c1 << ":\n";
+            ShowMessage(screen,"Candidates in Constituency " + to_string(c1) + ":", "info");
             viewCandidatesByConstituency(c1);
-            cout << "Candidates in Constituency " << c2 << ":\n";
+            ShowMessage(screen,"Candidates in Constituency " + to_string(c2) + ":", "info");
             viewCandidatesByConstituency(c2);
         } else if (choice == 1) {
-            int ElectionID, CandidateID, chosenConst;
-            cout << "You can vote in Constituency " << c1 << " or " << c2 << ".\n";
-            cout << "Enter Constituency ID to vote in: ";
-            cin >> chosenConst;
-            if (chosenConst != c1 && chosenConst != c2) {
-                cout << "Invalid Constituency.\n";
+            int ElectionID;
+            string CandidateID, chosenConst;
+            ShowMessage(screen,"You can vote in Constituency " + to_string(c1) + " or " + to_string(c2) + ".", "info");
+            vector<InputField> form = {
+                {"Constituency ID", &chosenConst, InputField::NUMBER}
+            };
+            bool success = ShowForm(screen, "Cast Vote", form);
+            if (!success) {
+                ShowMessage(screen,"Form submission cancelled.", "error");
                 continue;
             }
-            ElectionID = getElectionIDByConstituencyID(chosenConst);
+            int chosenConstID = stoi(chosenConst);
+            if (chosenConstID != c1 && chosenConstID != c2) {
+                ShowMessage(screen,"Invalid Constituency ID. Please choose " + to_string(c1) + " or " + to_string(c2) + ".", "error");
+                continue;
+            }
+            ElectionID = getElectionIDByConstituencyID(chosenConstID);
             if (ElectionID == -1) {
-                cout << "No election found for this constituency.\n";
+                ShowMessage(screen,"No election found for this constituency.", "info");
                 continue;
             }
             if (voteExists(voter->getVoterID(), ElectionID)) {
-                cout << "You’ve already voted in this election.\n";
+                ShowMessage(screen,"You’ve already voted in this election.", "info");
                 continue;
             }
-            viewCandidatesByConstituency(chosenConst);
-            cout << "Enter Candidate ID to vote for: ";
-            cin >> CandidateID;
-            Vote vote(getNextID("VoteID"), voter->getVoterID(), CandidateID, ElectionID, voter->getPollingStationID(), getCurrentTimestamp());
+            viewCandidatesByConstituency(chosenConstID);
+            vector<InputField> candidateForm = {
+                {"Candidate ID", &CandidateID, InputField::NUMBER}
+            };
+            success = ShowForm(screen, "Cast Vote", candidateForm);
+            if (!success) {
+                ShowMessage(screen,"Form submission cancelled.", "error");
+                continue;
+            }
+            int CandidateIDInt = stoi(CandidateID);
+            Vote vote(getNextID("VoteID"), voter->getVoterID(), CandidateIDInt, ElectionID, voter->getPollingStationID(), getCurrentTimestamp());
             castVote(vote);
         } else if (choice == 2) {
-            cout << "Logged out.\n";
+            ShowMessage(screen,"Logged out.", "success");
             break;
         } else {
-            cout << "Invalid choice.\n";
+            ShowMessage(screen,"Invalid choice.", "error");
         }
     }
 }
 
 void userPanel() {
-    cout << "\nWelcome to E-Voting System\n";
+    ShowMessage(screen,"Welcome to E-Voting System", "info");
     Voter* voter = voterLogin();
     if (voter != nullptr) {
         showUserMenu(voter);

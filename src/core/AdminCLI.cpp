@@ -54,30 +54,35 @@ vector<InputField> fields = {
     };
     bool success = ShowForm(screen, "Admin Login", fields);
     if (!success) {
-        cout << "\n[ERROR] Login cancelled.\n";
+        ShowMessage(screen,"Login cancelled.", "error");
         return false;
     }
-    // cout << "\n====================================\n";
-    // cout << "         ADMIN LOGIN PORTAL         \n";
-    // cout << "====================================\n";
-    // cout << "\nUsername: ";
-    // getline(cin, inputUser);
-    // cout << "Password: ";
-    // getline(cin, inputPass);
+    for (const auto& admin : adminList) {
+        if (admin.username == inputUser && admin.password == inputPass) {
+        ShowMessage(screen,"Login successful. Welcome to the Admin Panel!", "success");
+            return true;
+        }
+    }
 
-    // for (const auto& admin : adminList) {
-    //     if (admin.username == inputUser && admin.password == inputPass) {
-    //         cout << "\n[SUCCESS] Admin authenticated.\n";
-    //         return true;
-    //     }
-    // }
-
-    cout << "\n[ERROR] Invalid credentials. Access denied.\n";
+    ShowMessage(screen,"Invalid credentials. Access denied.", "error");
     return false;
 }
 
 void adminPanel() {
-    system("cls");
+    
+    
+    
+    vector<Admin> adminList;
+    if (!loadAdmins(adminList)) {
+        ShowMessage(screen, "Failed to load admin data.", "error");
+        return;
+    }
+    loginAdmin(adminList);
+    if (!loginAdmin(adminList)) {
+        ShowMessage(screen, "Login failed. Exiting admin panel.", "error");
+        return;
+    }
+
     while (true) {
 
     vector<string> adminPanel = {
@@ -94,7 +99,7 @@ void adminPanel() {
     };
 
     int choice = ShowMenu(screen, "Admin Panel", adminPanel);
-    system("cls");
+    
 
     switch (choice) {
 
@@ -107,8 +112,8 @@ void adminPanel() {
         case 6: manageVoters(); break;
         case 7: manageVoting(); break;
         case 8: manageResults(); break;
-        case 9: return; // Exit Admin Panel
-        default: cout << "Invalid choice. Try again.\n"; break;
+        case 9: return;
+        default: ShowMessage(screen, "Invalid choice. Try again.", "error"); break;
 
     }
 }

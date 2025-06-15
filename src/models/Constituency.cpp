@@ -119,7 +119,7 @@ vector<Constituency> loadAllConstituencies()
         }
         catch (...)
         {
-            cerr << "Error: Invalid JSON format in constituency file.\n";
+            cerr << "Error: Invalid JSON format in constituency file.";
         }
     }
     return list;
@@ -131,7 +131,7 @@ void saveAllConstituencies(const vector<Constituency> &list)
     ofstream file(CONSTITUENCY_FILE);
     if (!file.is_open())
     {
-        cerr << "Error: Unable to open file for writing.\n";
+        cerr << "Error: Unable to open file for writing.";
         return;
     }
     json j;
@@ -349,7 +349,7 @@ void manageConstituencies() {
             };
             bool success = ShowForm(screen, "Add Constituency", form);
             if (!success) {
-                ShowMessage(screen, "[ERROR] Constituency creation cancelled.","error");
+                ShowMessage(screen, "Constituency creation cancelled.","error");
                 continue;
             }
             int ElectionID = stoi(ElectionID_str);
@@ -360,7 +360,7 @@ void manageConstituencies() {
             fullName = type + "-" + name;
             bool success2 = ShowForm(screen, "Add Constituency", form2);
             if (!success2) {
-                  ShowMessage(screen,"[ERROR] Constituency creation cancelled.","error");
+                  ShowMessage(screen,"Constituency creation cancelled.","error");
                 continue;
             }
             if (!electionExists(ElectionID)) {
@@ -391,7 +391,7 @@ void manageConstituencies() {
             };
             bool success5 = ShowForm(screen, "Add Constituency", cityForm);
             if (!success5) {
-                ShowMessage(screen,"[ERROR] City selection cancelled.","error");
+                ShowMessage(screen,"City selection cancelled.","error");
                 continue;
             }
             int cityID = stoi(cityID_str);
@@ -413,7 +413,7 @@ void manageConstituencies() {
             };
             bool success = ShowForm(screen, "Edit Constituency", form);
             if (!success) {
-                  ShowMessage(screen,"[ERROR] Edit cancelled.","error");
+                  ShowMessage(screen,"Edit cancelled.","error");
                 continue;
             }
             int id = stoi(id_str);
@@ -431,7 +431,7 @@ void manageConstituencies() {
             };
             bool success2 = ShowForm(screen, "Edit Constituency", form2);
             if (!success2) {
-                  ShowMessage(screen,"[ERROR] Edit cancelled.","error");
+                  ShowMessage(screen,"Edit cancelled.","error");
                 continue;
             }
             int ElectionID = stoi(ElectionID_str);
@@ -445,7 +445,7 @@ void manageConstituencies() {
             };
             bool success3 = ShowForm(screen, "Edit Constituency", form3);
             if (!success3) {
-                  ShowMessage(screen,"[ERROR] Edit cancelled.","error");
+                  ShowMessage(screen,"Edit cancelled.","error");
                 continue;
             }
             fullName = type + "-" + name;
@@ -463,7 +463,7 @@ void manageConstituencies() {
             };
             bool success4 = ShowForm(screen, "Edit Constituency", form4);
             if (!success4) {
-                  ShowMessage(screen,"[ERROR] City selection cancelled.","error");
+                  ShowMessage(screen,"City selection cancelled.","error");
                 continue;
             }
             listCitiesByProvince(provinceName_str);
@@ -472,7 +472,7 @@ void manageConstituencies() {
             };
             bool success5 = ShowForm(screen, "Edit Constituency", form5);
             if (!success5) {
-                  ShowMessage(screen,"[ERROR] City selection cancelled.","error");
+                  ShowMessage(screen,"City selection cancelled.","error");
                 continue;
             }
             int cityID = stoi(cityID_str);
@@ -491,7 +491,7 @@ void manageConstituencies() {
             };
             bool success = ShowForm(screen, "Delete Constituency", form);
             if (!success) {
-                  ShowMessage(screen,"[ERROR] Delete cancelled.","error");
+                  ShowMessage(screen,"Delete cancelled.","error");
                 continue;
             }
             int id = stoi(id_str);

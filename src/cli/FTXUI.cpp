@@ -5,7 +5,7 @@ int ShowMenu(ScreenInteractive& screen,
              const string& heading, 
              const vector<string>& options) {
 
-
+    system("cls");
     int selected = 0;
 
     auto menu = Menu(&options, &selected);
@@ -26,14 +26,14 @@ int ShowMenu(ScreenInteractive& screen,
     });
 
     screen.Loop(renderer);
-
+    system("cls");
     return selected;
 }
 
 void ShowTableFTXUI(const string& heading, 
                     const vector<string>& headers, 
                     const vector<vector<string>>& rows) {
-
+    system("cls");
     // Calculate max width for each column
     vector<int> col_widths(headers.size(), 0);
     for (size_t i = 0; i < headers.size(); i++) {
@@ -101,15 +101,15 @@ auto screen = ScreenInteractive::TerminalOutput();
         screen.Exit();
         return true;
     });
-
     screen.Loop(event_handler);
+        system("cls");
 }
 
 bool ShowForm(ScreenInteractive& screen, const string& title, vector<InputField>& fields) {
     vector<Component> components;
     vector<Element> field_elements;
     bool submitted = false;
-
+    system("cls");
     for (auto& field : fields) {
         switch (field.type) {
             case InputField::TEXT: {
@@ -168,6 +168,7 @@ bool ShowForm(ScreenInteractive& screen, const string& title, vector<InputField>
     });
 
     screen.Loop(renderer);
+        system("cls");
     return submitted;
 }
 
@@ -175,7 +176,7 @@ void ShowSpinner(ScreenInteractive& screen, const string& message) {
     atomic<bool> loading = true;
     string dots = "";
     
-
+    system("cls");
     auto renderer = Renderer([&] {
         return hbox({
             text(message) | bold | color(Color::Green),
@@ -205,7 +206,7 @@ void ShowSpinner(ScreenInteractive& screen, const string& message) {
 
 void ShowProgressBar(ScreenInteractive& screen, const string& label) {
     int progress = 0;
-    
+        system("cls");
 
     auto renderer = Renderer([&] {
         return vbox({
@@ -228,7 +229,6 @@ void ShowProgressBar(ScreenInteractive& screen, const string& label) {
     system("cls");
 }
 void ShowMessage(ScreenInteractive& screen, const string& msg, const string& type) {
-    
     system("cls");
     Color msg_color = Color::White;
     string prefix;
@@ -243,27 +243,46 @@ void ShowMessage(ScreenInteractive& screen, const string& msg, const string& typ
         msg_color = Color::Blue;
         prefix = "ℹ Info: ";
     } else {
-        prefix = ""; // Fallback if unknown type
+        prefix = "";
     }
 
+    vector<string> words;
+    string word, full_msg = prefix + msg;
+    istringstream iss(full_msg);
+    while (iss >> word) {
+        words.push_back(word);
+    }
+
+    atomic<size_t> shown_words = 0;
+
     auto renderer = Renderer([&] {
+        string animated;
+        for (size_t i = 0; i < shown_words; ++i) {
+            animated += words[i];
+            if (i + 1 < shown_words) animated += " ";
+        }
         return vbox({
             filler(),
             hbox({
                 filler(),
-                text(prefix + msg) | bold | color(msg_color) | border,
+                text(animated) | bold | color(msg_color) | border,
                 filler(),
             }),
             filler(),
         });
     });
 
-    thread closer([&] {
-        this_thread::sleep_for(chrono::seconds(3));
+    thread animator([&] {
+        for (size_t i = 1; i <= words.size(); ++i) {
+            shown_words = i;
+            screen.PostEvent(Event::Custom);
+            this_thread::sleep_for(chrono::milliseconds(250));
+        }
+        this_thread::sleep_for(chrono::seconds(2));
         screen.Exit();
     });
 
     screen.Loop(renderer);
-    closer.join();
+    animator.join();
     system("cls");
 }

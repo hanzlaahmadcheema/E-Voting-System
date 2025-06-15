@@ -132,7 +132,7 @@ vector<Election> loadAllElections()
         catch (...)
         {
             // Invalid JSON, return empty list
-            cerr << "Error: Invalid JSON format in elections file.\n";
+            cerr << "Error: Invalid JSON format in elections file.";
             return list;
         }
     }
@@ -317,7 +317,7 @@ ShowSpinner(screen, "Loading Elections");
     };
 
     int choice = ShowMenu(screen, "Election Management", electionManagement);
-    system("cls");
+    
         if (choice == 0) {
             string name, type, date;
 

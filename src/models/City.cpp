@@ -93,7 +93,7 @@ vector<City> loadAllCities()
             file >> j;
             if (!j.is_array())
             {
-                cerr << "Invalid cities data format.\n";
+                cerr << "Invalid cities data format.";
                 return cities;
             }
             for (auto &obj : j)
@@ -115,7 +115,7 @@ vector<City> loadAllCities()
     }
     else
     {
-        cerr << "Could not open cities file for reading.\n";
+        cerr << "Could not open cities file for reading.";
     }
     return cities;
 }
@@ -126,7 +126,7 @@ void saveAllCities(const vector<City> &cities)
     ofstream file(CITY_FILE);
     if (!file.is_open())
     {
-        cerr << "Could not open cities file for writing.\n";
+        cerr << "Could not open cities file for writing.";
         return;
     }
     json j = json::array();
@@ -142,12 +142,12 @@ void addCity(const City &newCity)
 {
     if (newCity.getCityID() <= 0)
     {
-        cerr << "Invalid City ID. Must be positive.\n";
+        cerr << "Invalid City ID. Must be positive.";
         return;
     }
     if (newCity.getCityName().empty())
     {
-        cerr << "City name cannot be empty.\n";
+        cerr << "City name cannot be empty.";
         return;
     }
     vector<City> cities = loadAllCities();
@@ -155,12 +155,12 @@ void addCity(const City &newCity)
     {
         if (city.getCityID() == newCity.getCityID())
         {
-            cerr << "City ID already exists.\n";
+            cerr << "City ID already exists.";
             return;
         }
         if (city.getCityName() == newCity.getCityName())
         {
-            cerr << "City name already exists.\n";
+            cerr << "City name already exists.";
             return;
         }
     }
@@ -174,12 +174,12 @@ void editCity(int cityID, const string &newName, const string &newProvinceName)
 {
     if (cityID <= 0)
     {
-        cerr << "Invalid City ID.\n";
+        cerr << "Invalid City ID.";
         return;
     }
     if (newName.empty())
     {
-        cerr << "New city name cannot be empty.\n";
+        cerr << "New city name cannot be empty.";
         return;
     }
     vector<City> cities = loadAllCities();
@@ -188,7 +188,7 @@ void editCity(int cityID, const string &newName, const string &newProvinceName)
     {
         if (city.getCityName() == newName)
         {
-            cerr << "City name already exists.\n";
+            cerr << "City name already exists.";
             return;
         }
     }
@@ -203,7 +203,7 @@ void editCity(int cityID, const string &newName, const string &newProvinceName)
     }
     if (!found)
     {
-        cerr << "City ID not found.\n";
+        cerr << "City ID not found.";
         return;
     }
     saveAllCities(cities);
@@ -215,7 +215,7 @@ void deleteCityByID(int cityID)
 {
     if (cityID <= 0)
     {
-        cerr << "Invalid City ID.\n";
+        cerr << "Invalid City ID.";
         return;
     }
     vector<City> cities = loadAllCities();
@@ -223,7 +223,7 @@ void deleteCityByID(int cityID)
                         { return c.getCityID() == cityID; });
     if (it == cities.end())
     {
-        cerr << "City ID not found.\n";
+        cerr << "City ID not found.";
         return;
     }
     cities.erase(it, cities.end());
@@ -303,7 +303,7 @@ void manageCities() {
             };
             bool success = ShowForm(screen, "Add City", form);
             if (!success) {
-                ShowMessage(screen,"[ERROR] City creation cancelled.","error");
+                ShowMessage(screen,"City creation cancelled.","error");
                 continue;
             }
         } else if (choice == 1) {
@@ -318,7 +318,7 @@ void manageCities() {
             };
             bool success = ShowForm(screen, "Edit City", form);
             if (!success) {
-                ShowMessage(screen,"[ERROR] Edit cancelled.","error");
+                ShowMessage(screen,"Edit cancelled.","error");
                 continue;
             }
             int id = stoi(id_str);
@@ -339,7 +339,7 @@ void manageCities() {
             };
             bool success2 = ShowForm(screen, "Edit City", form2);
             if (!success2) {
-                ShowMessage(screen,"[ERROR] Edit cancelled.","error");
+                ShowMessage(screen,"Edit cancelled.","error");
                 continue;
             }
             editCity(id, name, ProvinceName);
@@ -352,7 +352,7 @@ void manageCities() {
             };
             bool success3 = ShowForm(screen, "Delete City", form3);
             if (!success3) {
-                ShowMessage(screen,"[ERROR] Delete cancelled.","error");
+                ShowMessage(screen,"Delete cancelled.","error");
                 continue;
             }
             int id = stoi(id_str);

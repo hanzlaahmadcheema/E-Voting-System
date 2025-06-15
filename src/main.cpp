@@ -23,7 +23,7 @@ int main() {
     switch (choice) {
         case 0: adminPanel(); break;
         case 1: userPanel(); break;
-        default: cout << "Exiting...\n"; break;
+        default: ShowMessage(screen,"Exiting...", "info");; break;
     }
 
     return 0;

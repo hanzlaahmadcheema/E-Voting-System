@@ -16,7 +16,7 @@ int getNextID(const string &key)
     }
     else
     {
-        cerr << "counters.json not found. Creating a new one.\n";
+        ShowMessage(screen,"counters.json not found. Creating a new one.", "info");
     }
 
     // Default to 0 if key not found

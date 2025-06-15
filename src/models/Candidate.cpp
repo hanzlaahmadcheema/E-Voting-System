@@ -140,7 +140,7 @@ vector<Candidate> loadAllCandidates()
                 }
                 else
                 {
-                    cerr << "Invalid candidate data found in file, skipping.\n";
+                    cerr << "Invalid candidate data found in file, skipping.";
                 }
             }
         }
@@ -151,7 +151,7 @@ vector<Candidate> loadAllCandidates()
     }
     else
     {
-        cerr << "Could not open candidate file for reading.\n";
+        cerr << "Could not open candidate file for reading.";
     }
     return candidates;
 }
@@ -162,7 +162,7 @@ void saveAllCandidates(const vector<Candidate> &candidates)
     ofstream file(CANDIDATE_FILE);
     if (!file.is_open())
     {
-        cerr << "Could not open candidate file for writing.\n";
+        cerr << "Could not open candidate file for writing.";
         return;
     }
     json j;
@@ -174,7 +174,7 @@ void saveAllCandidates(const vector<Candidate> &candidates)
         }
         else
         {
-            cerr << "Skipping invalid candidate during save.\n";
+            cerr << "Skipping invalid candidate during save.";
         }
     }
     file << j.dump(4);
@@ -185,7 +185,7 @@ void addCandidate(const Candidate &newCandidate)
 {
     if (!isValidCandidate(newCandidate))
     {
-        cerr << "Invalid candidate data. Please check all fields.\n";
+        cerr << "Invalid candidate data. Please check all fields.";
         return;
     }
     vector<Candidate> candidates = loadAllCandidates();
@@ -199,7 +199,7 @@ void editCandidate(int CandidateID, const string &newName, int newPartyID, int n
 {
     if (CandidateID <= 0)
     {
-        cerr << "Invalid candidate ID.\n";
+        cerr << "Invalid candidate ID.";
         return;
     }
     vector<Candidate> candidates = loadAllCandidates();
@@ -218,7 +218,7 @@ void editCandidate(int CandidateID, const string &newName, int newPartyID, int n
     }
     if (!found)
     {
-        cerr << "Candidate ID not found.\n";
+        cerr << "Candidate ID not found.";
         return;
     }
     saveAllCandidates(candidates);
@@ -229,7 +229,7 @@ void deleteCandidateByID(int CandidateID)
 {
     if (CandidateID <= 0)
     {
-        cerr << "Invalid candidate ID.\n";
+        cerr << "Invalid candidate ID.";
         return;
     }
     vector<Candidate> candidates = loadAllCandidates();
@@ -281,7 +281,7 @@ void viewCandidatesByConstituency(int constID)
 {
     if (constID <= 0)
     {
-        cerr << "Invalid constituency ID.\n";
+        cerr << "Invalid constituency ID.";
         return;
     }
     vector<Candidate> list = loadAllCandidates();
@@ -314,7 +314,7 @@ void viewCandidatesByStation(int PollingStationID)
     int constID1, constID2;
     if (PollingStationID <= 0)
     {
-        cerr << "Invalid Polling Station ID.\n";
+        cerr << "Invalid Polling Station ID.";
         return;
     }
     vector<Candidate> candidates = loadAllCandidates();
@@ -356,7 +356,7 @@ Candidate *getCandidateByID(int CandidateID)
 {
     if (CandidateID <= 0)
     {
-        cerr << "Invalid candidate ID.\n";
+        cerr << "Invalid candidate ID.";
         return nullptr;
     }
     vector<Candidate> candidates = loadAllCandidates();
@@ -374,7 +374,7 @@ string getCandidateNameByID(int CandidateID)
 {
     if (CandidateID <= 0)
     {
-        cerr << "Invalid candidate ID.\n";
+        cerr << "Invalid candidate ID.";
         return "";
     }
     vector<Candidate> candidates = loadAllCandidates();
@@ -450,17 +450,17 @@ void manageCandidates() {
             };
             bool success1 = ShowForm(screen, "Add Candidate", form1);
             if (!success1) {
-                ShowMessage(screen,"[ERROR] Candidate creation cancelled.","error");
+                ShowMessage(screen,"Candidate creation cancelled.","error");
                 continue;
             }
-            system("cls");
+            
             listAllParties();
             vector<InputField> form2 = {
                 {"Party ID", &partyID_str, InputField::TEXT}
             };
             bool success2 = ShowForm(screen, "Add Candidate", form2);
             if (!success2) {
-                ShowMessage(screen,"[ERROR] Candidate creation cancelled.","error");
+                ShowMessage(screen,"Candidate creation cancelled.","error");
                 continue;
             }
             vector<InputField> form3 = {
@@ -468,7 +468,7 @@ void manageCandidates() {
             };
             bool success3 = ShowForm(screen, "Add Candidate", form3);
             if (!success3) {
-                ShowMessage(screen,"[ERROR] Candidate creation cancelled.","error");
+                ShowMessage(screen,"Candidate creation cancelled.","error");
                 continue;
             }
             listCitiesByProvince(provinceID_str);
@@ -477,7 +477,7 @@ void manageCandidates() {
             };
             bool success4 = ShowForm(screen, "Add Candidate", form4);
             if (!success4) {
-                ShowMessage(screen,"[ERROR] Candidate creation cancelled.","error");
+                ShowMessage(screen,"Candidate creation cancelled.","error");
                 continue;
             }
             listConstituenciesByCity(stoi(cityID_str));
@@ -486,7 +486,7 @@ void manageCandidates() {
             };
             bool success5 = ShowForm(screen, "Add Candidate", form5);
             if (!success5) {
-                ShowMessage(screen,"[ERROR] Candidate creation cancelled.","error");
+                ShowMessage(screen,"Candidate creation cancelled.","error");
                 continue;
             }
             partyID = stoi(partyID_str);
@@ -508,7 +508,7 @@ void manageCandidates() {
             };
             bool success = ShowForm(screen, "View Candidates by Constituency", form);
             if (!success) {
-                ShowMessage(screen,"[ERROR] View cancelled.","error");
+                ShowMessage(screen,"View cancelled.","error");
                 continue;
             }
             int constID = stoi(constID_str);
@@ -527,7 +527,7 @@ void manageCandidates() {
             };
             bool success1 = ShowForm(screen, "Edit Candidate", form1);
             if (!success1) {
-                ShowMessage(screen,"[ERROR] Edit cancelled.","error");
+                ShowMessage(screen,"Edit cancelled.","error");
                 continue;
             }
             int id = stoi(id_str);
@@ -537,7 +537,7 @@ void manageCandidates() {
             };
             bool success2 = ShowForm(screen, "Edit Candidate", form2);
             if (!success2) {
-                ShowMessage(screen,"[ERROR] Edit cancelled.","error");
+                ShowMessage(screen,"Edit cancelled.","error");
                 continue;
             }
             int partyID = stoi(partyID_str);
@@ -547,7 +547,7 @@ void manageCandidates() {
             };
             bool success3 = ShowForm(screen, "Edit Candidate", form3);
             if (!success3) {
-                ShowMessage(screen,"[ERROR] Edit cancelled.","error");
+                ShowMessage(screen,"Edit cancelled.","error");
                 continue;
             }
             int constID = stoi(constID_str);
@@ -562,7 +562,7 @@ void manageCandidates() {
             };
             bool success = ShowForm(screen, "Delete Candidate", form);
             if (!success) {
-                ShowMessage(screen,"[ERROR] Delete cancelled.","error");
+                ShowMessage(screen,"Delete cancelled.","error");
                 continue;
             }
             int id = stoi(id_str);

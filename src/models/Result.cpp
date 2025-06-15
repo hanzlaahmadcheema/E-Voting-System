@@ -385,7 +385,7 @@ void manageResults() {
             };
             bool success = ShowForm(screen, "Compute Result", form);
             if (!success) {
-                  ShowMessage(screen,"[ERROR] Result computation cancelled.","error");
+                  ShowMessage(screen,"Result computation cancelled.","error");
                 continue;
             }
             int ElectionID = stoi(ElectionID_str);
@@ -400,7 +400,7 @@ void manageResults() {
             };
             bool success = ShowForm(screen, "Compute Result", form);
             if (!success) {
-                  ShowMessage(screen,"[ERROR] Result computation cancelled.","error");
+                  ShowMessage(screen,"Result computation cancelled.","error");
                 continue;
             }
             int ElectionID = stoi(ElectionID_str);

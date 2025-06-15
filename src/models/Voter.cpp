@@ -441,7 +441,7 @@ void manageVoters() {
                 };
             bool success1 = ShowForm(screen, "Add Voter", form1);
             if (!success1) {
-                ShowMessage(screen,"[ERROR] Creation cancelled.", "error");
+                ShowMessage(screen,"Creation cancelled.", "error");
                 continue;
             }
             int age = stoi(age_str);
@@ -481,7 +481,7 @@ void manageVoters() {
                 };
             bool success2 = ShowForm(screen, "Add Voter", form2);
             if (!success2) {
-                ShowMessage(screen,"[ERROR] Creation cancelled.", "error");
+                ShowMessage(screen,"Creation cancelled.", "error");
                 continue;
             }
             int cityChoice = stoi(cityID_str);
@@ -495,7 +495,7 @@ void manageVoters() {
                 };
             bool success3 = ShowForm(screen, "Add Voter", form3);
             if (!success3) {
-                ShowMessage(screen,"[ERROR] Creation cancelled.", "error");
+                ShowMessage(screen,"Creation cancelled.", "error");
                 continue;
             }
             int PollingID = stoi(pollingID_str);
@@ -514,7 +514,7 @@ void manageVoters() {
                 };
             bool success1 = ShowForm(screen, "Edit Voter", form1);
             if (!success1) {
-                ShowMessage(screen,"[ERROR] Edition cancelled.", "error");
+                ShowMessage(screen,"Edition cancelled.", "error");
                 continue;
             }
             int age = stoi(age_str);
@@ -536,7 +536,7 @@ void manageVoters() {
                 };
             bool success2 = ShowForm(screen, "Edit Voter", form2);
             if (!success2) {
-                ShowMessage(screen,"[ERROR] Edition cancelled.", "error");
+                ShowMessage(screen,"Edition cancelled.", "error");
                 continue;
             }
             if (!isValidName(name)) {
@@ -574,7 +574,7 @@ void manageVoters() {
                 };
             bool success3 = ShowForm(screen, "Edit Voter", form3);
             if (!success3) {
-                ShowMessage(screen,"[ERROR] Edition cancelled.", "error");
+                ShowMessage(screen,"Edition cancelled.", "error");
                 continue;
             }
             int cityChoice = stoi(cityID_str);
@@ -588,7 +588,7 @@ void manageVoters() {
                 };
             bool success4 = ShowForm(screen, "Edit Voter", form4);
             if (!success4) {
-                ShowMessage(screen,"[ERROR] Edition cancelled.", "error");
+                ShowMessage(screen,"Edition cancelled.", "error");
                 continue;
             }
             int PollingID = stoi(pollingID_str);
@@ -605,7 +605,7 @@ void manageVoters() {
                 };
             bool success1 = ShowForm(screen, "Delete Voter", form1);
             if (!success1) {
-                ShowMessage(screen,"[ERROR] Deletion cancelled.", "error");
+                ShowMessage(screen,"Deletion cancelled.", "error");
                 continue;
             }
             if (!voterExists(VoterCNIC)) {

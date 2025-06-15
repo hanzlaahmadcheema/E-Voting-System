@@ -99,7 +99,7 @@ vector<Party> loadAllParties()
         }
         catch (...)
         {
-            cerr << "Error: Invalid party data format.\n";
+            cerr << "Error: Invalid party data format.";
         }
     }
     return list;
@@ -111,7 +111,7 @@ void saveAllParties(const vector<Party> &list)
     ofstream file(PARTY_FILE);
     if (!file.is_open())
     {
-        cerr << "Error: Cannot open party file for writing.\n";
+        cerr << "Error: Cannot open party file for writing.";
         return;
     }
     json j;
@@ -269,7 +269,7 @@ void manageParties() {
             };
             bool success = ShowForm(screen, "Add Party", form);
             if (!success) {
-                  ShowMessage(screen,"[ERROR] Party creation cancelled.","error");
+                  ShowMessage(screen,"Party creation cancelled.","error");
                 continue;
             }
             if (!isValidPartyName(name)) {
@@ -303,7 +303,7 @@ void manageParties() {
             };
             bool success = ShowForm(screen, "Edit Party", form);
             if (!success) {
-                  ShowMessage(screen,"[ERROR] Party Editing cancelled.","error");
+                  ShowMessage(screen,"Party Editing cancelled.","error");
                 continue;
             }
             int id = stoi(id_str);
@@ -341,7 +341,7 @@ void manageParties() {
             };
             bool success = ShowForm(screen, "Delete Party", form);
             if (!success) {
-                  ShowMessage(screen,"[ERROR] Party Deletion cancelled.","error");
+                  ShowMessage(screen,"Party Deletion cancelled.","error");
                 continue;
             }
             int id = stoi(id_str);
