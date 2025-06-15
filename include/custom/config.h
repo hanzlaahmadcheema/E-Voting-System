@@ -10,6 +10,8 @@
 #include <ctime>
 #include <iomanip>
 #include <set>
+#include <regex>
+#include <stdexcept>
 #include <json.hpp>
 #include <ftxui/component/screen_interactive.hpp>
 #include <ftxui/component/component.hpp>
