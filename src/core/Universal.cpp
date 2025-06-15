@@ -1,39 +1,52 @@
-
-
 #include <custom/config.h>
+#include <fstream>
+#include <iostream>
+#include <stdexcept>
 
 const string COUNTER_FILE = "data/counters.json";
 
 int getNextID(const string &key)
 {
-    ifstream inFile(COUNTER_FILE);
+    if (key.empty()) {
+        throw std::invalid_argument("Key for getNextID cannot be empty.");
+    }
+
     json counters;
+    try {
+        std::ifstream inFile(COUNTER_FILE);
+        if (inFile) {
+            try {
+                inFile >> counters;
+            } catch (const std::exception& e) {
+                std::cerr << "Error parsing counters.json: " << e.what() << std::endl;
+                counters = json::object();
+            }
+            inFile.close();
+        } else {
+            std::cerr << "counters.json not found. Creating a new one." << std::endl;
+            counters = json::object();
+        }
 
-    if (inFile)
-    {
-        inFile >> counters;
-        inFile.close();
+        if (!counters.is_object()) {
+            counters = json::object();
+        }
+
+        int current = counters.value(key, 0);
+        int nextID = current + 1;
+        counters[key] = nextID;
+
+        std::ofstream outFile(COUNTER_FILE);
+        if (!outFile) {
+            throw std::runtime_error("Failed to open counters.json for writing.");
+        }
+        outFile << counters.dump(4);
+        outFile.close();
+
+        return nextID;
+    } catch (const std::exception& e) {
+        std::cerr << "Exception in getNextID: " << e.what() << std::endl;
+        return -1; // Indicate error
     }
-    else
-    {
-        cerr << "counters.json not found. Creating a new one." << endl;
-    }
-
-    // Default to 0 if key not found
-    if (!counters.is_object())
-    {
-        counters = json::object(); // create empty object if file is empty or missing
-    }
-
-    int current = counters.value(key, 0);
-    int nextID = current + 1;
-    counters[key] = nextID;
-
-    ofstream outFile(COUNTER_FILE);
-    outFile << counters.dump(4);
-    outFile.close();
-
-    return nextID;
 }
 
 string toLower(const string& str) {
