@@ -1,22 +1,22 @@
 
 #include <custom/config.h>
+#include <stdexcept>
 
+// --- Forward Declarations ---
 extern int getNextID(const string& key);
 extern bool constituencyExists(int id);
 extern void listAllConstituencies();
 extern void listCitiesByProvince(const string &province);
 extern void listConstituenciesByCity(int cityID);
 extern int ShowMenu(ScreenInteractive & screen, 
-     const string& heading, 
-     const vector<string>& options);
+    const string& heading, 
+    const vector<string>& options);
 void ShowTableFTXUI(const string& heading, 
-                    const vector<string>& headers, 
-                    const vector<vector<string>>& rows);
+                const vector<string>& headers, 
+                const vector<vector<string>>& rows);
 bool ShowForm(ScreenInteractive& screen, const string& title, vector<InputField>& fields);
 
-;
-
-// PollingStation
+// --- PollingStation Implementation ---
 PollingStation::PollingStation() : PollingStationID(0), PollingStationName(""), PollingStationAddress(""), CityID(0), ConstituencyIDNA(0), ConstituencyIDPA(0) {}
 PollingStation::PollingStation(int PollingStationID, const string &PollingStationName, const string &PollingStationAddress, int CityID, int ConstituencyIDNA, int ConstituencyIDPA)
 {
@@ -79,23 +79,28 @@ int PollingStation::getConstituencyIDPA() const
 json PollingStation::toJSON() const
 {
     return json{
-        {"PollingStationID", PollingStationID},
-        {"PollingStationName", PollingStationName},
-        {"PollingStationAddress", PollingStationAddress},
-        {"CityID", CityID},
-        {"ConstituencyIDNA", ConstituencyIDNA},
-        {"ConstituencyIDPA", ConstituencyIDPA}};
+       {"PollingStationID", PollingStationID},
+       {"PollingStationName", PollingStationName},
+       {"PollingStationAddress", PollingStationAddress},
+       {"CityID", CityID},
+       {"ConstituencyIDNA", ConstituencyIDNA},
+       {"ConstituencyIDPA", ConstituencyIDPA}};
 }
 
 PollingStation PollingStation::fromJSON(const json &j)
 {
-    return PollingStation(
-        j.at("PollingStationID").get<int>(),
-        j.at("PollingStationName").get<string>(),
-        j.at("PollingStationAddress").get<string>(),
-        j.at("CityID").get<int>(),
-        j.at("ConstituencyIDNA").get<int>(),
-        j.at("ConstituencyIDPA").get<int>());
+    try {
+       return PollingStation(
+          j.at("PollingStationID").get<int>(),
+          j.at("PollingStationName").get<string>(),
+          j.at("PollingStationAddress").get<string>(),
+          j.at("CityID").get<int>(),
+          j.at("ConstituencyIDNA").get<int>(),
+          j.at("ConstituencyIDPA").get<int>());
+    } catch (const std::exception& e) {
+       cerr << "Error: Invalid polling station JSON: " << e.what() << endl;
+       return PollingStation();
+    }
 }
 
 const string STATION_FILE = "data/polling_stations.json";
@@ -111,11 +116,11 @@ bool isValidPollingStationID(int id) {
 }
 
 bool isValidPollingStationName(const string &name) {
-    return !name.empty() && name.length() <= 100;
+    return !isBlank(name) && name.length() <= 100;
 }
 
 bool isValidPollingStationAddress(const string &address) {
-    return !address.empty() && address.length() <= 200;
+    return !isBlank(address) && address.length() <= 200;
 }
 
 // Load all stations
@@ -125,19 +130,21 @@ vector<PollingStation> loadAllStations()
     ifstream file(STATION_FILE);
     if (file.is_open())
     {
-        json j;
-        try
-        {
-            file >> j;
-            for (auto &obj : j)
-            {
-                list.push_back(PollingStation::fromJSON(obj));
-            }
-        }
-        catch (...)
-        {
-            cerr << "Error: Corrupted polling station data.";
-        }
+       json j;
+       try
+       {
+          file >> j;
+          for (auto &obj : j)
+          {
+             PollingStation ps = PollingStation::fromJSON(obj);
+             if (ps.getPollingStationID() > 0)
+                list.push_back(ps);
+          }
+       }
+       catch (const std::exception& e)
+       {
+          cerr << "Error: Corrupted polling station data: " << e.what() << endl;
+       }
     }
     return list;
 }
@@ -148,15 +155,19 @@ void saveAllStations(const vector<PollingStation> &list)
     ofstream file(STATION_FILE);
     if (!file.is_open())
     {
-        cerr << "Error: Cannot open file to save polling stations.";
-        return;
+       cerr << "Error: Cannot open file to save polling stations." << endl;
+       return;
     }
-    json j;
-    for (const auto &s : list)
-    {
-        j.push_back(s.toJSON());
+    try {
+       json j;
+       for (const auto &s : list)
+       {
+          j.push_back(s.toJSON());
+       }
+       file << j.dump(4);
+    } catch (const std::exception& e) {
+       cerr << "Error: Failed to save polling stations: " << e.what() << endl;
     }
-    file << j.dump(4);
 }
 
 // Admin: Add station
@@ -165,30 +176,42 @@ void addPollingStation(const PollingStation &s)
     vector<PollingStation> list = loadAllStations();
 
     // Validation
-    if (s.getPollingStationID() <= 0)
+    if (!isValidPollingStationID(s.getPollingStationID()))
     {
-        ShowMessage(screen,"Invalid Polling Station ID.","error");
-        return;
+       ShowMessage(screen,"Invalid Polling Station ID.","error");
+       return;
     }
-    if (isBlank(s.getPollingStationName()))
+    if (!isValidPollingStationName(s.getPollingStationName()))
     {
-        ShowMessage(screen,"Polling Station name cannot be empty.","error");
-        return;
+       ShowMessage(screen,"Polling Station name cannot be empty or too long.","error");
+       return;
     }
-    if (isBlank(s.getPollingStationAddress()))
+    if (!isValidPollingStationAddress(s.getPollingStationAddress()))
     {
-        ShowMessage(screen,"Polling Station address cannot be empty.","error");
-        return;
+       ShowMessage(screen,"Polling Station address cannot be empty or too long.","error");
+       return;
     }
-    if (s.getConstituencyIDNA() <= 0)
+    if (!isValidPollingStationID(s.getConstituencyIDNA()) || !constituencyExists(s.getConstituencyIDNA()))
     {
-        ShowMessage(screen,"Invalid Constituency ID.","error");
-        return;
+       ShowMessage(screen,"Invalid Constituency ID (NA).","error");
+       return;
     }
-    if (s.getConstituencyIDPA() <= 0)
+    if (!isValidPollingStationID(s.getConstituencyIDPA()) || !constituencyExists(s.getConstituencyIDPA()))
     {
-        ShowMessage(screen,"Invalid Constituency ID.","error");
-        return;
+       ShowMessage(screen,"Invalid Constituency ID (PA).","error");
+       return;
+    }
+    if (!isValidPollingStationID(s.getCityID()))
+    {
+       ShowMessage(screen,"Invalid City ID.","error");
+       return;
+    }
+    // Prevent duplicate IDs
+    for (const auto& ps : list) {
+       if (ps.getPollingStationID() == s.getPollingStationID()) {
+          ShowMessage(screen,"Polling Station ID already exists.","error");
+          return;
+       }
     }
     list.push_back(s);
     saveAllStations(list);
@@ -201,36 +224,36 @@ void editPollingStation(int id, const string &newName, const string &newAddress)
     vector<PollingStation> list = loadAllStations();
     bool found = false;
 
-    if (id <= 0)
+    if (!isValidPollingStationID(id))
     {
-        ShowMessage(screen,"Invalid Polling Station ID.","error");
-        return;
+       ShowMessage(screen,"Invalid Polling Station ID.","error");
+       return;
     }
-    if (isBlank(newName))
+    if (!isValidPollingStationName(newName))
     {
-        ShowMessage(screen,"New name cannot be empty.","error");
-        return;
+       ShowMessage(screen,"New name cannot be empty or too long.","error");
+       return;
     }
-    if (isBlank(newAddress))
+    if (!isValidPollingStationAddress(newAddress))
     {
-        ShowMessage(screen,"New address cannot be empty.","error");
-        return;
+       ShowMessage(screen,"New address cannot be empty or too long.","error");
+       return;
     }
 
     for (auto &s : list)
     {
-        if (s.getPollingStationID() == id)
-        {
-            s.setPollingStationName(newName);
-            s.setPollingStationAddress(newAddress);
-            found = true;
-            break;
-        }
+       if (s.getPollingStationID() == id)
+       {
+          s.setPollingStationName(newName);
+          s.setPollingStationAddress(newAddress);
+          found = true;
+          break;
+       }
     }
     if (!found)
     {
-        ShowMessage(screen,"Polling station not found.","error");
-        return;
+       ShowMessage(screen,"Polling station not found.","error");
+       return;
     }
     saveAllStations(list);
     ShowMessage(screen,"Polling station updated.","success");
@@ -239,18 +262,18 @@ void editPollingStation(int id, const string &newName, const string &newAddress)
 // Admin: Delete station
 void deletePollingStation(int id)
 {
-    if (id <= 0)
+    if (!isValidPollingStationID(id))
     {
-        ShowMessage(screen,"Invalid Polling Station ID.","error");
-        return;
+       ShowMessage(screen,"Invalid Polling Station ID.","error");
+       return;
     }
     vector<PollingStation> list = loadAllStations();
     auto it = remove_if(list.begin(), list.end(), [id](const PollingStation &s)
-                        { return s.getPollingStationID() == id; });
+                    { return s.getPollingStationID() == id; });
     if (it == list.end())
     {
-        ShowMessage(screen,"Polling station not found.","error");
-        return;
+       ShowMessage(screen,"Polling station not found.","error");
+       return;
     }
     list.erase(it, list.end());
     saveAllStations(list);
@@ -260,73 +283,69 @@ void deletePollingStation(int id)
 PollingStation getPollingStationByID(int id) {
     vector<PollingStation> list = loadAllStations();
     for (const auto& s : list) {
-        if (s.getPollingStationID() == id) return s;
+       if (s.getPollingStationID() == id) return s;
     }
     return PollingStation();
 }
+
 // Admin/User: View all stations by constituency
 void listStationsByConstituency(int constID)
 {
-    if (constID <= 0)
+    if (!isValidPollingStationID(constID))
     {
-        ShowMessage(screen,"Invalid Constituency ID.","error");
-        return;
+       ShowMessage(screen,"Invalid Constituency ID.","error");
+       return;
     }
     vector<PollingStation> list = loadAllStations();
-    bool found = false;
-    
     vector<string> headers = {"Station ID", "Name", "Address", "City ID", "Constituency ID"};
     vector<vector<string>> data;
     for (const auto &s : list)
     {
-        if (s.getConstituencyIDNA() == constID || s.getConstituencyIDPA() == constID)
-        {
-            data.push_back({
-                to_string(s.getPollingStationID()),
-                s.getPollingStationName(),
-                s.getPollingStationAddress(),
-                to_string(s.getCityID()),
-                to_string(s.getConstituencyIDNA())
-            });
-        }
+       if (s.getConstituencyIDNA() == constID || s.getConstituencyIDPA() == constID)
+       {
+          data.push_back({
+             to_string(s.getPollingStationID()),
+             s.getPollingStationName(),
+             s.getPollingStationAddress(),
+             to_string(s.getCityID()),
+             to_string(s.getConstituencyIDNA())
+          });
+       }
     }
     ShowTableFTXUI("Polling Stations in Constituency " + to_string(constID), headers, data);
-    if (!found)
+    if (data.empty())
     {
-        ShowMessage(screen,"No polling stations found for this constituency.","info");
+       ShowMessage(screen,"No polling stations found for this constituency.","info");
     }
-
 }
 
 void listStationsByCity(int cityID)
 {
-    if (cityID <= 0)
+    if (!isValidPollingStationID(cityID))
     {
-        ShowMessage(screen,"Invalid City ID.","error");
-        return;
+       ShowMessage(screen,"Invalid City ID.","error");
+       return;
     }
     vector<PollingStation> list = loadAllStations();
-    bool found = false;
-    
     vector<string> headers = {"Station ID", "Name", "Address", "City ID", "Constituency ID"};
     vector<vector<string>> data;
     for (const auto &s : list)
     {
-        if (s.getCityID() == cityID)
-        {
-            data.push_back({
-                to_string(s.getPollingStationID()),
-                s.getPollingStationName(),
-                s.getPollingStationAddress(),
-                to_string(s.getCityID()),
-                to_string(s.getConstituencyIDNA())
-            });
-        }
+       if (s.getCityID() == cityID)
+       {
+          data.push_back({
+             to_string(s.getPollingStationID()),
+             s.getPollingStationName(),
+             s.getPollingStationAddress(),
+             to_string(s.getCityID()),
+             to_string(s.getConstituencyIDNA())
+          });
+       }
     }
     ShowTableFTXUI("Polling Stations in City " + to_string(cityID), headers, data);
-    if (!found)
+    if (data.empty())
     {
-        ShowMessage(screen,"No polling stations found for this city.","info");
+       ShowMessage(screen,"No polling stations found for this city.","info");
     }
 }
 
@@ -335,194 +354,193 @@ void listAllStations()
     vector<PollingStation> list = loadAllStations();
     if (list.empty())
     {
-        ShowMessage(screen,"ℹNo polling stations found.","info");
-        return;
+       ShowMessage(screen,"ℹNo polling stations found.","info");
+       return;
     }
-    bool found = false;
     vector<string> headers = {"Station ID", "Name", "Address", "City ID", "Constituency ID"};
     vector<vector<string>> data;
     for (const auto &s : list)
     {
-        {
-            data.push_back({
-                to_string(s.getPollingStationID()),
-                s.getPollingStationName(),
-                s.getPollingStationAddress(),
-                to_string(s.getCityID()),
-                to_string(s.getConstituencyIDNA())
-            });
+       data.push_back({
+          to_string(s.getPollingStationID()),
+          s.getPollingStationName(),
+          s.getPollingStationAddress(),
+          to_string(s.getCityID()),
+          to_string(s.getConstituencyIDNA())
+       });
     }
-    }
-        ShowTableFTXUI("AllPolling Stations.", headers, data);
-    if (!found)
-    {
-        ShowMessage(screen,"No polling stations found.","info");
-    }
+    ShowTableFTXUI("All Polling Stations.", headers, data);
 }
 
 bool pollingStationExists(int id) {
     vector<PollingStation> list = loadAllStations();
     for (const auto& s : list) {
-        if (s.getPollingStationID() == id) return true;
+       if (s.getPollingStationID() == id) return true;
     }
     return false;
 }
 
 void managePollingStations() {
-    int choice;
     while (true) {
-   
+       vector<string> pollingStationMenu = {
+          "Add Polling Station",
+          "View All Polling Stations",
+          "Edit Polling Station",
+          "Delete Polling Station",
+          "Back"
+       };
 
-    vector<string> pollingStationMenu = {
-        "Add Polling Station",
-        "View All Polling Stations",
-        "Edit Polling Station",
-        "Delete Polling Station",
-        "Back"
-    };
+       int choice = ShowMenu(screen, "Polling Station Management", pollingStationMenu);
+       if (choice == 0) {
+          string cityChoice_str, name, address, constituencyIDNA_str, constituencyIDPA_str;
 
-    int choice = ShowMenu(screen, "Polling Station Management", pollingStationMenu);
-        if (choice == 0) {
-            string cityChoice_str, name, address, constituencyIDNA_str, constituencyIDPA_str;
-    
-            vector<string> provinceMenu = {
-                "Punjab",
-                "KPK",
-                "Sindh",
-                "Balochistan"
-            };
-            int choice = ShowMenu(screen, "Select Province", provinceMenu);
-            if (choice == 1) {
-                listCitiesByProvince("Punjab");
-            } else if (choice == 2) {
-                listCitiesByProvince("KPK");
-            } else if (choice == 3) {
-                listCitiesByProvince("Sindh");
-            } else if (choice == 4) {
-                listCitiesByProvince("Balochistan");
-            }
-            vector<InputField> form = {
-                {"City ID", &cityChoice_str, InputField::TEXT}
-            };
-            bool success = ShowForm(screen, "Create Polling Station", form);
-            if (!success) {
-                  ShowMessage(screen,"Creation cancelled.","error");
-                continue;
-            }
-            int cityChoice = stoi(cityChoice_str);
-            listStationsByCity(cityChoice);
-            vector<InputField> form2 = {
-                {"Name", &name, InputField::TEXT},
-                {"Address", &address, InputField::TEXT}
-            };
-            bool success2 = ShowForm(screen, "Create Polling Station", form2);
-            if (!success2) {
-                  ShowMessage(screen,"Creation cancelled.","error");
-                continue;
-            }
-            if (!isValidPollingStationName(name)) {
-                  ShowMessage(screen,"Invalid Polling Station Name.","error");
-                continue;
-            }
-            if (!isValidPollingStationAddress(address)) {
-                  ShowMessage(screen,"Invalid Polling Station Address.","error");
-                continue;
-            }
-            listConstituenciesByCity(cityChoice);
-            vector<InputField> form3 = {
-                {"Constituency ID2", &constituencyIDNA_str, InputField::TEXT},
-                {"Constituency ID1", &constituencyIDPA_str, InputField::TEXT}
-            };
-            bool success3 = ShowForm(screen, "Create Polling Station", form3);
-            if (!success3) {
-                  ShowMessage(screen,"Creation cancelled.","error");
-                continue;
-            }
-            int ConstituencyIDNA = stoi(constituencyIDNA_str);
-            int ConstituencyIDPA = stoi(constituencyIDPA_str);
+          vector<string> provinceMenu = {
+             "Punjab",
+             "KPK",
+             "Sindh",
+             "Balochistan"
+          };
+          int provinceChoice = ShowMenu(screen, "Select Province", provinceMenu);
+          if (provinceChoice >= 0 && provinceChoice < 4) {
+             listCitiesByProvince(provinceMenu[provinceChoice]);
+          } else {
+             ShowMessage(screen,"Invalid province selection.","error");
+             continue;
+          }
+          vector<InputField> form = {
+             {"City ID", &cityChoice_str, InputField::TEXT}
+          };
+          if (!ShowForm(screen, "Create Polling Station", form)) {
+             ShowMessage(screen,"Creation cancelled.","error");
+             continue;
+          }
+          int cityChoice = 0;
+          try {
+             cityChoice = stoi(cityChoice_str);
+          } catch (...) {
+             ShowMessage(screen,"Invalid City ID format.","error");
+             continue;
+          }
+          if (!isValidPollingStationID(cityChoice)) {
+             ShowMessage(screen,"Invalid City ID.","error");
+             continue;
+          }
+          listStationsByCity(cityChoice);
 
-            if (!constituencyExists(ConstituencyIDNA)) {
-                  ShowMessage(screen,"Invalid Constituency ID.","error");
-                continue;
-            }
-            if (!constituencyExists(ConstituencyIDPA)) {
-                  ShowMessage(screen,"Invalid Constituency ID.","error");
-                continue;
-            }
-            PollingStation ps(getNextID("PollingStationID"), name, address, cityChoice, ConstituencyIDNA, ConstituencyIDPA);
-            addPollingStation(ps);
-        } else if (choice == 1) {
-            listAllStations();
-        } else if (choice == 2) {
-            string id_str, name, address;
-            listAllStations();
-    
-            vector<InputField> form = {
-                {"Station ID", &id_str, InputField::TEXT},
-                {"Station Name", &name, InputField::TEXT},
-                {"Station Address", &address, InputField::TEXT}
-            };
-            bool success = ShowForm(screen, "Edit Polling Station", form);
-            if (!success) {
-                  ShowMessage(screen,"Editing cancelled.","error");
-                continue;
-            }
-            int id = stoi(id_str);
-            if (!isValidPollingStationID(id)) {
-                  ShowMessage(screen,"Invalid Polling Station ID.","error");
-                continue;
-            }
-            if (!pollingStationExists(id)) {
-                  ShowMessage(screen,"Polling Station ID not found.","error");
-                continue;
-            }
-            if (!isValidPollingStationName(name)) {
-                  ShowMessage(screen,"Invalid Polling Station Name.","error");
-                continue;
-            }
-            if (!isValidPollingStationAddress(address)) {
-                  ShowMessage(screen,"Invalid Polling Station Address.","error");
-                continue;
-            }
-            editPollingStation(id, name, address);
-        } else if (choice == 3) {
-            string id_str;
-            listAllStations();
-    
-            vector<InputField> form = {
-                {"Station ID", &id_str, InputField::TEXT}
-            };
-            bool success = ShowForm(screen, "Delete Polling Station", form);
-            if (!success) {
-                  ShowMessage(screen,"Deletion cancelled.","error");
-                continue;
-            }
-            int id = stoi(id_str);
-            if (!isValidPollingStationID(id)) {
-                  ShowMessage(screen,"Invalid Polling Station ID.","error");
-                continue;
-            }
-            if (!pollingStationExists(id)) {
-                  ShowMessage(screen,"Polling Station ID not found.","error");
-                continue;
-            }
-            deletePollingStation(id);
-        } else if (choice == 4) {
-            break;
-        } else {
-              ShowMessage(screen,"Invalid option. Please try again.","error");
-        }
+          vector<InputField> form2 = {
+             {"Name", &name, InputField::TEXT},
+             {"Address", &address, InputField::TEXT}
+          };
+          if (!ShowForm(screen, "Create Polling Station", form2)) {
+             ShowMessage(screen,"Creation cancelled.","error");
+             continue;
+          }
+          if (!isValidPollingStationName(name)) {
+             ShowMessage(screen,"Invalid Polling Station Name.","error");
+             continue;
+          }
+          if (!isValidPollingStationAddress(address)) {
+             ShowMessage(screen,"Invalid Polling Station Address.","error");
+             continue;
+          }
+          listConstituenciesByCity(cityChoice);
+
+          vector<InputField> form3 = {
+             {"Constituency ID2", &constituencyIDNA_str, InputField::TEXT},
+             {"Constituency ID1", &constituencyIDPA_str, InputField::TEXT}
+          };
+          if (!ShowForm(screen, "Create Polling Station", form3)) {
+             ShowMessage(screen,"Creation cancelled.","error");
+             continue;
+          }
+          int ConstituencyIDNA = 0, ConstituencyIDPA = 0;
+          try {
+             ConstituencyIDNA = stoi(constituencyIDNA_str);
+             ConstituencyIDPA = stoi(constituencyIDPA_str);
+          } catch (...) {
+             ShowMessage(screen,"Invalid Constituency ID format.","error");
+             continue;
+          }
+          if (!isValidPollingStationID(ConstituencyIDNA) || !constituencyExists(ConstituencyIDNA)) {
+             ShowMessage(screen,"Invalid Constituency ID (NA).","error");
+             continue;
+          }
+          if (!isValidPollingStationID(ConstituencyIDPA) || !constituencyExists(ConstituencyIDPA)) {
+             ShowMessage(screen,"Invalid Constituency ID (PA).","error");
+             continue;
+          }
+          PollingStation ps(getNextID("PollingStationID"), name, address, cityChoice, ConstituencyIDNA, ConstituencyIDPA);
+          addPollingStation(ps);
+       } else if (choice == 1) {
+          listAllStations();
+       } else if (choice == 2) {
+          string id_str, name, address;
+          listAllStations();
+
+          vector<InputField> form = {
+             {"Station ID", &id_str, InputField::TEXT},
+             {"Station Name", &name, InputField::TEXT},
+             {"Station Address", &address, InputField::TEXT}
+          };
+          if (!ShowForm(screen, "Edit Polling Station", form)) {
+             ShowMessage(screen,"Editing cancelled.","error");
+             continue;
+          }
+          int id = 0;
+          try {
+             id = stoi(id_str);
+          } catch (...) {
+             ShowMessage(screen,"Invalid Polling Station ID format.","error");
+             continue;
+          }
+          if (!isValidPollingStationID(id)) {
+             ShowMessage(screen,"Invalid Polling Station ID.","error");
+             continue;
+          }
+          if (!pollingStationExists(id)) {
+             ShowMessage(screen,"Polling Station ID not found.","error");
+             continue;
+          }
+          if (!isValidPollingStationName(name)) {
+             ShowMessage(screen,"Invalid Polling Station Name.","error");
+             continue;
+          }
+          if (!isValidPollingStationAddress(address)) {
+             ShowMessage(screen,"Invalid Polling Station Address.","error");
+             continue;
+          }
+          editPollingStation(id, name, address);
+       } else if (choice == 3) {
+          string id_str;
+          listAllStations();
+
+          vector<InputField> form = {
+             {"Station ID", &id_str, InputField::TEXT}
+          };
+          if (!ShowForm(screen, "Delete Polling Station", form)) {
+             ShowMessage(screen,"Deletion cancelled.","error");
+             continue;
+          }
+          int id = 0;
+          try {
+             id = stoi(id_str);
+          } catch (...) {
+             ShowMessage(screen,"Invalid Polling Station ID format.","error");
+             continue;
+          }
+          if (!isValidPollingStationID(id)) {
+             ShowMessage(screen,"Invalid Polling Station ID.","error");
+             continue;
+          }
+          if (!pollingStationExists(id)) {
+             ShowMessage(screen,"Polling Station ID not found.","error");
+             continue;
+          }
+          deletePollingStation(id);
+       } else if (choice == 4) {
+          break;
+       } else {
+          ShowMessage(screen,"Invalid option. Please try again.","error");
+       }
     }
 }
-// int main()
-// {
-//     // Example usage
-//     PollingStation ps(getNextID("PollingStationID"), "Main Street Station", "123 Main St", 101);
-//     addPollingStation(ps);
-//     listStationsByConstituency(101);
-//     editPollingStation(ps.getPollingStationID(), "Updated Station", "456 Updated St");
-//     listStationsByConstituency(101);
-//     deletePollingStation(ps.getPollingStationID());
-//     listStationsByConstituency(101);
-//     return 0;
-// }
