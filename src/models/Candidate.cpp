@@ -12,6 +12,7 @@ extern string getConstituencyTypeByID(int id);
 extern void deleteVotesByCandidateID(int CandidateID);
 extern void listCitiesByProvince(const string &province);
 extern void listConstituenciesByCity(int cityID);
+extern bool isValidCandidateName(const string &name);
 extern int ShowMenu(ScreenInteractive & screen, 
     const string& heading, 
     const vector<string>& options);
