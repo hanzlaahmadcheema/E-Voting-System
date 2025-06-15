@@ -237,6 +237,7 @@ bool electionExists(int id) {
 void manageElections() {
     while (true) {
        ShowSpinner(screen, "Loading Elections");
+       ShowProgressBar(screen, "Loading Elections");
        vector<string> electionManagement = {
           "Create Election",
           "View All Elections",
