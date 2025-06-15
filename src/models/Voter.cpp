@@ -1,6 +1,4 @@
 #include <custom/config.h>
-#include <stdexcept>
-#include <cctype>
 
 extern int getNextID(const string& key);
 extern bool pollingStationExists(int id);

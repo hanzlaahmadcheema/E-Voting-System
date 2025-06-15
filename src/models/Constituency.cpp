@@ -1,12 +1,5 @@
 #include <custom/config.h>
 
-// Add missing includes
-#include <fstream>
-#include <iostream>
-#include <algorithm>
-#include <stdexcept>
-using namespace std;
-
 // Externs
 extern int getNextID(const string &key);
 extern bool cityExists(int id);

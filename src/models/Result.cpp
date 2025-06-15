@@ -1,7 +1,4 @@
 #include <custom/config.h>
-#include <stdexcept>
-#include <limits>
-#include <sstream>
 
 extern vector<Vote> loadAllVotes();
 extern int getNextID(const string &key);

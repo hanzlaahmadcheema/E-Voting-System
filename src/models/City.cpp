@@ -1,6 +1,4 @@
 #include <custom/config.h>
-#include <stdexcept>
-#include <limits>
 
 extern int getNextID(const string &key);
 extern int ShowMenu(ScreenInteractive & screen, 
@@ -10,8 +8,6 @@ void ShowTableFTXUI(const string& heading,
                 const vector<string>& headers, 
                 const vector<vector<string>>& rows);
 bool ShowForm(ScreenInteractive& screen, const string& title, vector<InputField>& fields);
-
-;
 
 // City
 City::City() : CityID(0), CityName(""), ProvinceName("") {}

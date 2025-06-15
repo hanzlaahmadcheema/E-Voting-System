@@ -1,6 +1,5 @@
 
 #include <custom/config.h>
-#include <stdexcept>
 
 // --- Forward Declarations ---
 extern int getNextID(const string& key);

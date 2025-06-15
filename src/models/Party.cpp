@@ -1,6 +1,4 @@
 #include <custom/config.h>
-#include <stdexcept>
-#include <limits>
 
 // Helper: Validate integer string
 bool isValidInt(const string& str) {
@@ -22,8 +20,6 @@ void ShowTableFTXUI(const string& heading,
                     const vector<string>& headers, 
                     const vector<vector<string>>& rows);
 bool ShowForm(ScreenInteractive& screen, const string& title, vector<InputField>& fields);
-
-;
 
 // Party
 Party::Party() : PartyID(0), PartyName(""), PartySymbol("") {}

@@ -1,11 +1,4 @@
 #include <custom/config.h>
-#include <set>
-#include <regex>
-#include <fstream>
-#include <iostream>
-#include <exception>
-
-using namespace std;
 
 // Forward declarations
 extern int getNextID(const string &key);

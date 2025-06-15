@@ -8,10 +8,14 @@
 #include <functional>
 #include <unordered_map>
 #include <ctime>
+#include <cctype>
 #include <iomanip>
 #include <set>
 #include <regex>
+#include <exception>
 #include <stdexcept>
+#include <algorithm>
+#include <sstream>
 #include <json.hpp>
 #include <ftxui/component/screen_interactive.hpp>
 #include <ftxui/component/component.hpp>
