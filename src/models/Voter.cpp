@@ -11,6 +11,7 @@ extern void listCitiesByProvince(const string &province);
 extern void listConstituenciesByCity(int cityID);
 extern void listStationsByConstituency(int constChoice);
 extern void listStationsByCity(int cityID);
+extern bool cityExistsInProvince(int cityID, const string &province);
 extern int ShowMenu(ScreenInteractive & screen, 
      const string& heading, 
      const vector<string>& options);
@@ -411,30 +412,26 @@ void manageVoters() {
         int choice = ShowMenu(screen, "Voter Management", voterManagement);
 
         if (choice == 0) {
-            string age_str, pollingID_str, name, VoterCNIC, gender, address, cityID_str, provChoice_str;
+            string age_str, pollingID_str, name, VoterCNIC, gender, address, cityID_str, provChoice;
             vector<InputField> form1 = {
                 {"Voter Name", &name, InputField::TEXT},
                 {"Voter CNIC", &VoterCNIC, InputField::TEXT},
                 {"Voter Gender", &gender, InputField::TEXT},
                 {"Voter Age", &age_str, InputField::TEXT},
-                {"Voter Province", &provChoice_str, InputField::DROPDOWN, {"Punjab", "KPK", "Sindh", "Balochistan"}}
+                {"Voter Province", &provChoice, InputField::DROPDOWN, {"Punjab", "KPK", "Sindh", "Balochistan"}}
             };
             if (!ShowForm(screen, "Add Voter", form1)) {
                 ShowMessage(screen, "Creation cancelled.", "error");
                 continue;
             }
-            int age = 0, provChoice = 0;
-            try { age = stoi(age_str); provChoice = stoi(provChoice_str); }
+            int age = 0;
+            try { age = stoi(age_str); }
             catch (...) { ShowMessage(screen, "Invalid numeric input.", "error"); continue; }
             if (!isValidName(name)) { ShowMessage(screen, "Invalid name. Only letters and spaces allowed.", "error"); continue; }
             if (!isValidCNIC(VoterCNIC)) { ShowMessage(screen, "Invalid CNIC format.", "error"); continue; }
             if (!isValidAge(age)) { ShowMessage(screen, "Invalid age. Age must be between 18 and 120.", "error"); continue; }
             if (!isValidGender(gender)) { ShowMessage(screen, "Invalid gender. Please enter Male, Female, or Other.", "error"); continue; }
-            if (provChoice < 1 || provChoice > 4) { ShowMessage(screen, "Invalid province choice.", "error"); continue; }
-            if (provChoice == 1) listCitiesByProvince("Punjab");
-            else if (provChoice == 2) listCitiesByProvince("KPK");
-            else if (provChoice == 3) listCitiesByProvince("Sindh");
-            else if (provChoice == 4) listCitiesByProvince("Balochistan");
+            listCitiesByProvince(provChoice);
             vector<InputField> form2 = {
                 {"City ID", &cityID_str, InputField::TEXT},
                 {"Voter Address", &address, InputField::TEXT},
@@ -447,6 +444,10 @@ void manageVoters() {
             try { cityChoice = stoi(cityID_str); }
             catch (...) { ShowMessage(screen, "Invalid City ID.", "error"); continue; }
             if (!isValidAddress(address)) { ShowMessage(screen, "Invalid address. Cannot be empty.", "error"); continue; }
+            if (!cityExistsInProvince(cityChoice, provChoice)) {
+             ShowMessage(screen,"City ID not found in selected province.","error");
+             continue;
+            }
             listStationsByCity(cityChoice);
             vector<InputField> form3 = {
                 {"Polling ID", &pollingID_str, InputField::TEXT}
@@ -467,7 +468,7 @@ void manageVoters() {
         } else if (choice == 1) {
             listAllVoters();
         } else if (choice == 2) {
-            string age_str, pollingID_str, name, VoterCNIC, gender, address, cityID_str, provChoice_str;
+            string age_str, pollingID_str, name, VoterCNIC, gender, address, cityID_str, provChoice;
             vector<InputField> form1 = {
                 {"Voter CNIC", &VoterCNIC, InputField::TEXT}
             };
@@ -482,24 +483,20 @@ void manageVoters() {
                 {"Voter CNIC", &VoterCNIC, InputField::TEXT},
                 {"Voter Gender", &gender, InputField::TEXT},
                 {"Voter Age", &age_str, InputField::TEXT},
-                {"Voter Province", &provChoice_str, InputField::DROPDOWN, {"Punjab", "KPK", "Sindh", "Balochistan"}}
+                {"Voter Province", &provChoice, InputField::DROPDOWN, {"Punjab", "KPK", "Sindh", "Balochistan"}}
             };
             if (!ShowForm(screen, "Edit Voter", form2)) {
                 ShowMessage(screen, "Edition cancelled.", "error");
                 continue;
             }
-            int age = 0, provChoice = 0;
-            try { age = stoi(age_str); provChoice = stoi(provChoice_str); }
+            int age = 0;
+            try { age = stoi(age_str); }
             catch (...) { ShowMessage(screen, "Invalid numeric input.", "error"); continue; }
             if (!isValidName(name)) { ShowMessage(screen, "Invalid name. Only letters and spaces allowed.", "error"); continue; }
             if (!isValidCNIC(VoterCNIC)) { ShowMessage(screen, "Invalid CNIC format.", "error"); continue; }
             if (!isValidAge(age)) { ShowMessage(screen, "Invalid age. Age must be between 18 and 120.", "error"); continue; }
             if (!isValidGender(gender)) { ShowMessage(screen, "Invalid gender. Please enter Male, Female, or Other.", "error"); continue; }
-            if (provChoice < 1 || provChoice > 4) { ShowMessage(screen, "Invalid province choice.", "error"); continue; }
-            if (provChoice == 1) listCitiesByProvince("Punjab");
-            else if (provChoice == 2) listCitiesByProvince("KPK");
-            else if (provChoice == 3) listCitiesByProvince("Sindh");
-            else if (provChoice == 4) listCitiesByProvince("Balochistan");
+            listCitiesByProvince(provChoice);
             vector<InputField> form3 = {
                 {"City ID", &cityID_str, InputField::TEXT},
                 {"Voter Address", &address, InputField::TEXT},
@@ -512,6 +509,10 @@ void manageVoters() {
             try { cityChoice = stoi(cityID_str); }
             catch (...) { ShowMessage(screen, "Invalid City ID.", "error"); continue; }
             if (!isValidAddress(address)) { ShowMessage(screen, "Invalid address. Cannot be empty.", "error"); continue; }
+            if (!cityExistsInProvince(cityChoice, provChoice)) {
+             ShowMessage(screen,"City ID not found in selected province.","error");
+             continue;
+            }
             listStationsByCity(cityChoice);
             vector<InputField> form4 = {
                 {"Polling ID", &pollingID_str, InputField::TEXT}

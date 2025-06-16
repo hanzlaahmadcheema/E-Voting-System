@@ -146,6 +146,22 @@ void saveAllCities(const vector<City> &cities)
     }
 }
 
+bool cityExists(int id) {
+    vector<City> list = loadAllCities();
+    for (const auto& c : list) {
+       if (c.getCityID() == id) return true;
+    }
+    return false;
+}
+
+bool cityExistsInProvince(int cityID, const string &provinceName) {
+    vector<City> list = loadAllCities();
+    for (const auto& c : list) {
+       if (c.getCityID() == cityID && c.getProvinceName() == provinceName) return true;
+    }
+    return false;
+}
+
 // Admin: Add city
 void addCity(const City &newCity)
 {
@@ -257,7 +273,7 @@ void deleteCityByID(int cityID)
        }
        cities.erase(it, cities.end());
        saveAllCities(cities);
-       ShowMessage(screen, "City deleted if existed.", "info");
+       ShowMessage(screen, "City deleted.", "info");
     } catch (const exception& e) {
        ShowMessage(screen, string("Error deleting city: ") + e.what(), "error");
     }
@@ -315,14 +331,6 @@ void listAllCities()
     }
 }
 
-bool cityExists(int id) {
-    vector<City> list = loadAllCities();
-    for (const auto& c : list) {
-       if (c.getCityID() == id) return true;
-    }
-    return false;
-}
-
 void manageCities() {
     int choice;
     while (true) {
@@ -355,8 +363,7 @@ void manageCities() {
              ShowMessage(screen, "Invalid Province Name.", "error");
              continue;
           }
-          int id = getNextID("CityID");
-          addCity(City(id, name, ProvinceName));
+          addCity(City(getNextID("CityID"), name, ProvinceName));
        } else if (choice == 1) {
           listAllCities();
        } else if (choice == 2) {

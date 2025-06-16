@@ -152,6 +152,26 @@ void saveAllConstituencies(const vector<Constituency> &list)
     }
 }
 
+bool isValidConstituencyIDNA(int ConstituencyIDNA, int cityChoice){
+    vector<Constituency> list = loadAllConstituencies();
+      for (const auto &c : list)
+      {
+         if (c.getConstituencyID() == ConstituencyIDNA && c.getCityID() == cityChoice)
+            return true;
+      }
+      return false;
+}
+
+bool isValidConstituencyIDPA(int ConstituencyIDPA, int cityChoice){
+    vector<Constituency> list = loadAllConstituencies();
+      for (const auto &c : list)
+      {
+         if (c.getConstituencyID() == ConstituencyIDPA && c.getCityID() == cityChoice)
+            return true;
+      }
+      return false;
+}
+
 // Admin: Add constituency
 void addConstituency(const Constituency &newConst)
 {

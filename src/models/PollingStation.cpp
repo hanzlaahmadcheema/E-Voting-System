@@ -7,6 +7,9 @@ extern bool constituencyExists(int id);
 extern void listAllConstituencies();
 extern void listCitiesByProvince(const string &province);
 extern void listConstituenciesByCity(int cityID);
+extern bool cityExistsInProvince(int cityID, const string &province);
+extern bool isValidConstituencyIDNA(int id, int cityID);
+extern bool isValidConstituencyIDPA(int id, int cityID);
 extern int ShowMenu(ScreenInteractive & screen, 
     const string& heading, 
     const vector<string>& options);
@@ -426,8 +429,10 @@ void managePollingStations() {
              ShowMessage(screen,"Invalid City ID.","error");
              continue;
           }
-          listStationsByCity(cityChoice);
-
+          if (!cityExistsInProvince(cityChoice, provinceMenu[provinceChoice])) {
+             ShowMessage(screen,"City ID not found in selected province.","error");
+             continue;
+          }
           vector<InputField> form2 = {
              {"Name", &name, InputField::TEXT},
              {"Address", &address, InputField::TEXT}
@@ -447,14 +452,14 @@ void managePollingStations() {
           listConstituenciesByCity(cityChoice);
 
           vector<InputField> form3 = {
-             {"Constituency ID2", &constituencyIDNA_str, InputField::TEXT},
-             {"Constituency ID1", &constituencyIDPA_str, InputField::TEXT}
+             {"Constituency ID (NA)", &constituencyIDNA_str, InputField::TEXT},
+             {"Constituency ID (PA)", &constituencyIDPA_str, InputField::TEXT}
           };
           if (!ShowForm(screen, "Create Polling Station", form3)) {
              ShowMessage(screen,"Creation cancelled.","error");
              continue;
           }
-          int ConstituencyIDNA = 0, ConstituencyIDPA = 0;
+          int ConstituencyIDNA, ConstituencyIDPA;
           try {
              ConstituencyIDNA = stoi(constituencyIDNA_str);
              ConstituencyIDPA = stoi(constituencyIDPA_str);
@@ -470,6 +475,14 @@ void managePollingStations() {
              ShowMessage(screen,"Invalid Constituency ID (PA).","error");
              continue;
           }
+          if (!isValidConstituencyIDNA(ConstituencyIDNA, cityChoice)) {
+             ShowMessage(screen,"Constituency ID (NA) does not match City ID.","error");
+             continue;
+          }
+         if (!isValidConstituencyIDPA(ConstituencyIDPA, cityChoice)) {
+            ShowMessage(screen,"Constituency ID (PA) does not match City ID.","error");
+            continue;
+         }
           PollingStation ps(getNextID("PollingStationID"), name, address, cityChoice, ConstituencyIDNA, ConstituencyIDPA);
           addPollingStation(ps);
        } else if (choice == 1) {

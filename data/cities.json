@@ -6,41 +6,36 @@
     },
     {
         "CityID": 2,
-        "CityName": "Kamalia",
-        "ProvinceName": "Punjab"
-    },
-    {
-        "CityID": 3,
         "CityName": "Chichawatni",
         "ProvinceName": "Punjab"
     },
     {
-        "CityID": 4,
+        "CityID": 3,
         "CityName": "Karachi",
         "ProvinceName": "Sindh"
     },
     {
-        "CityID": 5,
+        "CityID": 4,
         "CityName": "Quetta",
         "ProvinceName": "Balochistan"
     },
     {
-        "CityID": 6,
+        "CityID": 5,
         "CityName": "Peshawar",
         "ProvinceName": "KPK"
     },
     {
-        "CityID": 7,
+        "CityID": 6,
         "CityName": "Mardan",
         "ProvinceName": "KPK"
     },
     {
-        "CityID": 8,
+        "CityID": 7,
         "CityName": "Hyderabad",
         "ProvinceName": "Sindh"
     },
     {
-        "CityID": 9,
+        "CityID": 8,
         "CityName": "Gawadar",
         "ProvinceName": "Balochistan"
     }

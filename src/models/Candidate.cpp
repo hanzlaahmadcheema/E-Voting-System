@@ -13,6 +13,9 @@ extern void deleteVotesByCandidateID(int CandidateID);
 extern void listCitiesByProvince(const string &province);
 extern void listConstituenciesByCity(int cityID);
 extern bool isValidCandidateName(const string &name);
+extern bool cityExistsInProvince(int cityID, const string &province);
+extern bool isValidConstituencyIDNA(int id, int cityID);
+extern bool isValidConstituencyIDPA(int id, int cityID);
 extern int ShowMenu(ScreenInteractive & screen, 
     const string& heading, 
     const vector<string>& options);
@@ -556,6 +559,10 @@ void manageCandidates() {
              ShowMessage(screen,"Invalid City ID format.","error");
              continue;
           }
+         if (!cityExistsInProvince(cityID, provinceID_str)) {
+            ShowMessage(screen,"City ID does not exist in selected province.","error");
+            continue;
+         }
           listConstituenciesByCity(cityID);
           vector<InputField> form5 = {
              {"Constituency ID", &constID_str, InputField::NUMBER}
@@ -572,6 +579,10 @@ void manageCandidates() {
           }
           if (!constituencyExists(constID)) {
              ShowMessage(screen,"Constituency ID does not exist.","error");
+             continue;
+          }
+          if (!isValidConstituencyIDNA(constID, cityID) || !isValidConstituencyIDPA(constID, cityID)) {
+             ShowMessage(screen,"Invalid Constituency ID for selected city.","error");
              continue;
           }
 
@@ -647,11 +658,38 @@ void manageCandidates() {
              ShowMessage(screen,"Party ID does not exist.","error");
              continue;
           }
-          listAllConstituencies();
+         string provinceID_str, cityID_str;
+            vector<InputField> form2_1 = {
+               {"Select Province", &provinceID_str, InputField::DROPDOWN, {"Punjab", "KPK", "Sindh", "Balochistan"}}
+            };
+          if (!ShowForm(screen, "Edit Candidate", form2_1)) {
+             ShowMessage(screen,"Edit cancelled.","error");
+             continue;
+          }
+          listCitiesByProvince(provinceID_str);
           vector<InputField> form3 = {
-             {"New Constituency ID", &constID_str, InputField::NUMBER}
+             {"New City ID", &cityID_str, InputField::NUMBER}
           };
           if (!ShowForm(screen, "Edit Candidate", form3)) {
+             ShowMessage(screen,"Edit cancelled.","error");
+             continue;
+          }
+         int cityID;
+          try {
+             cityID = stoi(cityID_str);
+          } catch (...) {
+             ShowMessage(screen,"Invalid City ID format.","error");
+             continue;
+          }
+         if (!cityExistsInProvince(cityID, provinceID_str)) {
+            ShowMessage(screen,"City ID does not exist in selected province.","error");
+            continue;
+         }
+          listConstituenciesByCity(cityID);
+          vector<InputField> form4 = {
+             {"New Constituency ID", &constID_str, InputField::NUMBER}
+          };
+          if (!ShowForm(screen, "Edit Candidate", form4)) {
              ShowMessage(screen,"Edit cancelled.","error");
              continue;
           }
@@ -664,6 +702,10 @@ void manageCandidates() {
           }
           if (!constituencyExists(constID)) {
              ShowMessage(screen,"Invalid Constituency ID.","error");
+             continue;
+          }
+         if (!isValidConstituencyIDNA(constID, cityID) || !isValidConstituencyIDPA(constID, cityID)) {
+             ShowMessage(screen,"Invalid Constituency ID for selected city.","error");
              continue;
           }
           ShowMessage(screen,"Editing Candidate ID " + to_string(id) + "...." , "info");
