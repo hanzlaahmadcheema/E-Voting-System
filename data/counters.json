@@ -2,10 +2,10 @@
     "CandidateID": 12,
     "CityID": 8,
     "ConstituencyID": 30,
-    "ElectionID": 5,
+    "ElectionID": 6,
     "PartyID": 4,
     "PollingStationID": 27,
+    "ResultID": 1,
     "VoteID": 5,
-    "VoterID": 3,
-    "ResultID": 1
+    "VoterID": 3
 }

@@ -83,7 +83,7 @@ Constituency Constituency::fromJSON(const json &j)
     }
 }
 
-const string CONSTITUENCY_FILE = "data/constituencies.json";
+const string CONSTITUENCY_FILE = "D://E-Voting-System/data/constituencies.json";
 
 bool constituencyNameExists(const vector<Constituency> &list, const string &name)
 {

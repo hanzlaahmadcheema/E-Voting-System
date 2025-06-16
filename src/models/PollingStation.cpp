@@ -107,7 +107,7 @@ PollingStation PollingStation::fromJSON(const json &j)
     }
 }
 
-const string STATION_FILE = "data/polling_stations.json";
+const string STATION_FILE = "D://E-Voting-System/data/polling_stations.json";
 
 // Helper: Check if string is empty or whitespace
 bool isBlank(const string &str)

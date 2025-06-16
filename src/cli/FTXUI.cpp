@@ -68,7 +68,10 @@ void ShowTableFTXUI(const string& heading,
         return hbox(move(parts));
     };
 
-    bool done = false;
+    int scroll = 0;
+    const int max_results = 5;
+    int total_rows = (int)rows.size();
+
     auto renderer = Renderer([&] {
         Elements table_elements;
 
@@ -84,25 +87,49 @@ void ShowTableFTXUI(const string& heading,
         // Header-bottom border
         table_elements.push_back(make_separator());
 
-        // Data rows
-        for (const auto& row : rows) {
-            table_elements.push_back(make_row(row));
+        // Data rows (with scrolling)
+        int start = scroll;
+        int end = min(scroll + max_results, total_rows);
+        for (int i = start; i < end; ++i) {
+            table_elements.push_back(make_row(rows[i]));
             table_elements.push_back(make_separator());
         }
 
-        // Compose whole table vertically
-        table_elements.push_back(text("Press any key to continue...") | center | dim);
+        // Scrollbar
+        if (total_rows > max_results) {
+            float ratio = max_results / (float)total_rows;
+            int bar_size = max(1, int(ratio * max_results));
+            int bar_pos = int((scroll / (float)total_rows) * max_results);
+            Elements scrollbar;
+            for (int i = 0; i < max_results; ++i) {
+                if (i >= bar_pos && i < bar_pos + bar_size)
+                    scrollbar.push_back(text("█"));
+                else
+                    scrollbar.push_back(text("│") | dim);
+            }
+            table_elements.push_back(hbox({filler(), vbox(scrollbar), filler()}));
+        }
+
+        table_elements.push_back(text("Use ↑/↓ to scroll, any other key to continue...") | center | dim);
         return vbox(move(table_elements)) | center | border;
     });
 
-
+    bool done = false;
     auto event_handler = CatchEvent(renderer, [&](Event event) {
+        if (event == Event::ArrowDown && scroll + max_results < total_rows) {
+            scroll++;
+            return true;
+        }
+        if (event == Event::ArrowUp && scroll > 0) {
+            scroll--;
+            return true;
+        }
         done = true;
         screen.Exit();
         return true;
     });
     screen.Loop(event_handler);
-        system("cls");
+    system("cls");
 }
 
 bool ShowForm(ScreenInteractive& screen, const string& title, vector<InputField>& fields) {

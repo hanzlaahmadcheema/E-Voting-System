@@ -59,7 +59,7 @@ City City::fromJSON(const json &j)
        j.at("ProvinceName").get<string>());
 }
 
-const string CITY_FILE = "data/cities.json";
+const string CITY_FILE = "D://E-Voting-System/data/cities.json";
 
 bool cityNameExists(const vector<City> &list, const string &name)
 {

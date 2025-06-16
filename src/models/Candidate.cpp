@@ -99,7 +99,7 @@ Candidate Candidate::fromJSON(const json &j)
        j.at("ConstituencyType").get<string>());
 }
 
-const string CANDIDATE_FILE = "data/candidates.json";
+const string CANDIDATE_FILE = "D://E-Voting-System/data/candidates.json";
 
 // --- Validation Helpers ---
 bool isValidCandidate(const Candidate &c)

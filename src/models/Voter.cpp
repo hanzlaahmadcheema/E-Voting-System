@@ -115,7 +115,7 @@ Voter Voter::fromJSON(const json &j)
         j.at("PollingStationID").get<int>());
 }
 
-const string VOTER_FILE = "data/voters.json";
+const string VOTER_FILE = "D://E-Voting-System/data/voters.json";
 
 // --- Validation Helpers ---
 

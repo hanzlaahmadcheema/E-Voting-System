@@ -120,8 +120,8 @@ Result Result::fromJSON(const json &j)
     }
 }
 
-const string RESULT_FILE = "data/results.json";
-const string VOTE_FILE = "data/votes.json";
+const string RESULT_FILE = "D://E-Voting-System/data/results.json";
+const string VOTE_FILE = "D://E-Voting-System/data/votes.json";
 
 // Load all results
 #include <sys/stat.h>

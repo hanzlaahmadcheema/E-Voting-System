@@ -3,7 +3,7 @@
 #include <iostream>
 #include <stdexcept>
 
-const string COUNTER_FILE = "data/counters.json";
+const string COUNTER_FILE = "D://E-Voting-System/data/counters.json";
 
 int getNextID(const string &key)
 {

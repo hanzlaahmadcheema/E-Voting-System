@@ -8,7 +8,7 @@ bool ShowForm(ScreenInteractive& screen, const string& title, vector<InputField>
 
 
 
-const string VOTE_FILE = "data/votes.json";
+const string VOTE_FILE = "D://E-Voting-System/data/votes.json";
 
 // Vote implementation
 Vote::Vote() : VoteID(0), VoterID(0), CandidateID(0), ElectionID(0), PollingStationID(0), VoteTime("") {}

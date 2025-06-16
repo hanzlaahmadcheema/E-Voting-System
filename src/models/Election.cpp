@@ -13,7 +13,7 @@ bool ShowForm(ScreenInteractive& screen, const string& title, vector<InputField>
 
 
 
-const string ELECTION_FILE = "data/elections.json";
+const string ELECTION_FILE = "D://E-Voting-System/data/elections.json";
 
 // Election class implementation
 Election::Election() : ElectionID(0), ElectionName(""), ElectionType(""), ElectionDate("") {}
@@ -264,7 +264,6 @@ void manageElections() {
              } else {
                 Election e(getNextID("ElectionID"), name, type, date);
                 createElection(e);
-                ShowMessage(screen, "Election created successfully!", "success");
              }
           } else {
              ShowMessage(screen, "Election creation cancelled.", "info");

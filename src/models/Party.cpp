@@ -66,7 +66,7 @@ Party Party::fromJSON(const json &j)
     }
 }
 
-const string PARTY_FILE = "data/parties.json";
+const string PARTY_FILE = "D://E-Voting-System/data/parties.json";
 
 bool isValidInt(const string& str) {
     try {

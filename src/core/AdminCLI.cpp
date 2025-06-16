@@ -1,6 +1,6 @@
 #include <custom/config.h>
 
-const string ADMIN_FILE = "data/admins.json";
+const string ADMIN_FILE = "D://E-Voting-System/data/admins.json";
 extern void manageElections();
 extern void manageCities();
 extern void manageConstituencies();
