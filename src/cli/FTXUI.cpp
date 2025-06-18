@@ -201,21 +201,29 @@ bool ShowForm(ScreenInteractive& screen, const string& title, vector<InputField>
 
 void ShowSpinner(ScreenInteractive& screen, const string& message) {
     atomic<bool> loading = true;
-    string dots = "";
-    
+    vector<string> spinner_frames = { "⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏" };
+    size_t frame = 0;
+
     system("cls");
     auto renderer = Renderer([&] {
-        return hbox({
-            text(message) | bold | color(Color::Green),
-            text(dots)
+        return vbox({
+            filler(),
+            hbox({
+                filler(),
+                text(spinner_frames[frame]) | bold | color(Color::Cyan),
+                text("  "),
+                text(message) | bold | color(Color::Green),
+                filler()
+            }),
+            filler()
         }) | center;
     });
 
     thread anim([&] {
         while (loading) {
-            dots = (dots == "...") ? "" : dots + ".";
+            frame = (frame + 1) % spinner_frames.size();
             screen.PostEvent(Event::Custom);
-            this_thread::sleep_for(chrono::milliseconds(300));
+            this_thread::sleep_for(chrono::milliseconds(120));
         }
     });
 
@@ -233,21 +241,29 @@ void ShowSpinner(ScreenInteractive& screen, const string& message) {
 
 void ShowProgressBar(ScreenInteractive& screen, const string& label) {
     int progress = 0;
-        system("cls");
+    system("cls");
 
     auto renderer = Renderer([&] {
         return vbox({
             text(label) | bold | center,
-            gauge(progress / 100.0f) | color(Color::Green) | size(WIDTH, EQUAL, 50)
+            separator(),
+            hbox({
+                filler(),
+                gauge(progress / 100.0f) | color(Color::Green) | size(WIDTH, EQUAL, 40),
+                text(" ") | size(WIDTH, EQUAL, 2),
+                text((to_string(progress) + "%")) | bold,
+                filler()
+            }) | center,
         }) | center;
     });
 
     thread worker([&] {
         while (progress < 100) {
-            this_thread::sleep_for(chrono::milliseconds(40));
+            this_thread::sleep_for(chrono::milliseconds(18 + (progress % 7))); // Animation: variable speed
             progress++;
             screen.PostEvent(Event::Custom);
         }
+        this_thread::sleep_for(chrono::milliseconds(400)); // Pause at 100%
         screen.Exit();
     });
 
@@ -255,6 +271,7 @@ void ShowProgressBar(ScreenInteractive& screen, const string& label) {
     worker.join();
     system("cls");
 }
+
 void ShowMessage(ScreenInteractive& screen, const string& msg, const string& type) {
     system("cls");
     Color msg_color = Color::White;
