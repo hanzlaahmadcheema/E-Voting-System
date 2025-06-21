@@ -63,12 +63,12 @@ const string CITY_FILE = "D://E-Voting-System/data/cities.json";
 
 bool cityNameExists(const vector<City> &list, const string &name)
 {
-    for (const auto &c : list)
-    {
-       if (c.getCityName() == name)
-          return true;
-    }
-    return false;
+   std::unordered_map<std::string, bool> nameMap;
+   for (const auto &c : list)
+   {
+      nameMap[c.getCityName()] = true;
+   }
+   return nameMap.find(name) != nameMap.end();
 }
 
 bool isValidCityName(const string &name)

@@ -380,18 +380,19 @@ int getVoterIDByCNIC(const string &VoterCNIC)
                 return v.getVoterID();
         }
     }
-    catch (...) {}
+    catch (...) {}  
     return -1;
 }
 
-bool voterExists(string VoterCNIC)
+bool voterExists(const string& VoterCNIC)
 {
     try
     {
         vector<Voter> list = loadAllVoters();
-        for (const auto &v : list)
-            if (v.getVoterCNIC() == VoterCNIC)
-                return true;
+        unordered_map<string, bool> cnicMap;
+        for (const auto& v : list)
+            cnicMap[v.getVoterCNIC()] = true;
+        return cnicMap.find(VoterCNIC) != cnicMap.end();
     }
     catch (...) {}
     return false;

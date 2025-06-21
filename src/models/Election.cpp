@@ -226,11 +226,12 @@ void listAllElections() {
 }
 
 bool electionExists(int id) {
-    vector<Election> list = loadAllElections();
-    for (const auto& e : list) {
-       if (e.getElectionID() == id) return true;
-    }
-    return false;
+   vector<Election> list = loadAllElections();
+   unordered_map<int, bool> idMap;
+   for (const auto& e : list) {
+      idMap[e.getElectionID()] = true;
+   }
+   return idMap.find(id) != idMap.end();
 }
 
 // Main election management menu

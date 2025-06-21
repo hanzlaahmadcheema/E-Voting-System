@@ -156,9 +156,15 @@ bool saveAllVotes(const vector<Vote> &list) {
 
 bool voteExists(int VoterID, int ElectionID) {
     vector<Vote> list = loadAllVotes();
+    unordered_map<int, unordered_set<int>> voterElectionMap;
     for (const auto& v : list) {
-        if (v.getVoterID() == VoterID && v.getElectionID() == ElectionID)
+        voterElectionMap[v.getVoterID()].insert(v.getElectionID());
+    }
+    auto it = voterElectionMap.find(VoterID);
+    if (it != voterElectionMap.end()) {
+        if (it->second.count(ElectionID)) {
             return true;
+        }
     }
     return false;
 }

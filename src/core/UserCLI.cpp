@@ -183,6 +183,7 @@ void showUserMenu(Voter* voter) {
 void userPanel() {
     ShowMessage(screen,"Welcome to E-Voting System", "info");
     Voter* voter = nullptr;
+        while (true) {
     try {
        voter = voterLogin();
     } catch (const std::exception& e) {
@@ -196,5 +197,10 @@ void userPanel() {
           ShowMessage(screen, string("Error in user menu: ") + e.what(), "error");
        }
        delete voter;
-    }
+   break; // Exit after successful login and menu
+        } else {
+            // Optionally, ask if the user wants to try again or exit
+            continue;
+        }
+      }
 }

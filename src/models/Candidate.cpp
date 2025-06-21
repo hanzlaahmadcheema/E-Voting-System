@@ -479,13 +479,15 @@ void viewCandidatesByType(string type){
 }
 
 bool candidateExists(int id) {
-    try {
-       vector<Candidate> list = loadAllCandidates();
-       for (const auto& c : list) {
-          if (c.getCandidateID() == id) return true;
-       }
-    } catch (...) {}
-    return false;
+   try {
+      vector<Candidate> list = loadAllCandidates();
+      std::unordered_map<int, bool> idMap;
+      for (const auto& c : list) {
+         idMap[c.getCandidateID()] = true;
+      }
+      return idMap.find(id) != idMap.end();
+   } catch (...) {}
+   return false;
 }
 
 // --- Main Management Menu ---

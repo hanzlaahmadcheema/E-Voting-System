@@ -141,30 +141,31 @@ void saveAllParties(const vector<Party> &list)
 
 bool partyNameExists(const vector<Party> &list, const string &name)
 {
+    std::unordered_map<std::string, bool> nameMap;
     for (const auto &p : list)
     {
-        if (toLower(p.getPartyName()) == toLower(name))
-            return true;
+        nameMap[toLower(p.getPartyName())] = true;
     }
-    return false;
+    return nameMap.find(toLower(name)) != nameMap.end();
 }
 
 bool partySymbolExists(const vector<Party> &list, const string &symbol)
 {
+    std::unordered_map<std::string, bool> symbolMap;
     for (const auto &p : list)
     {
-        if (toLower(p.getPartySymbol()) == toLower(symbol))
-            return true;
+        symbolMap[toLower(p.getPartySymbol())] = true;
     }
-    return false;
+    return symbolMap.find(toLower(symbol)) != symbolMap.end();
 }
 
 bool partyExists(int id) {
+    std::unordered_map<int, bool> idMap;
     vector<Party> list = loadAllParties();
     for (const auto& p : list) {
-        if (p.getPartyID() == id) return true;
+        idMap[p.getPartyID()] = true;
     }
-    return false;
+    return idMap.find(id) != idMap.end();
 }
 
 // Admin: Add party

@@ -87,12 +87,12 @@ const string CONSTITUENCY_FILE = "D://E-Voting-System/data/constituencies.json";
 
 bool constituencyNameExists(const vector<Constituency> &list, const string &name)
 {
-    for (const auto &p : list)
-    {
-       if (toLower(p.getConstituencyName()) == toLower(name))
-          return true;
-    }
-    return false;
+   std::unordered_map<std::string, bool> nameMap;
+   for (const auto &p : list)
+   {
+      nameMap[toLower(p.getConstituencyName())] = true;
+   }
+   return nameMap.find(toLower(name)) != nameMap.end();
 }
 
 bool isValidConstituencyID(int id)

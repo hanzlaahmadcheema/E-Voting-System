@@ -377,11 +377,12 @@ void listAllStations()
 }
 
 bool pollingStationExists(int id) {
-    vector<PollingStation> list = loadAllStations();
-    for (const auto& s : list) {
-       if (s.getPollingStationID() == id) return true;
-    }
-    return false;
+   vector<PollingStation> list = loadAllStations();
+   std::unordered_map<int, bool> idMap;
+   for (const auto& s : list) {
+      idMap[s.getPollingStationID()] = true;
+   }
+   return idMap.find(id) != idMap.end();
 }
 
 void managePollingStations() {

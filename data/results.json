@@ -6,5 +6,37 @@
         "ResultID": 1,
         "TotalVotes": 1,
         "WinnerCandidateID": 9
+    },
+    {
+        "ConstituencyID": 17,
+        "ElectionID": 2,
+        "PollingStationID": 0,
+        "ResultID": 2,
+        "TotalVotes": 1,
+        "WinnerCandidateID": 11
+    },
+    {
+        "ConstituencyID": 2,
+        "ElectionID": 1,
+        "PollingStationID": 0,
+        "ResultID": 3,
+        "TotalVotes": 1,
+        "WinnerCandidateID": 5
+    },
+    {
+        "ConstituencyID": 2,
+        "ElectionID": 2,
+        "PollingStationID": 0,
+        "ResultID": 4,
+        "TotalVotes": 1,
+        "WinnerCandidateID": 8
+    },
+    {
+        "ConstituencyID": 16,
+        "ElectionID": 2,
+        "PollingStationID": 0,
+        "ResultID": 5,
+        "TotalVotes": 1,
+        "WinnerCandidateID": 8
     }
 ]
