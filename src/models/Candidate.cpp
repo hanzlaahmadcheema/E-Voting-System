@@ -280,10 +280,13 @@ void deleteCandidateByID(int CandidateID)
 
        saveAllCandidates(candidates);
        if (candidates.size() < before)
+      {
           ShowProgressBar(screen, "Deleting Candidate...");
           ShowMessage(screen, "Candidate deleted.","success");
-       else
+      }
+       else{
           ShowMessage(screen, "Candidate ID not found.","error");
+       }
     } catch (const exception &e) {
        ShowMessage(screen, string("Error deleting candidate: ") + e.what(), "error");
     }
