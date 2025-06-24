@@ -492,6 +492,8 @@ bool candidateExists(int id) {
 
 // --- Main Management Menu ---
 void manageCandidates() {
+   
+   ShowSpinner(screen, "Loading Elections");
     while (true) {
        vector<string> candidateManagement = {
           "Add Candidate",
@@ -590,6 +592,7 @@ void manageCandidates() {
 
           Candidate c(getNextID("CandidateID"), name, partyID, constID, getConstituencyTypeByID(constID));
           addCandidate(c);
+         ShowProgressBar(screen, "Adding Candidate...");
 
        } else if (choice == 1) {
           listAllCandidates();
@@ -712,6 +715,7 @@ void manageCandidates() {
           }
           ShowMessage(screen,"Editing Candidate ID " + to_string(id) + "...." , "info");
           editCandidate(id, name, partyID, constID);
+          ShowProgressBar(screen, "Editing Candidate...");
        } else if (choice == 4) {
           string id_str;
           listAllCandidates();
@@ -740,6 +744,7 @@ void manageCandidates() {
           }
           ShowMessage(screen,"Deleting Candidate ID " + to_string(id) + "...","info");
           deleteCandidateByID(id);
+         ShowProgressBar(screen, "Deleting Candidate...");
        } else if (choice == 5) {
           break;
        } else {

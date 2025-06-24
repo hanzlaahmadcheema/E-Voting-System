@@ -375,6 +375,8 @@ int getElectionIDByConstituencyID(int id) {
 }
 
 void manageConstituencies() {
+          ShowSpinner(screen, "Loading Constituencies...");
+
     vector<Constituency> list = loadAllConstituencies();
     while (true) {
        vector<string> constituencyMenu = {
@@ -463,6 +465,8 @@ void manageConstituencies() {
           }
           Constituency c(getNextID("ConstituencyID"), fullName, cityID, ElectionID);
           addConstituency(c);
+                         ShowProgressBar(screen, "Adding Constituency...");
+
        } 
        else if (choice == 1) {
           listAllConstituencies();
@@ -535,7 +539,6 @@ void manageConstituencies() {
              ShowMessage(screen,"Constituency Name already exists.","error");
              continue;
           }
-          listAllCities();
           vector<InputField> form4 = {
              {"Select Province", &provinceName_str, InputField::DROPDOWN, {"Punjab", "KPK", "Sindh", "Balochistan"}}
           };
@@ -565,6 +568,7 @@ void manageConstituencies() {
              continue;
           }
           editConstituency(id, fullName, cityID, ElectionID);
+                           ShowProgressBar(screen, "Editing Constituency...");
        } 
        else if (choice == 3) {
           string id_str;
@@ -594,6 +598,7 @@ void manageConstituencies() {
              continue;
           }
           deleteConstituency(id);
+            ShowProgressBar(screen, "Deleting Constituency...");
        } else if (choice == 4) {
           break;
        } else {

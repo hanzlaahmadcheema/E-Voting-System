@@ -288,6 +288,7 @@ void listAllParties()
 }
 
 void manageParties() {
+           ShowSpinner(screen, "Loading Parties...");
     while (true) {
         vector<string> partyMenu = {
             "Add Party",
@@ -327,6 +328,8 @@ void manageParties() {
             }
             Party p(getNextID("PartyID"), name, symbol);
             addParty(p);
+                           ShowProgressBar(screen, "Adding Party...");
+
         } else if (choice == 1) {
             listAllParties();
         } else if (choice == 2) {
@@ -361,6 +364,7 @@ void manageParties() {
                 continue;
             }
             editParty(id, name, symbol);
+                            ShowProgressBar(screen, "Editing Party...");
         } else if (choice == 3) {
             string id_str;
             listAllParties();
@@ -383,6 +387,7 @@ void manageParties() {
                 continue;
             }
             deleteParty(id);
+            ShowProgressBar(screen, "Deleting Party...");
         } else if (choice == 4) {
             break;
         } else {

@@ -398,9 +398,8 @@ bool voterExists(const string& VoterCNIC)
     return false;
 }
 
-// --- manageVoters() remains unchanged except for improved stoi error handling ---
-
 void manageVoters() {
+           ShowSpinner(screen, "Loading Voters...");
     while (true) {
         vector<string> voterManagement = {
             "Register Voter",
@@ -466,6 +465,7 @@ void manageVoters() {
             }
             Voter v(getNextID("VoterID"), name, VoterCNIC, gender, age, address, PollingID);
             registerVoter(v);
+            ShowProgressBar(screen, "Registering Voter...");
         } else if (choice == 1) {
             listAllVoters();
         } else if (choice == 2) {
@@ -530,6 +530,7 @@ void manageVoters() {
                 continue;
             }
             editVoterByCNIC(VoterCNIC, Voter(getVoterIDByCNIC(VoterCNIC), name, VoterCNIC, gender, age, address, PollingID));
+            ShowProgressBar(screen, "Editing Voter...");
         } else if (choice == 3) {
             string VoterCNIC;
             vector<InputField> form1 = {
@@ -542,6 +543,7 @@ void manageVoters() {
             if (!voterExists(VoterCNIC)) { ShowMessage(screen, "Voter with this CNIC does not exist.", "error"); continue; }
             if (!isValidCNIC(VoterCNIC)) { ShowMessage(screen, "Invalid CNIC format.", "error"); continue; }
             deleteVoterByCNIC(VoterCNIC);
+            ShowProgressBar(screen, "Deleting Voter...");
         } else if (choice == 4) {
             break;
         } else {

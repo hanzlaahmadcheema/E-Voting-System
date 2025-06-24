@@ -332,6 +332,7 @@ void listAllCities()
 }
 
 void manageCities() {
+          ShowSpinner(screen, "Loading Cities...");
     int choice;
     while (true) {
        vector<string> cityManagement = {
@@ -364,6 +365,8 @@ void manageCities() {
              continue;
           }
           addCity(City(getNextID("CityID"), name, ProvinceName));
+                         ShowProgressBar(screen, "Adding City...");
+
        } else if (choice == 1) {
           listAllCities();
        } else if (choice == 2) {
@@ -411,6 +414,7 @@ void manageCities() {
              continue;
           }
           editCity(id, name, ProvinceName);
+                           ShowProgressBar(screen, "Editing City...");
        } else if (choice == 3) {
           string id_str;
           listAllCities();
@@ -439,6 +443,7 @@ void manageCities() {
              continue;
           }
           deleteCityByID(id);
+            ShowProgressBar(screen, "Deleting City...");
        } else if (choice == 4) {
           break;
        } else {

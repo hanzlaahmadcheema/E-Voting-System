@@ -386,6 +386,7 @@ bool pollingStationExists(int id) {
 }
 
 void managePollingStations() {
+          ShowSpinner(screen, "Loading Polling Stations...");
     while (true) {
        vector<string> pollingStationMenu = {
           "Add Polling Station",
@@ -486,6 +487,8 @@ void managePollingStations() {
          }
           PollingStation ps(getNextID("PollingStationID"), name, address, cityChoice, ConstituencyIDNA, ConstituencyIDPA);
           addPollingStation(ps);
+                         ShowProgressBar(screen, "Adding Polling Station...");
+
        } else if (choice == 1) {
           listAllStations();
        } else if (choice == 2) {
@@ -525,6 +528,7 @@ void managePollingStations() {
              continue;
           }
           editPollingStation(id, name, address);
+          ShowProgressBar(screen, "Editing Polling Station...");
        } else if (choice == 3) {
           string id_str;
           listAllStations();
@@ -552,6 +556,7 @@ void managePollingStations() {
              continue;
           }
           deletePollingStation(id);
+          ShowProgressBar(screen, "Deleting Polling Station...");
        } else if (choice == 4) {
           break;
        } else {

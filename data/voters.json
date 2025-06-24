@@ -16,5 +16,14 @@
         "VoterGender": "Male",
         "VoterID": 3,
         "VoterName": "Wali Ahmad"
+    },
+    {
+        "PollingStationID": 26,
+        "VoterAddress": "Gawadar Sea Port",
+        "VoterAge": 18,
+        "VoterCNIC": "3520207878906",
+        "VoterGender": "Male",
+        "VoterID": 4,
+        "VoterName": "Bilawal"
     }
 ]

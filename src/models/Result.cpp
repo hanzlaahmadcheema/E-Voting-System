@@ -379,6 +379,7 @@ void listAllResults()
 }
 
 void manageResults() {
+          ShowSpinner(screen, "Loading Results...");
     while (true) {
        vector<string> resultsManagement = {
           "Compute Result by Constituency",
@@ -406,6 +407,7 @@ void manageResults() {
           int ElectionID = stoi(ElectionID_str);
           int constID = stoi(constID_str);
           computeConstituencyResult(ElectionID, constID, getConstituencyTypeByID(constID));
+          ShowProgressBar(screen, "Computing Results by Constituency...");
        } else if (choice == 1) {
           string ElectionID_str, constID_str;
           vector<InputField> form = {

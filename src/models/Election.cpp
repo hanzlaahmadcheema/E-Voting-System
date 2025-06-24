@@ -237,8 +237,7 @@ bool electionExists(int id) {
 // Main election management menu
 void manageElections() {
     while (true) {
-       ShowSpinner(screen, "Loading Elections");
-       ShowProgressBar(screen, "Loading Elections");
+       ShowSpinner(screen, "Loading Elections...");
        vector<string> electionManagement = {
           "Create Election",
           "View All Elections",
@@ -265,6 +264,7 @@ void manageElections() {
              } else {
                 Election e(getNextID("ElectionID"), name, type, date);
                 createElection(e);
+               ShowProgressBar(screen, "Creating Election...");
              }
           } else {
              ShowMessage(screen, "Election creation cancelled.", "info");
@@ -313,6 +313,7 @@ void manageElections() {
              continue;
           }
           editElection(id, name, type, date);
+            ShowProgressBar(screen, "Editing Election...");
        } else if (choice == 3) {
           string id_str;
           listAllElections();
@@ -340,6 +341,7 @@ void manageElections() {
              continue;
           }
           deleteElection(id);
+            ShowProgressBar(screen, "Deleting Election...");
        } else if (choice == 4) {
           break;
        } else {

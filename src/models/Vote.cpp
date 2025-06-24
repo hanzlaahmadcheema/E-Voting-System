@@ -264,6 +264,7 @@ void listAllVotes() {
 }
 
 void manageVoting() {
+           ShowSpinner(screen, "Loading Voting Management...");
     while (true) {
         vector<string> votingManagement = {
             "View All Votes",
