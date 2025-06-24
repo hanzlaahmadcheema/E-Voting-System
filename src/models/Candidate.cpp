@@ -713,7 +713,6 @@ void manageCandidates() {
              ShowMessage(screen,"Invalid Constituency ID for selected city.","error");
              continue;
           }
-          ShowMessage(screen,"Editing Candidate ID " + to_string(id) + "...." , "info");
           editCandidate(id, name, partyID, constID);
           ShowProgressBar(screen, "Editing Candidate...");
        } else if (choice == 4) {
@@ -742,7 +741,6 @@ void manageCandidates() {
              ShowMessage(screen,"Candidate ID not found.","info");
              continue;
           }
-          ShowMessage(screen,"Deleting Candidate ID " + to_string(id) + "...","info");
           deleteCandidateByID(id);
          ShowProgressBar(screen, "Deleting Candidate...");
        } else if (choice == 5) {

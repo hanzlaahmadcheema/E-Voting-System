@@ -28,5 +28,11 @@
         "ElectionID": 5,
         "ElectionName": "Balochistan Assembly",
         "ElectionType": "PB"
+    },
+    {
+        "ElectionDate": "0000-00-00",
+        "ElectionID": 10,
+        "ElectionName": "new",
+        "ElectionType": "NA"
     }
 ]

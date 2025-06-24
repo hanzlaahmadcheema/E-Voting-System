@@ -7,6 +7,8 @@ int ShowMenu(ScreenInteractive& screen,
 
     system("cls");
     int selected = 0;
+    int animation_step = 0;
+    const int max_animation = 8; // Number of animation steps
 
     auto menu = Menu(&options, &selected);
     auto menu_with_enter = CatchEvent(menu, [&](Event event) {
@@ -18,14 +20,27 @@ int ShowMenu(ScreenInteractive& screen,
     });
 
     auto renderer = Renderer(menu_with_enter, [&] {
+        // Heading in green, options in white, border in Cyan
         return vbox({
-                   text(heading) | bold | center,
+                   text(heading) | bold | center | color(Color::Green),
                    separator(),
-                   menu->Render() | frame,
-               }) | border | size(WIDTH, EQUAL, 50) | center;
+                   menu->Render() | color(Color::White) | frame,
+               }) | border | color(Color::Cyan) | size(WIDTH, EQUAL, 50) | center;
+    });
+
+    // Animation thread: increase animation_step until max_animation
+    std::atomic<bool> running = true;
+    std::thread anim([&] {
+        while (animation_step < max_animation && running) {
+            std::this_thread::sleep_for(std::chrono::milliseconds(40));
+            ++animation_step;
+            screen.PostEvent(Event::Custom);
+        }
     });
 
     screen.Loop(renderer);
+    running = false;
+    anim.join();
     system("cls");
     return selected;
 }
@@ -134,7 +149,6 @@ void ShowTableFTXUI(const string& heading,
 
 bool ShowForm(ScreenInteractive& screen, const string& title, vector<InputField>& fields) {
     vector<Component> components;
-    vector<Element> field_elements;
     bool submitted = false;
     system("cls");
     for (auto& field : fields) {
@@ -152,7 +166,7 @@ bool ShowForm(ScreenInteractive& screen, const string& title, vector<InputField>
                 auto dropdown = Dropdown(&field.options, selected);
                 components.push_back(Renderer(dropdown, [&, selected] {
                     if (!field.options.empty()) *field.value = field.options[*selected];
-                    return dropdown->Render();
+                    return dropdown->Render() | color(Color::White);
                 }));
                 break;
             }
@@ -161,7 +175,7 @@ bool ShowForm(ScreenInteractive& screen, const string& title, vector<InputField>
                 auto radio = Radiobox(&field.options, selected);
                 components.push_back(Renderer(radio, [&, selected] {
                     if (!field.options.empty()) *field.value = field.options[*selected];
-                    return radio->Render();
+                    return radio->Render() | color(Color::White);
                 }));
                 break;
             }
@@ -174,28 +188,46 @@ bool ShowForm(ScreenInteractive& screen, const string& title, vector<InputField>
         screen.Exit();  // Ends the form loop
     });
 
-    components.push_back(submit_button);
+    // Custom renderer for button: blue background, green text, fixed width
+    auto button_renderer = Renderer(submit_button, [&] {
+        return submit_button->Render()
+            | color(Color::Green)
+            | bgcolor(Color::Blue)
+            | size(WIDTH, EQUAL, 18)
+            | center;
+    });
+
+    components.push_back(button_renderer);
 
     auto container = Container::Vertical(components);
 
     auto renderer = Renderer(container, [&] {
         vector<Element> elems = {
-            text(title) | bold | center,
+            text(title) | bold | center | color(Color::Green),
             separator()
         };
 
         for (size_t i = 0; i < fields.size(); ++i) {
-            elems.push_back(hbox({ text(fields[i].label + ": "), components[i]->Render() }) | border);
+            elems.push_back(
+                hbox({
+                    text(fields[i].label + ": ") | color(Color::White),
+                    components[i]->Render()
+                }) | border | color(Color::Cyan)
+            );
         }
 
         elems.push_back(separator());
-        elems.push_back(components.back()->Render() | center);  // Submit button
+        elems.push_back(components.back()->Render() | center);
 
-        return vbox(elems) | border | size(WIDTH, LESS_THAN, 60) | center;
+        return vbox(elems)
+            | border
+            | color(Color::Cyan)
+            | size(WIDTH, EQUAL, 50)
+            | center;
     });
 
     screen.Loop(renderer);
-        system("cls");
+    system("cls");
     return submitted;
 }
 
