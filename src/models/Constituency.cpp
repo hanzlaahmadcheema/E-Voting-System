@@ -1,7 +1,6 @@
 #include <custom/config.h>
 
 // Externs
-extern int getNextID(const string &key);
 extern bool cityExists(int id);
 extern bool electionExists(int id);
 extern void listAllCities();
@@ -9,15 +8,7 @@ extern void listAllElections();
 extern void listCitiesByProvince(const string &province);
 extern string getElectionTypeByID(int id);
 extern string toLower(const string& str);
-extern int ShowMenu(ScreenInteractive & screen, 
-    const string& heading, 
-    const vector<string>& options);
-void ShowTableFTXUI(const string& heading, 
-                const vector<string>& headers, 
-                const vector<vector<string>>& rows);
 bool ShowForm(ScreenInteractive& screen, const string& title, vector<InputField>& fields);
-
-
 
 // Constituency
 Constituency::Constituency() : ConstituencyID(0), ConstituencyName(""), CityID(0), ElectionID(0) {}
@@ -205,6 +196,7 @@ void addConstituency(const Constituency &newConst)
     }
 
     list.push_back(newConst);
+                             ShowProgressBar(screen, "Adding Constituency...");
     saveAllConstituencies(list);
     ShowMessage(screen,"Constituency added.","success");
 }
@@ -257,6 +249,7 @@ void editConstituency(int id, const string &newName, int CityID, int ElectionID)
        ShowMessage(screen,"Error: Constituency ID not found.","error");
        return;
     }
+                               ShowProgressBar(screen, "Editing Constituency...");
     saveAllConstituencies(list);
     ShowMessage(screen,"Constituency updated.","success");
 }
@@ -279,6 +272,7 @@ void deleteConstituency(int id)
        ShowMessage(screen,"Error: Constituency ID not found.","error");
        return;
     }
+   ShowProgressBar(screen, "Deleting Constituency...");
     saveAllConstituencies(list);
     ShowMessage(screen,"Constituency deleted.","success");
 }
@@ -304,7 +298,7 @@ void listAllConstituencies()
           to_string(c.getElectionID())
        });
     }
-    ShowTableFTXUI("All Constituencies", headers, data);
+    ShowTableFTXUI(screen, "All Constituencies", headers, data);
 }
 
 // Admin/User: List by city
@@ -337,7 +331,7 @@ void listConstituenciesByCity(int cityID)
        ShowMessage(screen,"No constituencies found for this city.","info");
        return;
     }
-    ShowTableFTXUI("Constituencies in City " + to_string(cityID), headers, data);
+    ShowTableFTXUI(screen, "Constituencies in City " + to_string(cityID), headers, data);
 }
 
 bool constituencyExists(int id) {
@@ -465,7 +459,6 @@ void manageConstituencies() {
           }
           Constituency c(getNextID("ConstituencyID"), fullName, cityID, ElectionID);
           addConstituency(c);
-                         ShowProgressBar(screen, "Adding Constituency...");
 
        } 
        else if (choice == 1) {
@@ -568,7 +561,6 @@ void manageConstituencies() {
              continue;
           }
           editConstituency(id, fullName, cityID, ElectionID);
-                           ShowProgressBar(screen, "Editing Constituency...");
        } 
        else if (choice == 3) {
           string id_str;
@@ -598,7 +590,6 @@ void manageConstituencies() {
              continue;
           }
           deleteConstituency(id);
-            ShowProgressBar(screen, "Deleting Constituency...");
        } else if (choice == 4) {
           break;
        } else {

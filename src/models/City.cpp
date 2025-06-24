@@ -1,15 +1,6 @@
 #include <custom/config.h>
 
-extern int getNextID(const string &key);
-extern int ShowMenu(ScreenInteractive & screen, 
-    const string& heading, 
-    const vector<string>& options);
-void ShowTableFTXUI(const string& heading, 
-                const vector<string>& headers, 
-                const vector<vector<string>>& rows);
 bool ShowForm(ScreenInteractive& screen, const string& title, vector<InputField>& fields);
-
-
 
 // City
 City::City() : CityID(0), CityName(""), ProvinceName("") {}
@@ -196,6 +187,8 @@ void addCity(const City &newCity)
           }
        }
        cities.push_back(newCity);
+                                ShowProgressBar(screen, "Adding City...");
+
        saveAllCities(cities);
        ShowMessage(screen, "City added successfully.", "success");
     } catch (const exception& e) {
@@ -247,6 +240,7 @@ void editCity(int cityID, const string &newName, const string &newProvinceName)
           ShowMessage(screen, "City ID not found.", "error");
           return;
        }
+                                  ShowProgressBar(screen, "Editing City...");
        saveAllCities(cities);
        ShowMessage(screen, "City updated.", "success");
     } catch (const exception& e) {
@@ -272,6 +266,7 @@ void deleteCityByID(int cityID)
           return;
        }
        cities.erase(it, cities.end());
+      ShowProgressBar(screen, "Deleting City...");
        saveAllCities(cities);
        ShowMessage(screen, "City deleted.", "info");
     } catch (const exception& e) {
@@ -303,7 +298,7 @@ void listCitiesByProvince(const string &province)
              data.push_back({to_string(c.getCityID()), c.getCityName(), c.getProvinceName()});
           }
        }
-       ShowTableFTXUI("Cities in " + province, headers, data);
+       ShowTableFTXUI(screen, "Cities in " + province, headers, data);
     } catch (const exception& e) {
        ShowMessage(screen, string("Error listing cities: ") + e.what(), "error");
     }
@@ -325,7 +320,7 @@ void listAllCities()
        {
           data.push_back({to_string(c.getCityID()), c.getCityName(), c.getProvinceName()});
        }
-       ShowTableFTXUI("All Cities", headers, data);
+       ShowTableFTXUI(screen, "All Cities", headers, data);
     } catch (const exception& e) {
        ShowMessage(screen, string("Error listing cities: ") + e.what(), "error");
     }
@@ -365,7 +360,6 @@ void manageCities() {
              continue;
           }
           addCity(City(getNextID("CityID"), name, ProvinceName));
-                         ShowProgressBar(screen, "Adding City...");
 
        } else if (choice == 1) {
           listAllCities();
@@ -414,7 +408,6 @@ void manageCities() {
              continue;
           }
           editCity(id, name, ProvinceName);
-                           ShowProgressBar(screen, "Editing City...");
        } else if (choice == 3) {
           string id_str;
           listAllCities();
@@ -443,7 +436,6 @@ void manageCities() {
              continue;
           }
           deleteCityByID(id);
-            ShowProgressBar(screen, "Deleting City...");
        } else if (choice == 4) {
           break;
        } else {

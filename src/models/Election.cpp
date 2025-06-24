@@ -1,17 +1,8 @@
 #include <custom/config.h>
 
 // Forward declarations
-extern int getNextID(const string &key);
 void deleteVotesByElectionID(int ElectionID);
-extern int ShowMenu(ScreenInteractive & screen, 
-    const string& heading, 
-    const vector<string>& options);
-void ShowTableFTXUI(const string& heading, 
-                const vector<string>& headers, 
-                const vector<vector<string>>& rows);
 bool ShowForm(ScreenInteractive& screen, const string& title, vector<InputField>& fields);
-
-
 
 const string ELECTION_FILE = "D://E-Voting-System/data/elections.json";
 
@@ -133,6 +124,7 @@ void createElection(const Election &e) {
        }
     }
     list.push_back(e);
+                   ShowProgressBar(screen, "Creating Election...");
     saveAllElections(list);
     ShowMessage(screen, "Election created.", "success");
 }
@@ -170,6 +162,8 @@ void editElection(int ElectionID, const string &newName, const string &newType, 
        ShowMessage(screen, "Election ID not found.", "error");
        return;
     }
+                ShowProgressBar(screen, "Editing Election...");
+
     saveAllElections(list);
     ShowMessage(screen, "Election edited.", "success");
 }
@@ -189,6 +183,8 @@ void deleteElection(int ElectionID) {
        return;
     }
     list.erase(it, list.end());
+                ShowProgressBar(screen, "Deleting Election...");
+
     deleteVotesByElectionID(ElectionID);
     saveAllElections(list);
     ShowMessage(screen, "Election deleted.", "success");
@@ -222,7 +218,7 @@ void listAllElections() {
           e.getElectionDate()
        });
     }
-    ShowTableFTXUI("All Elections", headers, data);
+    ShowTableFTXUI(screen, "All Elections", headers, data);
 }
 
 bool electionExists(int id) {
@@ -264,7 +260,6 @@ void manageElections() {
              } else {
                 Election e(getNextID("ElectionID"), name, type, date);
                 createElection(e);
-               ShowProgressBar(screen, "Creating Election...");
              }
           } else {
              ShowMessage(screen, "Election creation cancelled.", "info");
@@ -313,7 +308,6 @@ void manageElections() {
              continue;
           }
           editElection(id, name, type, date);
-            ShowProgressBar(screen, "Editing Election...");
        } else if (choice == 3) {
           string id_str;
           listAllElections();
@@ -341,7 +335,6 @@ void manageElections() {
              continue;
           }
           deleteElection(id);
-            ShowProgressBar(screen, "Deleting Election...");
        } else if (choice == 4) {
           break;
        } else {

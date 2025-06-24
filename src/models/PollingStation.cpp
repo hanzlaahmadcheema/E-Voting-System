@@ -10,15 +10,7 @@ extern void listConstituenciesByCity(int cityID);
 extern bool cityExistsInProvince(int cityID, const string &province);
 extern bool isValidConstituencyIDNA(int id, int cityID);
 extern bool isValidConstituencyIDPA(int id, int cityID);
-extern int ShowMenu(ScreenInteractive & screen, 
-    const string& heading, 
-    const vector<string>& options);
-void ShowTableFTXUI(const string& heading, 
-                const vector<string>& headers, 
-                const vector<vector<string>>& rows);
 bool ShowForm(ScreenInteractive& screen, const string& title, vector<InputField>& fields);
-
-
 
 // --- PollingStation Implementation ---
 PollingStation::PollingStation() : PollingStationID(0), PollingStationName(""), PollingStationAddress(""), CityID(0), ConstituencyIDNA(0), ConstituencyIDPA(0) {}
@@ -218,6 +210,7 @@ void addPollingStation(const PollingStation &s)
        }
     }
     list.push_back(s);
+                             ShowProgressBar(screen, "Adding Polling Station...");
     saveAllStations(list);
     ShowMessage(screen,"Polling station added.","success");
 }
@@ -259,6 +252,8 @@ void editPollingStation(int id, const string &newName, const string &newAddress)
        ShowMessage(screen,"Polling station not found.","error");
        return;
     }
+              ShowProgressBar(screen, "Editing Polling Station...");
+
     saveAllStations(list);
     ShowMessage(screen,"Polling station updated.","success");
 }
@@ -280,6 +275,7 @@ void deletePollingStation(int id)
        return;
     }
     list.erase(it, list.end());
+              ShowProgressBar(screen, "Deleting Polling Station...");
     saveAllStations(list);
     ShowMessage(screen,"Polling station deleted.","success");
 }
@@ -316,7 +312,7 @@ void listStationsByConstituency(int constID)
           });
        }
     }
-    ShowTableFTXUI("Polling Stations in Constituency " + to_string(constID), headers, data);
+    ShowTableFTXUI(screen, "Polling Stations in Constituency " + to_string(constID), headers, data);
     if (data.empty())
     {
        ShowMessage(screen,"No polling stations found for this constituency.","info");
@@ -346,7 +342,7 @@ void listStationsByCity(int cityID)
           });
        }
     }
-    ShowTableFTXUI("Polling Stations in City " + to_string(cityID), headers, data);
+    ShowTableFTXUI(screen, "Polling Stations in City " + to_string(cityID), headers, data);
     if (data.empty())
     {
        ShowMessage(screen,"No polling stations found for this city.","info");
@@ -373,7 +369,7 @@ void listAllStations()
           to_string(s.getConstituencyIDNA())
        });
     }
-    ShowTableFTXUI("All Polling Stations.", headers, data);
+    ShowTableFTXUI(screen, "All Polling Stations.", headers, data);
 }
 
 bool pollingStationExists(int id) {
@@ -487,7 +483,6 @@ void managePollingStations() {
          }
           PollingStation ps(getNextID("PollingStationID"), name, address, cityChoice, ConstituencyIDNA, ConstituencyIDPA);
           addPollingStation(ps);
-                         ShowProgressBar(screen, "Adding Polling Station...");
 
        } else if (choice == 1) {
           listAllStations();
@@ -528,7 +523,6 @@ void managePollingStations() {
              continue;
           }
           editPollingStation(id, name, address);
-          ShowProgressBar(screen, "Editing Polling Station...");
        } else if (choice == 3) {
           string id_str;
           listAllStations();
@@ -556,7 +550,6 @@ void managePollingStations() {
              continue;
           }
           deletePollingStation(id);
-          ShowProgressBar(screen, "Deleting Polling Station...");
        } else if (choice == 4) {
           break;
        } else {

@@ -39,13 +39,19 @@
 #include <models/Vote.h>
 #include <models/Voter.h>
 
-
 using namespace std;
 using namespace ftxui;
 using json = nlohmann::json;
 
+int getNextID(const string &key);
 void ShowSpinner(ScreenInteractive& screen, const string& message);
 void ShowProgressBar(ScreenInteractive& screen, const string& label);
 void ShowMessage(ScreenInteractive& screen, const string& msg, const string& type);
-
+int ShowMenu(ScreenInteractive & screen, 
+    const string& heading, 
+    const vector<string>& options);
+void ShowTableFTXUI(ScreenInteractive& screen, const string& heading, 
+                const vector<string>& headers, 
+                const vector<vector<string>>& rows);
+                
 extern ftxui::ScreenInteractive screen;

@@ -12,14 +12,7 @@ extern void listConstituenciesByCity(int cityID);
 extern void listStationsByConstituency(int constChoice);
 extern void listStationsByCity(int cityID);
 extern bool cityExistsInProvince(int cityID, const string &province);
-extern int ShowMenu(ScreenInteractive & screen, 
-     const string& heading, 
-     const vector<string>& options);
-void ShowTableFTXUI(const string& heading, 
-                    const vector<string>& headers, 
-                    const vector<vector<string>>& rows);
 bool ShowForm(ScreenInteractive& screen, const string& title, vector<InputField>& fields);
-
 
 
 // Voter
@@ -233,6 +226,7 @@ void registerVoter(const Voter &newVoter)
                 throw std::invalid_argument("Voter with this ID already exists.");
         }
         voters.push_back(newVoter);
+                    ShowProgressBar(screen, "Registering Voter...");
         saveAllVoters(voters);
 
         // Verify if added
@@ -281,7 +275,7 @@ void listAllVoters()
                 to_string(v.getPollingStationID())
             });
         }
-        ShowTableFTXUI("Voter Details", headers, data);
+        ShowTableFTXUI(screen, "Voter Details", headers, data);
     }
     catch (const std::exception &e)
     {
@@ -308,6 +302,7 @@ void editVoterByCNIC(const string &VoterCNIC, const Voter &updatedVoter)
         }
         if (!found)
             throw std::invalid_argument("Voter with CNIC " + VoterCNIC + " not found.");
+                        ShowProgressBar(screen, "Editing Voter...");
         saveAllVoters(voters);
         ShowMessage(screen, "Voter updated successfully.", "success");
     }
@@ -332,6 +327,8 @@ void deleteVoterByCNIC(const string &VoterCNIC)
         voters.erase(it, voters.end());
 
         if (deletedVoterID != -1)
+                    ShowProgressBar(screen, "Deleting Voter...");
+
             deleteVotesByVoterID(deletedVoterID);
 
         saveAllVoters(voters);
@@ -465,7 +462,6 @@ void manageVoters() {
             }
             Voter v(getNextID("VoterID"), name, VoterCNIC, gender, age, address, PollingID);
             registerVoter(v);
-            ShowProgressBar(screen, "Registering Voter...");
         } else if (choice == 1) {
             listAllVoters();
         } else if (choice == 2) {
@@ -530,7 +526,6 @@ void manageVoters() {
                 continue;
             }
             editVoterByCNIC(VoterCNIC, Voter(getVoterIDByCNIC(VoterCNIC), name, VoterCNIC, gender, age, address, PollingID));
-            ShowProgressBar(screen, "Editing Voter...");
         } else if (choice == 3) {
             string VoterCNIC;
             vector<InputField> form1 = {
@@ -543,7 +538,6 @@ void manageVoters() {
             if (!voterExists(VoterCNIC)) { ShowMessage(screen, "Voter with this CNIC does not exist.", "error"); continue; }
             if (!isValidCNIC(VoterCNIC)) { ShowMessage(screen, "Invalid CNIC format.", "error"); continue; }
             deleteVoterByCNIC(VoterCNIC);
-            ShowProgressBar(screen, "Deleting Voter...");
         } else if (choice == 4) {
             break;
         } else {

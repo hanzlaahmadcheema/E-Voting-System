@@ -45,8 +45,9 @@ int ShowMenu(ScreenInteractive& screen,
     return selected;
 }
 
-void ShowTableFTXUI(const string& heading, 
-                    const vector<string>& headers, 
+void ShowTableFTXUI(ScreenInteractive& screen,
+                    const string& heading,
+                    const vector<string>& headers,
                     const vector<vector<string>>& rows) {
     system("cls");
     // Calculate max width for each column
@@ -60,29 +61,6 @@ void ShowTableFTXUI(const string& heading,
         }
     }
 
-    // Helper: make a horizontal line with +---+---+ style
-    auto make_separator = [&]() {
-        Elements parts;
-        parts.push_back(text("+"));
-        for (auto w : col_widths) {
-            parts.push_back(text(string(w + 2, '-')));
-            parts.push_back(text("+"));
-        }
-        return hbox(move(parts));
-    };
-
-    // Helper: make a row with | data | data | style
-    auto make_row = [&](const vector<string>& row_data, bool is_header = false) {
-        Elements parts;
-        parts.push_back(text("|"));
-        for (size_t i = 0; i < row_data.size(); i++) {
-            string cell = " " + row_data[i] + string(col_widths[i] - row_data[i].size() + 1, ' ');
-            parts.push_back(text(cell) | (is_header ? bold : nothing));
-            parts.push_back(text("|"));
-        }
-        return hbox(move(parts));
-    };
-
     int scroll = 0;
     const int max_results = 5;
     int total_rows = (int)rows.size();
@@ -91,42 +69,44 @@ void ShowTableFTXUI(const string& heading,
         Elements table_elements;
 
         // Heading
-        table_elements.push_back(text(heading) | bold | center | border);
+        table_elements.push_back(text(heading) | bold | center | color(Color::Green));
 
-        // Table top border
-        table_elements.push_back(make_separator());
+        // Header row (green)
+        Elements header_cells;
+        for (size_t i = 0; i < headers.size(); ++i) {
+            string cell = " " + headers[i] + string(col_widths[i] - headers[i].size() + 1, ' ');
+            header_cells.push_back(text(cell) | bold | color(Color::Green));
+        }
+        table_elements.push_back(hbox(move(header_cells)));
+        // Header separator line
+        Elements header_sep;
+        for (size_t i = 0; i < headers.size(); ++i) {
+            header_sep.push_back(text(string(col_widths[i] + 2, '─')) | color(Color::Cyan));
+        }
+        table_elements.push_back(hbox(move(header_sep)));
 
-        // Header row
-        table_elements.push_back(make_row(headers, true));
-
-        // Header-bottom border
-        table_elements.push_back(make_separator());
-
-        // Data rows (with scrolling)
+        // Data rows (white) with row separators
         int start = scroll;
         int end = min(scroll + max_results, total_rows);
         for (int i = start; i < end; ++i) {
-            table_elements.push_back(make_row(rows[i]));
-            table_elements.push_back(make_separator());
-        }
-
-        // Scrollbar
-        if (total_rows > max_results) {
-            float ratio = max_results / (float)total_rows;
-            int bar_size = max(1, int(ratio * max_results));
-            int bar_pos = int((scroll / (float)total_rows) * max_results);
-            Elements scrollbar;
-            for (int i = 0; i < max_results; ++i) {
-                if (i >= bar_pos && i < bar_pos + bar_size)
-                    scrollbar.push_back(text("█"));
-                else
-                    scrollbar.push_back(text("│") | dim);
+            Elements row_cells;
+            for (size_t j = 0; j < rows[i].size(); ++j) {
+                string cell = " " + rows[i][j] + string(col_widths[j] - rows[i][j].size() + 1, ' ');
+                row_cells.push_back(text(cell) | color(Color::White));
             }
-            table_elements.push_back(hbox({filler(), vbox(scrollbar), filler()}));
+            table_elements.push_back(hbox(move(row_cells)));
+            // Row separator line (except after last row)
+            if (i + 1 < end) {
+                Elements row_sep;
+                for (size_t j = 0; j < headers.size(); ++j) {
+                    row_sep.push_back(text(string(col_widths[j] + 2, '─')) | color(Color::Cyan) | dim);
+                }
+                table_elements.push_back(hbox(move(row_sep)));
+            }
         }
 
-        table_elements.push_back(text("Use ↑/↓ to scroll, any other key to continue...") | center | dim);
-        return vbox(move(table_elements)) | center | border;
+        table_elements.push_back(text("Use ↑/↓ to scroll, press Enter to continue...") | center | dim);
+        return vbox(move(table_elements)) | border | color(Color::Cyan) | center;
     });
 
     bool done = false;
@@ -139,9 +119,12 @@ void ShowTableFTXUI(const string& heading,
             scroll--;
             return true;
         }
-        done = true;
-        screen.Exit();
-        return true;
+        if (event == Event::Return) {
+            done = true;
+            screen.Exit();
+            return true;
+        }
+        return false;
     });
     screen.Loop(event_handler);
     system("cls");
@@ -306,29 +289,29 @@ void ShowProgressBar(ScreenInteractive& screen, const string& label) {
 
 void ShowMessage(ScreenInteractive& screen, const string& msg, const string& type) {
     system("cls");
-    Color msg_color = Color::White;
-    string prefix;
+    Color header_color = Color::White;
+    string header_text;
 
     if (type == "success") {
-        msg_color = Color::Green;
-        prefix = "✔ Success: ";
+        header_color = Color::Green;
+        header_text = "✔ Success";
     } else if (type == "error") {
-        msg_color = Color::Red;
-        prefix = "✖ Error: ";
+        header_color = Color::Red;
+        header_text = "✖ Error";
     } else if (type == "info") {
-        msg_color = Color::Blue;
-        prefix = "ℹ Info: ";
+        header_color = Color::Blue;
+        header_text = "ℹ Info";
     } else {
-        prefix = "";
+        header_text = "";
     }
 
+    // Animate message text word by word
     vector<string> words;
-    string word, full_msg = prefix + msg;
-    istringstream iss(full_msg);
+    string word;
+    istringstream iss(msg);
     while (iss >> word) {
         words.push_back(word);
     }
-
     atomic<size_t> shown_words = 0;
 
     auto renderer = Renderer([&] {
@@ -338,21 +321,21 @@ void ShowMessage(ScreenInteractive& screen, const string& msg, const string& typ
             if (i + 1 < shown_words) animated += " ";
         }
         return vbox({
-            filler(),
+            text(header_text) | bold | center | color(header_color),
+            separator(),
             hbox({
                 filler(),
-                text(animated) | bold | color(msg_color) | border,
-                filler(),
+                text(animated) | color(Color::White) | center,
+                filler()
             }),
-            filler(),
-        });
+        }) | border | color(Color::Cyan) | size(WIDTH, EQUAL, 50) | center;
     });
 
     thread animator([&] {
         for (size_t i = 1; i <= words.size(); ++i) {
             shown_words = i;
             screen.PostEvent(Event::Custom);
-            this_thread::sleep_for(chrono::milliseconds(250));
+            this_thread::sleep_for(chrono::milliseconds(120));
         }
         this_thread::sleep_for(chrono::seconds(2));
         screen.Exit();

@@ -1,16 +1,7 @@
 #include <custom/config.h>
 
-extern int getNextID(const string &key);
 extern string toLower(const string& str);
-extern int ShowMenu(ScreenInteractive & screen, 
-     const string& heading, 
-     const vector<string>& options);
-void ShowTableFTXUI(const string& heading, 
-                    const vector<string>& headers, 
-                    const vector<vector<string>>& rows);
 bool ShowForm(ScreenInteractive& screen, const string& title, vector<InputField>& fields);
-
-
 
 // Party
 Party::Party() : PartyID(0), PartyName(""), PartySymbol("") {}
@@ -198,6 +189,7 @@ void addParty(const Party &p)
         return;
     }
     list.push_back(p);
+                               ShowProgressBar(screen, "Adding Party...");
     saveAllParties(list);
     ShowMessage(screen, "Party added.","success");
 }
@@ -245,6 +237,8 @@ void editParty(int id, const string &name, const string &symbol)
         ShowMessage(screen,"Party ID not found.","error");
         return;
     }
+                                ShowProgressBar(screen, "Editing Party...");
+
     saveAllParties(list);
     ShowMessage(screen,"Party updated.","success");
 }
@@ -261,6 +255,7 @@ void deleteParty(int id)
         return;
     }
     list.erase(it, list.end());
+                ShowProgressBar(screen, "Deleting Party...");
     saveAllParties(list);
     ShowMessage(screen,"Party deleted.","success");
 }
@@ -284,7 +279,7 @@ void listAllParties()
             p.getPartyName(),
             p.getPartySymbol()});
     }
-    ShowTableFTXUI("All Parties", headers, data);
+    ShowTableFTXUI(screen, "All Parties", headers, data);
 }
 
 void manageParties() {
@@ -328,7 +323,6 @@ void manageParties() {
             }
             Party p(getNextID("PartyID"), name, symbol);
             addParty(p);
-                           ShowProgressBar(screen, "Adding Party...");
 
         } else if (choice == 1) {
             listAllParties();
@@ -364,7 +358,6 @@ void manageParties() {
                 continue;
             }
             editParty(id, name, symbol);
-                            ShowProgressBar(screen, "Editing Party...");
         } else if (choice == 3) {
             string id_str;
             listAllParties();
@@ -387,7 +380,6 @@ void manageParties() {
                 continue;
             }
             deleteParty(id);
-            ShowProgressBar(screen, "Deleting Party...");
         } else if (choice == 4) {
             break;
         } else {

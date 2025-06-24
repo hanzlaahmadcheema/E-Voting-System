@@ -1,7 +1,4 @@
 #include <custom/config.h>
-#include <fstream>
-#include <iostream>
-#include <stdexcept>
 
 const string COUNTER_FILE = "D://E-Voting-System/data/counters.json";
 

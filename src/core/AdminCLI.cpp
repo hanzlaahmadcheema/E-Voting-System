@@ -10,9 +10,7 @@ extern void manageCandidates();
 extern void manageVoters();
 extern void manageVoting();
 extern void manageResults();
-extern int ShowMenu(ScreenInteractive & screen, 
-    const string& heading, 
-    const vector<string>& options);
+bool ShowForm(ScreenInteractive& screen, const string& title, vector<InputField>& fields);
 
 bool loadAdmins(vector<Admin>& adminList) {
     try {
@@ -97,27 +95,27 @@ bool loginAdmin(const vector<Admin>& adminList) {
 }
 
 void adminPanel() {
-    vector<Admin> adminList;
-    if (!loadAdmins(adminList)) {
-       ShowMessage(screen, "Failed to load admin data.", "error");
-       return;
-    }
+   //  vector<Admin> adminList;
+   //  if (!loadAdmins(adminList)) {
+   //     ShowMessage(screen, "Failed to load admin data.", "error");
+   //     return;
+   //  }
 
-    int loginAttempts = 0;
-    const int maxAttempts = 3;
-    while (loginAttempts < maxAttempts) {
-       if (loginAdmin(adminList)) {
-          break;
-       }
-       loginAttempts++;
-       if (loginAttempts < maxAttempts) {
-          ShowMessage(screen, "Try again. Attempts left: " + std::to_string(maxAttempts - loginAttempts), "warning");
-       }
-    }
-    if (loginAttempts == maxAttempts) {
-       ShowMessage(screen, "Maximum login attempts exceeded. Exiting admin panel.", "error");
-       return;
-    }
+   //  int loginAttempts = 0;
+   //  const int maxAttempts = 3;
+   //  while (loginAttempts < maxAttempts) {
+   //     if (loginAdmin(adminList)) {
+   //        break;
+   //     }
+   //     loginAttempts++;
+   //     if (loginAttempts < maxAttempts) {
+   //        ShowMessage(screen, "Try again. Attempts left: " + std::to_string(maxAttempts - loginAttempts), "warning");
+   //     }
+   //  }
+   //  if (loginAttempts == maxAttempts) {
+   //     ShowMessage(screen, "Maximum login attempts exceeded. Exiting admin panel.", "error");
+   //     return;
+   //  }
 
     while (true) {
        vector<string> adminPanel = {

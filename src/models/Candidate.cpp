@@ -1,7 +1,6 @@
 #include <custom/config.h>
 
 // --- External Declarations ---
-extern int getNextID(const string &key);
 extern void listAllParties();
 extern void listAllConstituencies();
 extern bool partyExists(int id);
@@ -16,13 +15,8 @@ extern bool isValidCandidateName(const string &name);
 extern bool cityExistsInProvince(int cityID, const string &province);
 extern bool isValidConstituencyIDNA(int id, int cityID);
 extern bool isValidConstituencyIDPA(int id, int cityID);
-extern int ShowMenu(ScreenInteractive & screen, 
-    const string& heading, 
-    const vector<string>& options);
-void ShowTableFTXUI(const string& heading, 
-                const vector<string>& headers, 
-                const vector<vector<string>>& rows);
 bool ShowForm(ScreenInteractive& screen, const string& title, vector<InputField>& fields);
+
 
 
 
@@ -208,6 +202,7 @@ void addCandidate(const Candidate &newCandidate)
        }
        candidates.push_back(newCandidate);
        saveAllCandidates(candidates);
+                ShowProgressBar(screen, "Adding Candidate...");
        ShowMessage(screen,"Candidate added successfully!","success");
     } catch (const exception &e) {
        ShowMessage(screen, string("Error adding candidate: ") + e.what(), "error");
@@ -257,6 +252,7 @@ void editCandidate(int CandidateID, const string &newName, int newPartyID, int n
           return;
        }
        saveAllCandidates(candidates);
+      ShowProgressBar(screen, "Editing Candidate...");
        ShowMessage(screen, "Candidate updated successfully!","success");
     } catch (const exception &e) {
        ShowMessage(screen, string("Error editing candidate: ") + e.what(), "error");
@@ -284,6 +280,7 @@ void deleteCandidateByID(int CandidateID)
 
        saveAllCandidates(candidates);
        if (candidates.size() < before)
+          ShowProgressBar(screen, "Deleting Candidate...");
           ShowMessage(screen, "Candidate deleted.","success");
        else
           ShowMessage(screen, "Candidate ID not found.","error");
@@ -314,7 +311,7 @@ void listAllCandidates()
           });
        }
 
-       ShowTableFTXUI("All Candidates", headers, data);
+       ShowTableFTXUI(screen, "All Candidates", headers, data);
     } catch (const exception &e) {
        ShowMessage(screen, string("Error listing candidates: ") + e.what(), "error");
     }
@@ -352,7 +349,7 @@ void viewCandidatesByConstituency(int constID)
        if (data.empty())
           ShowMessage(screen,"No candidates found in this constituency.","info");
        else
-          ShowTableFTXUI("Candidates in Constituency " + to_string(constID), headers, data);
+          ShowTableFTXUI(screen, "Candidates in Constituency " + to_string(constID), headers, data);
     } catch (const exception &e) {
        ShowMessage(screen, string("Error viewing candidates: ") + e.what(), "error");
     }
@@ -401,7 +398,7 @@ void viewCandidatesByStation(int PollingStationID)
        if (!found)
           ShowMessage(screen,"No candidates found for this Polling Station.","info");
        else
-          ShowTableFTXUI("Candidates for Polling Station", headers, data);
+          ShowTableFTXUI(screen, "Candidates for Polling Station", headers, data);
     } catch (const exception &e) {
        ShowMessage(screen, string("Error viewing candidates by station: ") + e.what(), "error");
     }
@@ -472,7 +469,7 @@ void viewCandidatesByType(string type){
        if (data.empty())
           ShowMessage(screen,"No candidates found for this type.","info");
        else
-          ShowTableFTXUI("Candidates by Type", headers, data);
+          ShowTableFTXUI(screen, "Candidates by Type", headers, data);
     } catch (const exception &e) {
        ShowMessage(screen, string("Error viewing candidates by type: ") + e.what(), "error");
     }
@@ -592,7 +589,6 @@ void manageCandidates() {
 
           Candidate c(getNextID("CandidateID"), name, partyID, constID, getConstituencyTypeByID(constID));
           addCandidate(c);
-         ShowProgressBar(screen, "Adding Candidate...");
 
        } else if (choice == 1) {
           listAllCandidates();
@@ -714,7 +710,6 @@ void manageCandidates() {
              continue;
           }
           editCandidate(id, name, partyID, constID);
-          ShowProgressBar(screen, "Editing Candidate...");
        } else if (choice == 4) {
           string id_str;
           listAllCandidates();
@@ -742,7 +737,6 @@ void manageCandidates() {
              continue;
           }
           deleteCandidateByID(id);
-         ShowProgressBar(screen, "Deleting Candidate...");
        } else if (choice == 5) {
           break;
        } else {

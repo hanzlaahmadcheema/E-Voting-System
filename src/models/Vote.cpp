@@ -1,10 +1,8 @@
 #include <custom/config.h>
 
 // Forward declarations
-extern int getNextID(const string &key);
 extern int ShowMenu(ScreenInteractive & screen, const string& heading, const vector<string>& options);
-void ShowTableFTXUI(const string& heading, const vector<string>& headers, const vector<vector<string>>& rows);
-bool ShowForm(ScreenInteractive& screen, const string& title, vector<InputField>& fields);
+void ShowTableFTXUI(ScreenInteractive& screen, const string& heading, const vector<string>& headers, const vector<vector<string>>& rows);
 
 
 
@@ -260,7 +258,7 @@ void listAllVotes() {
             v.getTimestamp()
         });
     }
-    ShowTableFTXUI("Vote Details", headers, rows);
+    ShowTableFTXUI(screen, "Vote Details", headers, rows);
 }
 
 void manageVoting() {

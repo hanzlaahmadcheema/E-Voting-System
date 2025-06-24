@@ -11,15 +11,10 @@ extern void viewCandidatesByStation(int PollingStationID);
 extern string getCurrentTimestamp();
 extern string getElectionTypeByID(int id);
 extern void viewCandidatesByType(string type);
-extern int getNextID(const string &key);
 int getElectionIDByConstituencyID(int id);
-extern int ShowMenu(ScreenInteractive & screen, 
-    const string& heading, 
-    const vector<string>& options);
-void ShowTableFTXUI(const string& heading, 
-                const vector<string>& headers, 
-                const vector<vector<string>>& rows);
 bool ShowForm(ScreenInteractive& screen, const string& title, vector<InputField>& fields);
+
+
 
 bool isValidCNIC(const string& cnic);
 

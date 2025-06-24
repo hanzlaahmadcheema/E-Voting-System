@@ -1,19 +1,10 @@
 #include <custom/config.h>
 
 extern vector<Vote> loadAllVotes();
-extern int getNextID(const string &key);
 extern string getConstituencyTypeByID(int id);
 extern vector<PollingStation> loadAllStations();
 extern string getCandidateNameByID(int CandidateID);
-extern int ShowMenu(ScreenInteractive & screen, 
-    const string& heading, 
-    const vector<string>& options);
-void ShowTableFTXUI(const string& heading, 
-                const vector<string>& headers, 
-                const vector<vector<string>>& rows);
 bool ShowForm(ScreenInteractive& screen, const string& title, vector<InputField>& fields);
-
-
 
 static bool isValidPositiveInt(const string& str) {
     if (str.empty()) return false;
@@ -269,7 +260,7 @@ void computeConstituencyResult(int ElectionID, int ConstituencyID, const string&
        }
 
        if (tie) {
-          ShowMessage(screen, "There is a tie between candidates for this constituency.", "Warning");
+          ShowMessage(screen, "There is a tie between candidates for this constituency.", "info");
           // Optionally, handle tie-break logic here.
        }
 
@@ -277,13 +268,14 @@ void computeConstituencyResult(int ElectionID, int ConstituencyID, const string&
        vector<Result> allResults = loadAllResults();
        for (const auto& r : allResults) {
           if (r.getElectionID() == ElectionID && r.getConstituencyID() == ConstituencyID) {
-             ShowMessage(screen, "Result for this election and constituency already exists.", "Error");
+             ShowMessage(screen, "Result for this election and constituency already exists.", "error");
              return;
           }
        }
 
        Result result(getNextID("ResultID"), 0, ElectionID, winnerCandidateID, maxVotes, ConstituencyID);
        allResults.push_back(result);
+                 ShowProgressBar(screen, "Computing Results by Constituency...");
        saveAllResults(allResults);
 
        vector<string> headers = {"Result ID", "Polling Station ID", "Election ID", "Winner Candidate", "Total Votes", "Constituency ID"};
@@ -299,7 +291,7 @@ void computeConstituencyResult(int ElectionID, int ConstituencyID, const string&
              to_string(r.getConstituencyID())
           });
        }
-       ShowTableFTXUI("Results In Constituency " + to_string(ConstituencyID), headers, data);
+       ShowTableFTXUI(screen, "Results In Constituency " + to_string(ConstituencyID), headers, data);
     } catch (const exception& e) {
        ShowMessage(screen, string("Error computing result: ") + e.what(), "Error");
     }
@@ -342,7 +334,7 @@ void viewResultByConstituency(int ElectionID, int ConstituencyID)
           ShowMessage(screen, "No result found for this constituency.", "Error");
           return;
        }
-       ShowTableFTXUI("Result for Constituency " + to_string(ConstituencyID), headers, data);
+       ShowTableFTXUI(screen, "Result for Constituency " + to_string(ConstituencyID), headers, data);
     } catch (const exception& e) {
        ShowMessage(screen, string("Error viewing result: ") + e.what(), "Error");
     }
@@ -372,7 +364,7 @@ void listAllResults()
              to_string(r.getConstituencyID())
           });
        }
-       ShowTableFTXUI("All Results", headers, data);
+       ShowTableFTXUI(screen, "All Results", headers, data);
     } catch (const exception& e) {
        ShowMessage(screen, string("Error listing results: ") + e.what(), "Error");
     }
@@ -407,7 +399,6 @@ void manageResults() {
           int ElectionID = stoi(ElectionID_str);
           int constID = stoi(constID_str);
           computeConstituencyResult(ElectionID, constID, getConstituencyTypeByID(constID));
-          ShowProgressBar(screen, "Computing Results by Constituency...");
        } else if (choice == 1) {
           string ElectionID_str, constID_str;
           vector<InputField> form = {
