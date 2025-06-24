@@ -368,7 +368,7 @@ void manageCities() {
           listAllCities();
 
           vector<InputField> form = {
-             {"City ID", &id_str, InputField::NUMBER},
+             {"City ID", &id_str, InputField::TEXT},
              {"New City Name", &name, InputField::TEXT}
           };
           bool success = ShowForm(screen, "Edit City", form);

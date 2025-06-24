@@ -102,7 +102,7 @@ void showUserMenu(Voter* voter) {
           string CandidateID, chosenConst;
           ShowMessage(screen,"You can vote in Constituency " + to_string(c1) + " or " + to_string(c2) + ".", "info");
           vector<InputField> form = {
-             {"Constituency ID", &chosenConst, InputField::NUMBER}
+             {"Constituency ID", &chosenConst, InputField::TEXT}
           };
           bool success = ShowForm(screen, "Cast Vote", form);
           if (!success) {
@@ -144,7 +144,7 @@ void showUserMenu(Voter* voter) {
              continue;
           }
           vector<InputField> candidateForm = {
-             {"Candidate ID", &CandidateID, InputField::NUMBER}
+             {"Candidate ID", &CandidateID, InputField::TEXT}
           };
           success = ShowForm(screen, "Cast Vote", candidateForm);
           if (!success) {

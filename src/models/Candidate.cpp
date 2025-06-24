@@ -550,7 +550,7 @@ void manageCandidates() {
           }
           listCitiesByProvince(provinceID_str);
           vector<InputField> form4 = {
-             {"City ID", &cityID_str, InputField::NUMBER}
+             {"City ID", &cityID_str, InputField::TEXT}
           };
           if (!ShowForm(screen, "Add Candidate", form4)) {
              ShowMessage(screen,"Candidate creation cancelled.","error");
@@ -569,7 +569,7 @@ void manageCandidates() {
          }
           listConstituenciesByCity(cityID);
           vector<InputField> form5 = {
-             {"Constituency ID", &constID_str, InputField::NUMBER}
+             {"Constituency ID", &constID_str, InputField::TEXT}
           };
           if (!ShowForm(screen, "Add Candidate", form5)) {
              ShowMessage(screen,"Candidate creation cancelled.","error");
@@ -598,7 +598,7 @@ void manageCandidates() {
        } else if (choice == 2) {
           string constID_str;
           vector<InputField> form = {
-             {"Constituency ID", &constID_str, InputField::NUMBER}
+             {"Constituency ID", &constID_str, InputField::TEXT}
           };
           if (!ShowForm(screen, "View Candidates by Constituency", form)) {
              ShowMessage(screen,"View cancelled.","error");
@@ -621,7 +621,7 @@ void manageCandidates() {
           listAllCandidates();
 
           vector<InputField> form1 = {
-             {"Candidate ID", &id_str, InputField::NUMBER},
+             {"Candidate ID", &id_str, InputField::TEXT},
              {"New Name", &name, InputField::TEXT}
           };
           if (!ShowForm(screen, "Edit Candidate", form1)) {
@@ -645,7 +645,7 @@ void manageCandidates() {
           }
           listAllParties();
           vector<InputField> form2 = {
-             {"New Party ID", &partyID_str, InputField::NUMBER}
+             {"New Party ID", &partyID_str, InputField::TEXT}
           };
           if (!ShowForm(screen, "Edit Candidate", form2)) {
              ShowMessage(screen,"Edit cancelled.","error");
@@ -672,7 +672,7 @@ void manageCandidates() {
           }
           listCitiesByProvince(provinceID_str);
           vector<InputField> form3 = {
-             {"New City ID", &cityID_str, InputField::NUMBER}
+             {"New City ID", &cityID_str, InputField::TEXT}
           };
           if (!ShowForm(screen, "Edit Candidate", form3)) {
              ShowMessage(screen,"Edit cancelled.","error");
@@ -691,7 +691,7 @@ void manageCandidates() {
          }
           listConstituenciesByCity(cityID);
           vector<InputField> form4 = {
-             {"New Constituency ID", &constID_str, InputField::NUMBER}
+             {"New Constituency ID", &constID_str, InputField::TEXT}
           };
           if (!ShowForm(screen, "Edit Candidate", form4)) {
              ShowMessage(screen,"Edit cancelled.","error");
@@ -718,7 +718,7 @@ void manageCandidates() {
           listAllCandidates();
 
           vector<InputField> form = {
-             {"Candidate ID", &id_str, InputField::NUMBER}
+             {"Candidate ID", &id_str, InputField::TEXT}
           };
           if (!ShowForm(screen, "Delete Candidate", form)) {
              ShowMessage(screen,"Delete cancelled.","error");

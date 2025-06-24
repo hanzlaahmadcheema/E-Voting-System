@@ -384,8 +384,8 @@ void manageResults() {
        if (choice == 0) {
           string ElectionID_str, constID_str;
           vector<InputField> form = {
-             {"Election ID", &ElectionID_str, InputField::NUMBER},
-             {"Constituency ID", &constID_str, InputField::NUMBER}
+             {"Election ID", &ElectionID_str, InputField::TEXT},
+             {"Constituency ID", &constID_str, InputField::TEXT}
           };
           bool success = ShowForm(screen, "Compute Result", form);
           if (!success) {
@@ -402,8 +402,8 @@ void manageResults() {
        } else if (choice == 1) {
           string ElectionID_str, constID_str;
           vector<InputField> form = {
-             {"Election ID", &ElectionID_str, InputField::NUMBER},
-             {"Constituency ID", &constID_str, InputField::NUMBER}
+             {"Election ID", &ElectionID_str, InputField::TEXT},
+             {"Constituency ID", &constID_str, InputField::TEXT}
           };
           bool success = ShowForm(screen, "View Result", form);
           if (!success) {
