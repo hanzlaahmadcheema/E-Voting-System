@@ -12,7 +12,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 include_directories(
     ${PROJECT_SOURCE_DIR}/src
     ${PROJECT_SOURCE_DIR}/include
-    "D:/FTXUI/include"
+    ${PROJECT_SOURCE_DIR}/FTXUI/include
 )
 
 # Automatically detect all .cpp files in src/
@@ -20,8 +20,8 @@ file(GLOB_RECURSE SRC_FILES
     "${PROJECT_SOURCE_DIR}/src/*.cpp"
 )
 
-# Add FTXUI from sibling directory
-add_subdirectory(${CMAKE_SOURCE_DIR}/../ftxui ${CMAKE_BINARY_DIR}/ftxui-build)
+# Add FTXUI from local directory (after cloning into FTXUI/)
+add_subdirectory(${PROJECT_SOURCE_DIR}/FTXUI ${CMAKE_BINARY_DIR}/ftxui-build)
 
 # Add executable
 add_executable(E-Voting-System ${SRC_FILES})

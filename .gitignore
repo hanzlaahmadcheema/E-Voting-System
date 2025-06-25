@@ -11,3 +11,6 @@ build/
 # Temporary files
 *.swp
 *.swo
+
+# FTXUI
+FTXUI/
