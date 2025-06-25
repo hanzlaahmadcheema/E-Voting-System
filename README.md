@@ -40,9 +40,10 @@ E-Voting-System/
 │   ├── cli/        # FTXUI UI components
 │   └── main.cpp    # Entry point
 ├── include/        # Header files
+├── FTXUI/         # FTXUI library (submodule)
 ├── CMakeLists.txt
 └── README.md
-```
+``` 
 
 ---
 
