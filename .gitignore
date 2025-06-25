@@ -1,7 +1,5 @@
 # Build files
-bin/
 build/
-logs/
 *.o
 *.exe
 *.out
@@ -9,12 +7,7 @@ logs/
 # Editor and OS-specific files
 .vscode/
 .vs/
-.DS_Store
-Thumbs.db
 
 # Temporary files
 *.swp
 *.swo
-
-mysql-connector/
-libs/SQLAPI/
